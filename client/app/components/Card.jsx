@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 
 const Card = (props) => {
   return (
-    <div onClick={props.selectCard}>
+    <div onClick={props.selectCard(this)}>
       <p>Player: {props.cardInfo.name}</p>
       <p>Stats</p>
       <ul>

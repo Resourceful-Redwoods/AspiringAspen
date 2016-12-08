@@ -6,7 +6,7 @@ import 'Card' from './Card.jsx'
 const UserHand = (props) => {
 
   const usersCards = props.currentHand.map((card) =>
-    <Card cardInfo={card} />
+    <Card cardInfo={card} selectCard={props.selectCard} />
   )
 
   return (
