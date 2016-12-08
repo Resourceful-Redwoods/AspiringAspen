@@ -4,6 +4,9 @@ import ReactDOM from 'react-dom'
 class Waiting extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      foundMatch: false;
+    }
   }
 
   componentDidMount () {
@@ -12,6 +15,10 @@ class Waiting extends React.Component {
 
   componentWillUnmount () {
     //leave display
+  }
+
+  foundMatch () {
+    this.setState({foundMatch:true});
   }
 
   render() {
