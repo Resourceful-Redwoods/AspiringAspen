@@ -95,21 +95,14 @@ class Game extends React.Component {
   componentWillUnmount () {
 
   }
-  //round begin
-  //random category
-  
-  //set waiting: true
-
-  //if waiting !== false && userHandCard !== null && opponentHandCard !== null
-
 
   render() {
     const gameOver = this.state.game.gameOver;
     return (
      <div>
-       <div id='opponent'><OpponentHand /></div>
+       <div id='opponent'><Opponent /></div>
        <div id-'board'><Board /></div>
-       { gameOver ? <GameOver winner={this.state.game.gameWinner} /> : null }
+       { gameOver ? <Decision winner={this.state.game.gameWinner} /> : null }
        <div id='userhand'><Userhand /></div>
      </div>
     )
