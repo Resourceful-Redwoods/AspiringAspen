@@ -2,9 +2,9 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
-  entry: ['babel-polyfill', './client/index.js'],
+  entry: './client/components/index.jsx',
   output: { path: __dirname + '/client/public', filename: 'bundle.js' },
-  watch: true,
+  watch: false,
   module: {
     loaders: [
       { test: /\.css$/, exclude: /\.useable\.css$/, loader: "style-loader!css-loader" },
