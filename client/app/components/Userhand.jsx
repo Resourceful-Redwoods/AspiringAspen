@@ -20,8 +20,10 @@ const UserHand = (props) => {
   )
 }
 
-UserHand.propTypes = {
-  currentHand: PropTypes.array.isRequired,
-  username: PropTypes.string.isRequired,
-  playCard: PropTypes.func.isRequired
-}
+// UserHand.propTypes = {
+//   currentHand: PropTypes.array.isRequired,
+//   username: PropTypes.string.isRequired,
+//   playCard: PropTypes.func.isRequired
+// }
+
+export default UserHand;

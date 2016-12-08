@@ -11,3 +11,5 @@ const GameOver = (props) => {
     </div>
   )
 }
+
+export default GameOver;

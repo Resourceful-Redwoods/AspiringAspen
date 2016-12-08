@@ -16,6 +16,8 @@ const OpponentHand = (props) => {
   )
 }
 
-OpponentHand.propTypes = {
-  currentHand: PropTypes.array.isRequired,
-};
+// OpponentHand.propTypes = {
+//   currentHand: PropTypes.array.isRequired,
+// };
+
+export default OpponentHand;

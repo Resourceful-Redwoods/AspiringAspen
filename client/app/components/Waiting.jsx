@@ -32,3 +32,5 @@ class Waiting extends React.Component {
     )
   }
 }
+
+export default Waiting;

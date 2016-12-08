@@ -17,7 +17,9 @@ const Card = (props) => {
   )
 }
 
-Card.propTypes = {
-  cardInfo: PropTypes.object.isRequired,
-  selectCard: PropTypes.func.isRequired,
-};
+// Card.propTypes = {
+//   cardInfo: PropTypes.object.isRequired,
+//   selectCard: PropTypes.func.isRequired,
+// };
+
+export default Card;

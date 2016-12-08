@@ -35,7 +35,7 @@ class Home extends React.Component {
     const isMatchmaking = this.state.matchmaking;
     return (
       <div>
-        <div class="titlebar">
+        <div className="titlebar">
           <h1>DeckStomp</h1>
         </div>
         { isMatchmaking ? <Waiting /> : null }
@@ -54,4 +54,4 @@ class Home extends React.Component {
   }
 }
 
-
+export default Home;

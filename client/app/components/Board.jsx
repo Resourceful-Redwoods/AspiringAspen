@@ -26,3 +26,5 @@ const Board = (props) => {
 
 Board.propTypes = {
 };
+
+export default Board;
