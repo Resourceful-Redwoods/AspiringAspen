@@ -1,31 +1,22 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-class Card extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      
-    }
-  }
-
-  componentWillMount () {
-
-  }
-  
-  componentDidMount () {
-    
-  }
-
-  componentWillUnmount () {
-    
-  }
-
-  render() {
-    return (
-     <div>
-       
-     </div>
-    )
-  }
+const Card = (props) => {
+  return (
+    <div>
+      <p>Player: {props.cardInfo.name}</p>
+      <p>Stats</p>
+      <ul>
+        <li>Home Runs: {props.cardInfo.hr}</li>
+        <li>Average: {props.cardInfo.avg}</li>
+        <li>Hits: {props.cardInfo.hits}</li>
+        <li>RBI: {props.cardInfo.rbi}</li>
+        <li>Stolen Bases: {props.cardInfo.sb}</li>
+      </ul>
+    </div>
+  )
 }
+
+Card.propTypes = {
+  cardInfo: PropTypes.object.isRequired,
+};
