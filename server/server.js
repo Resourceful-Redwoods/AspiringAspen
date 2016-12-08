@@ -4,6 +4,8 @@ var bodyParser = require('body-parser');
 
 var playerData = require('./data/baseballData.js');
 
+var helper = require('./util/helper.js');
+
 var app = express();
 
 app.use('/static', express.static(path.join(__dirname, '/../client/public')));
@@ -20,6 +22,15 @@ app.get('/', function (req, res) {
 app.get('/players', function (req, res) {
   console.log('get /players')
   res.json(playerData)
+});
+
+app.get('/deck', function (req, res) {
+  console.log('get /deck')
+  var team = {
+    hand: []
+  }
+
+  res.json( helper.getDeck(playerData, team.hand, 2 ) )
 });
 
 app.listen(3000, function () {
