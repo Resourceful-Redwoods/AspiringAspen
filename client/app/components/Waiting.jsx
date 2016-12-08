@@ -24,7 +24,7 @@ class Waiting extends React.Component {
   render() {
     return (
       <div id="waiting">
-        <h1>Finding a match </h1>
+        <h1>Finding a match</h1>
         <button> Cancel </button>
       </div>
     )

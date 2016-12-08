@@ -20,6 +20,7 @@ class Home extends React.Component {
     console.log('play now');
     this.setState({ matchmaking: true });
     //kick off matchmaking
+    socket.emit('game', 'play');
   }
 
   componentWillUnmount() {
@@ -35,7 +36,7 @@ class Home extends React.Component {
         </div>
         { isMatchmaking ? <Waiting /> : null }
         <div>
-          <form>
+          <form id='nameForm'>
             <label>
               Enter a name:
               <input type="text" name="name" />
