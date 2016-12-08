@@ -2,7 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
-  entry: './client/components/index.jsx',
+  entry: './client/app/index.jsx',
   output: { path: __dirname + '/client/public', filename: 'bundle.js' },
   watch: false,
   module: {
@@ -34,13 +34,13 @@ module.exports = {
     ],
   },
   plugins: [
-    new webpack.DefinePlugin({ 
+    new webpack.DefinePlugin({
       'process.env': {
         'NODE_ENV': JSON.stringify('production')
       }
     }),
-    new webpack.optimize.DedupePlugin(),            // Dedupe similar code 
+    new webpack.optimize.DedupePlugin(),            // Dedupe similar code
     new webpack.optimize.UglifyJsPlugin(),          // Minify everything
-    new webpack.optimize.AggressiveMergingPlugin()  // Merge chunks 
+    new webpack.optimize.AggressiveMergingPlugin()  // Merge chunks
   ]
 };
