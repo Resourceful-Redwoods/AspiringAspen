@@ -23,11 +23,53 @@ class Game extends React.Component {
       board: {
         currentCategory: null,
         playerA: {
-          currentHand: [],
+          currentHand: [
+            {
+              name: 'Mike Trout',
+              info: {
+                hr: 29,
+                sb: 30,
+                avg: 100,
+                hits: 173,
+                rbi: 100
+              }
+            },
+            {
+              name: 'Joey Votto',
+              info: {
+                hr: 29,
+                sb: 8,
+                avg: 326,
+                hits: 181,
+                rbi: 97
+              }
+            }
+          ],
           username: null
         },
         playerB: {
-          currentHand: [],
+          currentHand: [
+            {
+              name: 'Nolan Arenado',
+              info: {
+                hr: 41,
+                sb: 2,
+                avg: 294,
+                hits: 182,
+                rbi: 133
+              }
+            },
+            {
+              name: 'Mookie Betts',
+              info: {
+                hr: 31,
+                sb: 26,
+                avg: 318,
+                hits: 214,
+                rbi: 113
+              }
+            }
+          ],
           username: null
         },
         waiting: false,
@@ -44,13 +86,13 @@ class Game extends React.Component {
     game.assignHands();
     //get deck
   }
-  
+
   componentDidMount () {
-    
+
   }
 
   componentWillUnmount () {
-    
+
   }
 
   render() {
@@ -59,7 +101,7 @@ class Game extends React.Component {
      <div>
        <div id='opponent'><Opponent /></div>
        <div id-'board'><Board /></div>
-       { gameOver ? <Decision winner={this.state.game.gameWinner} /> : null }
+       { gameOver ? <Decision /> : null }
        <div id='userhand'><Userhand /></div>
      </div>
     )
