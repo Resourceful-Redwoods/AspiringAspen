@@ -22,7 +22,7 @@ class Game extends React.Component {
       },
       board: {
         currentCategory: null,
-        playerA: {
+        userHand: {
           currentHand: [
             {
               name: 'Mike Trout',
@@ -45,9 +45,10 @@ class Game extends React.Component {
               }
             }
           ],
+          selectedCard: null,
           username: null
         },
-        playerB: {
+        opponentHand: {
           currentHand: [
             {
               name: 'Nolan Arenado',
@@ -74,8 +75,8 @@ class Game extends React.Component {
         },
         waiting: false,
         currentRound: {
-          playerACard: null,
-          playerBCard: null,
+          userHandCard: null,
+          opponentHandCard: null,
           outcome: null
         }
       }
@@ -100,7 +101,7 @@ class Game extends React.Component {
     return (
      <div>
        <div id='opponent'><Opponent /></div>
-       <div id-'board'><Board /></div>
+       <div id-'board'><Board currentRound={this.state.currentRound} /></div>
        { gameOver ? <Decision /> : null }
        <div id='userhand'><Userhand /></div>
      </div>
