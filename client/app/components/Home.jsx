@@ -8,7 +8,7 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      matchmaking: false
     }
   }
 
@@ -17,17 +17,23 @@ class Home extends React.Component {
   }
 
   playNow () {
+    console.log('play now');
+    this.setState({ matchmaking: true });
     //kick off matchmaking
+  }
 
-    //render waiting component?
+  componentWillUnmount() {
+    this.setState({ matchmaking: false });
   }
 
   render() {
+    const isMatchmaking = this.state.matchmaking;
     return (
       <div>
         <div class="titlebar">
           <h1>DeckStomp</h1>
         </div>
+        { isMatchmaking ? <Waiting /> : null }
         <div>
           <form>
             <label>
@@ -36,7 +42,7 @@ class Home extends React.Component {
             </label>
             <input type="submit" value="Submit" />
           </form>
-          <button onClick={this.playNow}> Play Now! </button>
+          <button onClick={ this.playNow }> Play Now! </button>
         </div>
       </div>
     )
