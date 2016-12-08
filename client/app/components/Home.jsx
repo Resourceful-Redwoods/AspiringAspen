@@ -23,6 +23,10 @@ class Home extends React.Component {
     socket.emit('game', 'play');
   }
 
+  cancelMatchmaking () {
+    
+  }
+
   componentWillUnmount() {
     this.setState({ matchmaking: false });
   }

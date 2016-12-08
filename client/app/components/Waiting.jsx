@@ -18,14 +18,16 @@ class Waiting extends React.Component {
   }
 
   foundMatch () {
+    // ?
     this.setState({foundMatch:true});
   }
+
 
   render() {
     return (
       <div id="waiting">
         <h1>Finding a match</h1>
-        <button> Cancel </button>
+        <button onClick={ this.props.cancelMatchmaking }> Cancel </button>
       </div>
     )
   }
