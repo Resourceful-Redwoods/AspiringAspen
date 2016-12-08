@@ -5,7 +5,7 @@ class Waiting extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      foundMatch: false;
+      foundMatch: false
     }
   }
 
