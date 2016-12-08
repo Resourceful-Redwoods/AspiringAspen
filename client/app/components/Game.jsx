@@ -1,10 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import game from './util/gameHelper.js'
+import game from './util/gameHelpers.js'
 
 import Board from './Board.jsx'
-import Opponent from './Opponent.jsx'
-import Submit from './Submit.jsx'
+import OpponentHand from './OpponentHand.jsx'
 import Userhand from './Userhand.jsx'
 
 class Game extends React.Component {

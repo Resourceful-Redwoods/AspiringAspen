@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import 'Cardback' from './Card.jsx'
+import Cardback from './Card.jsx'
 
 const OpponentHand = (props) => {
 

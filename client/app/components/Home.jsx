@@ -1,8 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import Waiting from '.components/Waiting.jsx'
-import Game from '.components/Game.jsx'
+import Waiting from './Waiting.jsx'
+import Game from './Game.jsx'
 
 class Home extends React.Component {
   constructor(props) {
@@ -24,7 +24,7 @@ class Home extends React.Component {
   }
 
   cancelMatchmaking () {
-    
+
   }
 
   componentWillUnmount() {

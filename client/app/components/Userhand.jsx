@@ -14,7 +14,7 @@ const UserHand = (props) => {
       <p>{props.username}</p>
       <div>
         {usersCards}
-      <div>
+      </div>
       <button onClick={props.playCard}>Play Card</button>
     </div>
   )
@@ -23,5 +23,5 @@ const UserHand = (props) => {
 UserHand.propTypes = {
   currentHand: PropTypes.array.isRequired,
   username: PropTypes.string.isRequired,
-  playCard: PropTypes.func.isRequired,
-};
+  playCard: PropTypes.func.isRequired
+}
