@@ -101,8 +101,8 @@ class Game extends React.Component {
     return (
      <div>
        <div id='opponent'><Opponent /></div>
-       <div id-'board'><Board currentRound={this.state.currentRound} /></div>
-       { gameOver ? <Decision /> : null }
+       <div id-'board'><Board /></div>
+       { gameOver ? <Decision winner={this.state.game.gameWinner} /> : null }
        <div id='userhand'><Userhand /></div>
      </div>
     )
