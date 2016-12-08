@@ -9,7 +9,7 @@ var app = express();
 app.use('/static', express.static(path.join(__dirname, '/../client/public')));
 
 app.get('/', function (req, res) {
-  console.log('get /);
+  console.log('get /');
   res.send('Deck Stomp!!!')
 });
 
