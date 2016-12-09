@@ -20,11 +20,12 @@ class Home extends React.Component {
     console.log('play now');
     this.setState({ matchmaking: true });
     //kick off matchmaking
-    socket.emit('game', 'play');
+    // socket.emit('game', 'play');
   }
 
   cancelMatchmaking () {
-
+    this.setState({ matchmaking: false });
+    console.log('cancel')
   }
 
   componentWillUnmount() {
@@ -32,13 +33,13 @@ class Home extends React.Component {
   }
 
   render() {
-    const isMatchmaking = this.state.matchmaking;
+    let isMatchmaking = this.state.matchmaking;
     return (
       <div>
-        <div class="titlebar">
+        <div className="titlebar">
           <h1>DeckStomp</h1>
         </div>
-        { isMatchmaking ? <Waiting /> : null }
+        { isMatchmaking ? <Waiting cancelMatchmaking={this.cancelMatchmaking.bind(this)} /> : null }
         <div>
           <form id='nameForm'>
             <label>
@@ -47,11 +48,11 @@ class Home extends React.Component {
             </label>
             <input type="submit" value="Submit" />
           </form>
-          <button onClick={ this.playNow }> Play Now! </button>
+          <button onClick={ this.playNow.bind(this) }> Play Now! </button>
         </div>
       </div>
     )
   }
 }
 
-
+export default Home;

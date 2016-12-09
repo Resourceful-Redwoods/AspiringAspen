@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+
 import game from './util/gameHelpers.js'
 
 import Board from './Board.jsx'
@@ -22,8 +23,8 @@ class Game extends React.Component {
       board: {
         currentCategory: null,
         userHand: {
-          currentHand: [
-            {
+          currentHand: {
+            'Mike_Trout': {
               name: 'Mike Trout',
               info: {
                 hr: 29,
@@ -33,7 +34,7 @@ class Game extends React.Component {
                 rbi: 100
               }
             },
-            {
+            'Joey_Votto': {
               name: 'Joey Votto',
               info: {
                 hr: 29,
@@ -43,13 +44,13 @@ class Game extends React.Component {
                 rbi: 97
               }
             }
-          ],
+          },
           selectedCard: null,
           username: null
         },
         opponentHand: {
-          currentHand: [
-            {
+          currentHand: {
+            'Nolan_Arenado': {
               name: 'Nolan Arenado',
               info: {
                 hr: 41,
@@ -59,8 +60,8 @@ class Game extends React.Component {
                 rbi: 133
               }
             },
-            {
-              name: 'Mookie Betts',
+            'Mookie_Betts': {
+              name: 'Mookie_Betts',
               info: {
                 hr: 31,
                 sb: 26,
@@ -69,7 +70,7 @@ class Game extends React.Component {
                 rbi: 113
               }
             }
-          ],
+          },
           username: null
         },
         waiting: false,
@@ -83,7 +84,7 @@ class Game extends React.Component {
   }
 
   componentWillMount () {
-    game.assignHands();
+    // game.assignHands();
     //get deck
   }
 
@@ -95,15 +96,38 @@ class Game extends React.Component {
 
   }
 
+  selectCard(card) {
+    console.log('before', card)
+    // emit to socket
+  }
+
+  playCard() {
+    console.log('play card', this.state)
+    // emit to socket
+  }
+
   render() {
     const gameOver = this.state.game.gameOver;
+
     return (
      <div>
-       <div id='opponent'><OpponentHand /></div>
-       <div id='board'><Board /></div>
+       <div id='opponent'>
+        <OpponentHand
+          currentHand={this.state.board.opponentHand.currentHand} />
+        </div>
+       <div id='board'>
+        { this.state.board.currentRound.userHandCard && this.state.board.currentRound.opponentHandCard ? <Board /> : null}
+        </div>
        { gameOver ? <GameOver winner={this.state.game.gameWinner} /> : null }
-       <div id='userhand'><Userhand /></div>
+       <div id='userhand'>
+        <Userhand
+          currentHand={this.state.board.userHand.currentHand}
+          selectCard={this.selectCard}
+          playCard={this.playCard} />
+        </div>
      </div>
     )
   }
 }
+
+export default Game;

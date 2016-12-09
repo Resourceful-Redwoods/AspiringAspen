@@ -27,8 +27,10 @@ class Waiting extends React.Component {
     return (
       <div id="waiting">
         <h1>Finding a match</h1>
-        <button onClick={ this.props.cancelMatchmaking }> Cancel </button>
+        <button onClick={ this.props.cancelMatchmaking.bind(this) }> Cancel </button>
       </div>
     )
   }
 }
+
+export default Waiting;

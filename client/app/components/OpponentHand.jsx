@@ -1,21 +1,24 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-import Cardback from './Card.jsx'
+import Cardback from './Cardback.jsx'
 
 const OpponentHand = (props) => {
 
-  const usersCards = props.currentHand.map((card) =>
-    <Cardback />
+  const usersCards = Object.keys(props.currentHand).map((key) =>
+    <Cardback key={key} />
   )
 
   return (
     <div>
+      OpponentHand
       {usersCards}
     </div>
   )
 }
 
-OpponentHand.propTypes = {
-  currentHand: PropTypes.array.isRequired,
-};
+// OpponentHand.propTypes = {
+//   currentHand: React.PropTypes.array.isRequired,
+// };
+
+export default OpponentHand;
