@@ -1,5 +1,5 @@
 module.exports = {
-  Mike_Trout: {
+  'Mike_Trout': {
     name: 'Mike Trout',
     info: {
       hr: 29,
@@ -9,7 +9,7 @@ module.exports = {
       rbi: 100
     }
   },
-  Freddie_Freeman: {
+  'Freddie_Freeman': {
     name: 'Freddie Freeman',
     info: {
       hr: 34,
@@ -19,7 +19,7 @@ module.exports = {
       rbi: 91
     }
   },
-  Joey_Votto: {
+  'Joey_Votto': {
     name: 'Joey Votto',
     info: {
       hr: 30,
@@ -29,7 +29,7 @@ module.exports = {
       rbi: 97
     }
   },
-  Paul_Goldschmidt: {
+  'Paul_Goldschmidt': {
     name: 'Paul Goldschmidt',
     info: {
       hr: 24,
@@ -39,7 +39,7 @@ module.exports = {
       rbi: 95
     }
   },
-  David_Ortiz: {
+  'David_Ortiz': {
     name: 'David Ortiz',
     info: {
       hr: 28,
@@ -49,7 +49,7 @@ module.exports = {
       rbi: 127
     }
   },
-  Nolan_Arenado: {
+  'Nolan_Arenado': {
     name: 'Nolan Arenado',
     info: {
       hr: 41,
@@ -59,7 +59,7 @@ module.exports = {
       rbi: 133
     }
   },
-  Jose_Altuve: {
+  'Jose_Altuve': {
     name: 'Jose Altuve',
     info: {
       hr: 25,
@@ -69,7 +69,7 @@ module.exports = {
       rbi: 96
     }
   },
-  Mookie_Betts: {
+  'Mookie_Betts': {
     name: 'Mookie Betts',
     info: {
       hr: 31,
@@ -79,4 +79,4 @@ module.exports = {
       rbi: 113
     }
   }
-}
+};

@@ -1,8 +1,8 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 const Card = (props) => {
-  console.log('card', props)
+  console.log('card', props);
 
   return (
 
@@ -17,8 +17,8 @@ const Card = (props) => {
         <li>Stolen Bases: {props.card.info.sb}</li>
       </ul>
     </div>
-  )
-}
+  );
+};
 
 // Card.propTypes = {
 //   card: React.PropTypes.object,
