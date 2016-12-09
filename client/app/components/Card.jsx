@@ -2,24 +2,27 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 const Card = (props) => {
+  console.log('card', props)
+
   return (
-    <div onClick={props.selectCard(this)}>
-      <p>Player: {props.cardInfo.name}</p>
+
+    <div onClick={() => props.selectCard(props.card)}>
+      <p>Player: {props.card.name}</p>
       <p>Stats</p>
       <ul>
-        <li>Home Runs: {props.cardInfo.hr}</li>
-        <li>Average: {props.cardInfo.avg}</li>
-        <li>Hits: {props.cardInfo.hits}</li>
-        <li>RBI: {props.cardInfo.rbi}</li>
-        <li>Stolen Bases: {props.cardInfo.sb}</li>
+        <li>Home Runs: {props.card.info.hr}</li>
+        <li>Average: {props.card.info.avg}</li>
+        <li>Hits: {props.card.info.hits}</li>
+        <li>RBI: {props.card.info.rbi}</li>
+        <li>Stolen Bases: {props.card.info.sb}</li>
       </ul>
     </div>
   )
 }
 
 // Card.propTypes = {
-//   cardInfo: PropTypes.object.isRequired,
-//   selectCard: PropTypes.func.isRequired,
+//   card: React.PropTypes.object,
+//   selectCard: React.PropTypes.func
 // };
 
 export default Card;

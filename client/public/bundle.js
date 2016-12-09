@@ -26442,11 +26442,14 @@
 	      console.log('play now');
 	      this.setState({ matchmaking: true });
 	      //kick off matchmaking
-	      socket.emit('game', 'play');
+	      // socket.emit('game', 'play');
 	    }
 	  }, {
 	    key: 'cancelMatchmaking',
-	    value: function cancelMatchmaking() {}
+	    value: function cancelMatchmaking() {
+	      this.setState({ matchmaking: false });
+	      console.log('cancel');
+	    }
 	  }, {
 	    key: 'componentWillUnmount',
 	    value: function componentWillUnmount() {
@@ -26468,7 +26471,7 @@
 	            'DeckStomp'
 	          )
 	        ),
-	        isMatchmaking ? _react2.default.createElement(_Waiting2.default, null) : null,
+	        isMatchmaking ? _react2.default.createElement(_Waiting2.default, { cancelMatchmaking: this.cancelMatchmaking.bind(this) }) : null,
 	        _react2.default.createElement(
 	          'div',
 	          null,
@@ -26485,7 +26488,7 @@
 	          ),
 	          _react2.default.createElement(
 	            'button',
-	            { onClick: this.playNow },
+	            { onClick: this.playNow.bind(this) },
 	            ' Play Now! '
 	          )
 	        )
@@ -26569,7 +26572,7 @@
 	        ),
 	        _react2.default.createElement(
 	          'button',
-	          { onClick: this.props.cancelMatchmaking },
+	          { onClick: this.props.cancelMatchmaking.bind(this) },
 	          ' Cancel '
 	        )
 	      );
@@ -26613,7 +26616,7 @@
 	
 	var _OpponentHand2 = _interopRequireDefault(_OpponentHand);
 	
-	var _Userhand = __webpack_require__(240);
+	var _Userhand = __webpack_require__(241);
 	
 	var _Userhand2 = _interopRequireDefault(_Userhand);
 	
@@ -26646,48 +26649,54 @@
 	      board: {
 	        currentCategory: null,
 	        userHand: {
-	          currentHand: [{
-	            name: 'Mike Trout',
-	            info: {
-	              hr: 29,
-	              sb: 30,
-	              avg: 100,
-	              hits: 173,
-	              rbi: 100
+	          currentHand: {
+	            'Mike_Trout': {
+	              name: 'Mike Trout',
+	              info: {
+	                hr: 29,
+	                sb: 30,
+	                avg: 100,
+	                hits: 173,
+	                rbi: 100
+	              }
+	            },
+	            'Joey_Votto': {
+	              name: 'Joey Votto',
+	              info: {
+	                hr: 29,
+	                sb: 8,
+	                avg: 326,
+	                hits: 181,
+	                rbi: 97
+	              }
 	            }
-	          }, {
-	            name: 'Joey Votto',
-	            info: {
-	              hr: 29,
-	              sb: 8,
-	              avg: 326,
-	              hits: 181,
-	              rbi: 97
-	            }
-	          }],
+	          },
 	          selectedCard: null,
 	          username: null
 	        },
 	        opponentHand: {
-	          currentHand: [{
-	            name: 'Nolan Arenado',
-	            info: {
-	              hr: 41,
-	              sb: 2,
-	              avg: 294,
-	              hits: 182,
-	              rbi: 133
+	          currentHand: {
+	            'Nolan_Arenado': {
+	              name: 'Nolan Arenado',
+	              info: {
+	                hr: 41,
+	                sb: 2,
+	                avg: 294,
+	                hits: 182,
+	                rbi: 133
+	              }
+	            },
+	            'Mookie_Betts': {
+	              name: 'Mookie_Betts',
+	              info: {
+	                hr: 31,
+	                sb: 26,
+	                avg: 318,
+	                hits: 214,
+	                rbi: 113
+	              }
 	            }
-	          }, {
-	            name: 'Mookie Betts',
-	            info: {
-	              hr: 31,
-	              sb: 26,
-	              avg: 318,
-	              hits: 214,
-	              rbi: 113
-	            }
-	          }],
+	          },
 	          username: null
 	        },
 	        waiting: false,
@@ -26704,7 +26713,7 @@
 	  _createClass(Game, [{
 	    key: 'componentWillMount',
 	    value: function componentWillMount() {
-	      _gameHelpers2.default.assignHands();
+	      // game.assignHands();
 	      //get deck
 	    }
 	  }, {
@@ -26714,27 +26723,44 @@
 	    key: 'componentWillUnmount',
 	    value: function componentWillUnmount() {}
 	  }, {
+	    key: 'selectCard',
+	    value: function selectCard(card) {
+	      console.log('before', card);
+	      // emit to socket
+	    }
+	  }, {
+	    key: 'playCard',
+	    value: function playCard() {
+	      console.log('play card', this.state);
+	      // emit to socket
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var gameOver = this.state.game.gameOver;
+	
 	      return _react2.default.createElement(
 	        'div',
 	        null,
 	        _react2.default.createElement(
 	          'div',
 	          { id: 'opponent' },
-	          _react2.default.createElement(_OpponentHand2.default, null)
+	          _react2.default.createElement(_OpponentHand2.default, {
+	            currentHand: this.state.board.opponentHand.currentHand })
 	        ),
 	        _react2.default.createElement(
 	          'div',
 	          { id: 'board' },
-	          _react2.default.createElement(_Board2.default, null)
+	          this.state.board.currentRound.userHandCard && this.state.board.currentRound.opponentHandCard ? _react2.default.createElement(_Board2.default, null) : null
 	        ),
 	        gameOver ? _react2.default.createElement(GameOver, { winner: this.state.game.gameWinner }) : null,
 	        _react2.default.createElement(
 	          'div',
 	          { id: 'userhand' },
-	          _react2.default.createElement(_Userhand2.default, null)
+	          _react2.default.createElement(_Userhand2.default, {
+	            currentHand: this.state.board.userHand.currentHand,
+	            selectCard: this.selectCard,
+	            playCard: this.playCard })
 	        )
 	      );
 	    }
@@ -26886,14 +26912,18 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var Card = function Card(props) {
+	  console.log('card', props);
+	
 	  return _react2.default.createElement(
 	    'div',
-	    { onClick: props.selectCard(undefined) },
+	    { onClick: function onClick() {
+	        return props.selectCard(props.card);
+	      } },
 	    _react2.default.createElement(
 	      'p',
 	      null,
 	      'Player: ',
-	      props.cardInfo.name
+	      props.card.name
 	    ),
 	    _react2.default.createElement(
 	      'p',
@@ -26907,39 +26937,39 @@
 	        'li',
 	        null,
 	        'Home Runs: ',
-	        props.cardInfo.hr
+	        props.card.info.hr
 	      ),
 	      _react2.default.createElement(
 	        'li',
 	        null,
 	        'Average: ',
-	        props.cardInfo.avg
+	        props.card.info.avg
 	      ),
 	      _react2.default.createElement(
 	        'li',
 	        null,
 	        'Hits: ',
-	        props.cardInfo.hits
+	        props.card.info.hits
 	      ),
 	      _react2.default.createElement(
 	        'li',
 	        null,
 	        'RBI: ',
-	        props.cardInfo.rbi
+	        props.card.info.rbi
 	      ),
 	      _react2.default.createElement(
 	        'li',
 	        null,
 	        'Stolen Bases: ',
-	        props.cardInfo.sb
+	        props.card.info.sb
 	      )
 	    )
 	  );
 	};
 	
 	// Card.propTypes = {
-	//   cardInfo: PropTypes.object.isRequired,
-	//   selectCard: PropTypes.func.isRequired,
+	//   card: React.PropTypes.object,
+	//   selectCard: React.PropTypes.func
 	// };
 	
 	exports.default = Card;
@@ -26962,33 +26992,68 @@
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _Card = __webpack_require__(238);
+	var _Cardback = __webpack_require__(240);
 	
-	var _Card2 = _interopRequireDefault(_Card);
+	var _Cardback2 = _interopRequireDefault(_Cardback);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var OpponentHand = function OpponentHand(props) {
 	
-	  var usersCards = props.currentHand.map(function (card) {
-	    return _react2.default.createElement(_Card2.default, null);
+	  var usersCards = Object.keys(props.currentHand).map(function (key) {
+	    return _react2.default.createElement(_Cardback2.default, { key: key });
 	  });
 	
 	  return _react2.default.createElement(
 	    'div',
 	    null,
+	    'OpponentHand',
 	    usersCards
 	  );
 	};
 	
 	// OpponentHand.propTypes = {
-	//   currentHand: PropTypes.array.isRequired,
+	//   currentHand: React.PropTypes.array.isRequired,
 	// };
 	
 	exports.default = OpponentHand;
 
 /***/ },
 /* 240 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactDom = __webpack_require__(32);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Cardback = function Cardback(props) {
+	  return _react2.default.createElement(
+	    'div',
+	    null,
+	    _react2.default.createElement(
+	      'p',
+	      null,
+	      'Back of card'
+	    )
+	  );
+	};
+	
+	exports.default = Cardback;
+
+/***/ },
+/* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -27013,9 +27078,13 @@
 	
 	var UserHand = function UserHand(props) {
 	
-	  var usersCards = props.currentHand.map(function (card) {
-	    return _react2.default.createElement(_Card2.default, { cardInfo: card, selectCard: props.selectCard });
+	  console.log('userhand', props);
+	
+	  var usersCards = Object.keys(props.currentHand).map(function (card, key) {
+	    return _react2.default.createElement(_Card2.default, { card: props.currentHand[card], selectCard: props.selectCard, key: key });
 	  });
+	
+	  console.log('user usersCards', usersCards);
 	
 	  return _react2.default.createElement(
 	    'div',
@@ -27023,7 +27092,7 @@
 	    _react2.default.createElement(
 	      'p',
 	      null,
-	      props.username
+	      'Hello'
 	    ),
 	    _react2.default.createElement(
 	      'div',

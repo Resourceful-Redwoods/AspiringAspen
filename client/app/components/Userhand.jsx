@@ -5,13 +5,17 @@ import Card from './Card.jsx'
 
 const UserHand = (props) => {
 
-  const usersCards = props.currentHand.map((card) =>
-    <Card cardInfo={card} selectCard={props.selectCard} />
+  console.log('userhand', props)
+
+  const usersCards = Object.keys(props.currentHand).map((card, key) =>
+    <Card card={props.currentHand[card]} selectCard={props.selectCard} key={key} />
   )
+
+  console.log('user usersCards', usersCards)
 
   return (
     <div>
-      <p>{props.username}</p>
+      <p>Hello</p>
       <div>
         {usersCards}
       </div>

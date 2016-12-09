@@ -7,6 +7,7 @@ const Board = (props) => {
 
   return (
     <div>
+
       <div className="user-hand">
         <p>Your Card:</p>
         <Card cardInfo={props.currentRound.userHandCard} />
@@ -20,6 +21,7 @@ const Board = (props) => {
       <div>
         <p>{props.currentRound.outcome ? 'Outcome: ' + props.currentRound.outcome : null}</p>
       </div>
+
     </div>
   )
 }
