@@ -1,6 +1,6 @@
-node_modules
+node_modules/
 client/public/lib
 client/public/bundle.js
 client/public/bundle.js.map
 db
-babel_cache
+babel_cache/
