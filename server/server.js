@@ -1,12 +1,15 @@
-var express = require('express')
+var express = require('express');
+var app = express();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+
 var path = require('path');
+var chalk = require('chalk');
+var _ = require('lodash');
 var bodyParser = require('body-parser');
 
 var playerData = require('./data/baseballData.js');
-
 var helper = require('./util/helper.js');
-
-var app = express();
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
@@ -18,17 +21,17 @@ app.use(express.static(path.resolve(__dirname, '..', 'client/public')));
 // TODO: use api to have all player information
 
 app.get('/players', function (req, res) {
-  console.log('get /players')
-  res.json(playerData)
+  console.log('get /players');
+  res.json(playerData);
 });
 
 app.get('/deck', function (req, res) {
-  console.log('get /deck')
+  console.log('get /deck');
   var team = {
     hand: []
-  }
+  };
 
-  res.json( helper.getDeck(playerData, team.hand, 2 ) )
+  res.json( helper.getDeck(playerData, team.hand, 2 ) );
 });
 
 // Always return the main index.html, so react-router render the route in the client
@@ -36,10 +39,250 @@ app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', 'client', 'index.html'));
 });
 
-app.get('/', function(req, res){
-  res.send(200);
+/**** SOCKETS START ****/
+/** SOCKETS DATA **/
+let waiting = [];
+let rooms = {};
+
+io.on('connection', function(socket) { // 'chat message' used to console.log (for now)
+  console.log(`User Connected - ${chalk.red(socket.id)}`);
+  socket.emit('chat message', `Your Id: ${socket.id}`);
+  socket.data = {
+    gameState: 'idle'
+  };
+
+  socket.on('game', function(action) {
+    if (action === 'play') { //TODO: Forfeit if already in a game, do nothing if already waiting
+      if (socket.data.gameState !== 'waiting') {
+        play(socket);
+      }
+    }
+    //TODO: add action 'quit'
+  });
+
+  socket.on('chat message', function(msg) {
+    io.to(socket.data.room).emit('chat message', msg);
+  });
+
+  socket.on('disconnect', function() {
+    let gameState = socket.data.gameState;
+    console.log(`${chalk.red(socket.id)} disconnected while ${chalk.green(gameState)}`);
+    
+    if (gameState === 'waiting') {
+      return dequeue(socket);
+    }
+
+    if (gameState === 'playing') {
+      let opponent = getSocket(socket.data.opponent);
+      console.log(`${chalk.red(socket.id)} DC'd -> ${chalk.magenta('loses')}`);
+      if (opponent) {
+        console.log(`${chalk.red(opponent.id)} -> ${chalk.magenta('wins')}`);
+        opponent.emit('chat message', 'Opponent disconnected');
+        gameEnd(opponent, 'win');
+      } else {
+        console.log(chalk.magenta(`No opponenent, connected: ${chalk.red(io.sockets.connected)}`));
+      }
+    }
+  });
 });
 
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!')
+/**** SOCKETS END ****/
+/*** SOCKETS HELPERS START ***/
+
+function newGame(id1, id2) {
+  var dummyDeck = {
+    'Nolan_Arenado': {
+      name: 'Nolan Arenado',
+      info: {
+        hr: 41,
+        sb: 2,
+        avg: 294,
+        hits: 182,
+        rbi: 133
+      }
+    },
+    'Mookie_Betts': {
+      name: 'Mookie Betts',
+      info: {
+        hr: 31,
+        sb: 26,
+        avg: 318,
+        hits: 214,
+        rbi: 113
+      }
+    },
+    'Mike_Trout': {
+      name: 'Mike Trout',
+      info: {
+        hr: 29,
+        sb: 30,
+        avg: 100,
+        hits: 173,
+        rbi: 100
+      }
+    },
+    'Joey_Votto': {
+      name: 'Joey Votto',
+      info: {
+        hr: 29,
+        sb: 8,
+        avg: 326,
+        hits: 181,
+        rbi: 97
+      }
+    }
+  };
+
+  function dealHands(size = 2) {
+    let cards = Object.keys(dummyDeck);
+    let hand1 = {};
+    let hand2 = {};
+
+    function drawCard() {
+      let cardIndex = Math.floor(Math.random() * cards.length);
+      let card = cards.splice(cardIndex, 1)[0];
+      return dummyDeck[card];
+    }
+
+    for (let i = 1; i <= size * 2; i++) {
+      let card = drawCard();
+      if (i % 2) {
+        hand1[card.name] = card;
+      } else {
+        hand2[card.name] = card;
+      }
+    }
+
+    return [hand1, hand2];
+  }
+
+  var hands = dealHands();
+  
+  var match = {
+    id: id1 + id2,
+    game: {
+      rounds: {
+        count: 0,
+        wins: {}
+      },
+      gameWinner: null,
+      gameOver: false,
+      categories: ['hr', 'sb', 'avg', 'hits', 'rbi']
+    },
+    board: {
+      currentCategory: null,
+      waiting: false,
+      currentRound: {
+        outcome: null
+      }
+    }
+  };
+
+  getSocket(id1).data.hand = {
+    currentHand: hands.shift(),
+    selectedCard: null
+  };
+
+  getSocket(id2).data.hand = {
+    currentHand: hands.shift(),
+    selectedCard: null
+  };
+
+  match.board.currentRound[`${id1}_HandCard`] = null;
+  match.board.currentRound[`${id2}_HandCard`] = null;
+
+  match.game.rounds.wins[id1] = 0;
+  match.game.rounds.wins[id2] = 0;
+
+  return match;
+}
+
+function makeRoom(sock1, sock2) {
+  let room = sock1.id + sock2.id;
+  _.extend(sock1.data, {
+    room: room,
+    opponent: sock2.id,
+    gameState: 'playing',
+    username: null
+  });
+
+  _.extend(sock2.data, {
+    room: room,
+    opponent: sock1.id,
+    gameState: 'playing',
+    username: null
+  });
+
+  sock1.join(room);
+  sock2.join(room);
+
+  rooms[room] = newGame(sock1.id, sock2.id);
+  console.log(`Made Room: ${chalk.yellow(room)} with ${chalk.red(sock1.id)} & ${chalk.red(sock2.id)}`);
+  sock1.emit('hand', sock1.data);
+  sock2.emit('hand', sock2.data);
+  chooseCategory(room);
+}
+
+function getSocket(socketId) {
+  let socket = io.sockets.connected[socketId];
+
+  if (!socket) {
+    console.log(`Can not find socket ${chalk.red(socketId)} in connected sockets`);
+    return null;
+  }
+
+  return socket;
+}
+
+function play(socket) {
+  if (waiting.length) {
+    let opponent = getSocket(waiting.shift());
+    if (!opponent || opponent.data.gameState !== 'waiting') { //safeguards against certain async issues
+      return setTimeout(play.bind(this, socket), 0);
+    }
+    makeRoom(socket, opponent);
+    let room = socket.data.room;
+    io.to(room).emit('chat message', `In room: ${room}`);
+  } else {
+    queue(socket);
+  }
+}
+
+function queue(socket) {
+  waiting.push(socket.id);
+  socket.data.gameState = 'waiting';
+  socket.emit('chat message', 'Searching for opponent...');
+}
+
+function dequeue(socket) {
+  if (socket.data.gameState === 'waiting') {
+    waiting.splice(waiting.indexOf(socket.id), 1);
+    socket.data.gameState === 'idle';
+  }
+}
+
+function leaveRoom(socket) {
+  socket.leave(socket.data.room);
+  delete socket.data.room;
+}
+
+function gameEnd(socket, result) {
+  socket.emit('game end', result);
+  console.log(`${chalk.red(socket.id)} ends match with ${chalk.magenta(result)}`);
+  leaveRoom(socket);
+}
+
+function chooseCategory(room) {
+  let category = _.sample(rooms[room].game.categories);
+  rooms[room].board.currentCategory = category;
+  io.to(room).emit('category', category);
+  return category;
+}
+
+/*** SOCKETS HELPERS END ***/
+
+
+
+http.listen(3000, function () {
+  console.log('Example app listening on port 3000!');
 });
