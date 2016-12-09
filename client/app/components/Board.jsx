@@ -1,7 +1,7 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-import Card from './Card.jsx'
+import Card from './Card.jsx';
 
 const Board = (props) => {
 
@@ -19,12 +19,13 @@ const Board = (props) => {
       </div>
 
       <div>
-        <p>{props.currentRound.outcome ? 'Outcome: ' + props.currentRound.outcome : null}</p>
+        <p>Outcome: {props.currentRound.outcome}</p>
       </div>
 
     </div>
-  )
-}
+
+  );
+};
 
 Board.propTypes = {
 };

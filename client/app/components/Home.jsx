@@ -1,35 +1,46 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-import Waiting from './Waiting.jsx'
-import Game from './Game.jsx'
+import Waiting from './Waiting.jsx';
+import Game from './Game.jsx';
 
 class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       matchmaking: false
-    }
+    };
   }
 
   componentDidMount () {
+    // socket.on('init', this._initialize);
+    // listen to see if there is a match
+    // socket.on('is matched', this._isMatch);
+  }
 
+  componentWillUnmount() {}
+
+  _initialize() {
+    // do things right away
+  }
+
+  _isMatch() {
+    // redirect to /game
   }
 
   playNow () {
     console.log('play now');
     this.setState({ matchmaking: true });
-    //kick off matchmaking
+
+    // kick off matchmaking
     // socket.emit('game', 'play');
   }
 
   cancelMatchmaking () {
     this.setState({ matchmaking: false });
-    console.log('cancel')
-  }
-
-  componentWillUnmount() {
-    this.setState({ matchmaking: false });
+    console.log('cancel');
+    // cancel matchmaking
+    // socket.emit('game', 'play');
   }
 
   render() {
@@ -51,7 +62,7 @@ class Home extends React.Component {
           <button onClick={ this.playNow.bind(this) }> Play Now! </button>
         </div>
       </div>
-    )
+    );
   }
 }
 
