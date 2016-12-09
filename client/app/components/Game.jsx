@@ -85,11 +85,11 @@ class Game extends React.Component {
 
   componentWillMount () {
     // game.assignHands();
-    //get deck
+    // get deck
   }
 
-  componentDidMount () {
-
+  componentDidMount() {
+    socket.on('init', this._initialize);
   }
 
   componentWillUnmount () {
@@ -97,12 +97,14 @@ class Game extends React.Component {
   }
 
   selectCard(card) {
-    console.log('before', card)
+    console.log('select card', card)
     // emit to socket
+      // send card along with the username
   }
 
   playCard() {
     console.log('play card', this.state)
+    socket.emit('send:message', message)
     // emit to socket
   }
 

@@ -26714,24 +26714,28 @@
 	    key: 'componentWillMount',
 	    value: function componentWillMount() {
 	      // game.assignHands();
-	      //get deck
+	      // get deck
 	    }
 	  }, {
 	    key: 'componentDidMount',
-	    value: function componentDidMount() {}
+	    value: function componentDidMount() {
+	      socket.on('init', this._initialize);
+	    }
 	  }, {
 	    key: 'componentWillUnmount',
 	    value: function componentWillUnmount() {}
 	  }, {
 	    key: 'selectCard',
 	    value: function selectCard(card) {
-	      console.log('before', card);
+	      console.log('select card', card);
 	      // emit to socket
+	      // send card along with the username
 	    }
 	  }, {
 	    key: 'playCard',
 	    value: function playCard() {
 	      console.log('play card', this.state);
+	      socket.emit('send:message', message);
 	      // emit to socket
 	    }
 	  }, {
