@@ -1,11 +1,11 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-import game from './util/gameHelpers.js'
+import game from './util/gameHelpers.js';
 
-import Board from './Board.jsx'
-import OpponentHand from './OpponentHand.jsx'
-import Userhand from './Userhand.jsx'
+import Board from './Board.jsx';
+import OpponentHand from './OpponentHand.jsx';
+import Userhand from './Userhand.jsx';
 
 class Game extends React.Component {
   constructor(props) {
@@ -80,32 +80,34 @@ class Game extends React.Component {
           outcome: null
         }
       }
-    }
+    };
   }
 
-  componentWillMount () {
-    // game.assignHands();
-    // get deck
-  }
+  componentWillMount () {}
 
   componentDidMount() {
-    socket.on('init', this._initialize);
+    // socket.on('init', this._initialize);
+    // socket.on('init', this._getCategory);
+    // socket.on('init', this._getRoundOutcome);
+    // socket.on('init', this._getGameOutcome);
   }
 
-  componentWillUnmount () {
+  componentWillUnmount () {}
 
-  }
+  _initialize() {}
+  _getCategory() {}
+  _getRoundOutcome() {}
+  _getRoundOutcome() {}
 
   selectCard(card) {
-    console.log('select card', card)
-    // emit to socket
-      // send card along with the username
+    console.log('select card', card);
+    // save selected card in state
   }
 
   playCard() {
-    console.log('play card', this.state)
-    socket.emit('send:message', message)
-    // emit to socket
+    console.log('play card', this.state);
+    // socket.emit('play card', this.state.selectedCard);
+    // set isWaiting to true
   }
 
   render() {
@@ -118,9 +120,10 @@ class Game extends React.Component {
           currentHand={this.state.board.opponentHand.currentHand} />
         </div>
        <div id='board'>
-        { this.state.board.currentRound.userHandCard && this.state.board.currentRound.opponentHandCard ? <Board /> : null}
+        { this.state.isWaiting && !this.state.hasOutcome ? <p>Waiting for opponent...</p> : null }
+        { this.state.hasOutcome ? <Board /> : null }
         </div>
-       { gameOver ? <GameOver winner={this.state.game.gameWinner} /> : null }
+        { gameOver ? <GameOver winner={this.state.game.gameWinner} /> : null }
        <div id='userhand'>
         <Userhand
           currentHand={this.state.board.userHand.currentHand}
@@ -128,7 +131,7 @@ class Game extends React.Component {
           playCard={this.playCard} />
         </div>
      </div>
-    )
+    );
   }
 }
 

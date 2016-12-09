@@ -1,17 +1,17 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-import Card from './Card.jsx'
+import Card from './Card.jsx';
 
 const UserHand = (props) => {
 
-  console.log('userhand', props)
+  console.log('userhand', props);
 
   const usersCards = Object.keys(props.currentHand).map((card, key) =>
     <Card card={props.currentHand[card]} selectCard={props.selectCard} key={key} />
-  )
+  );
 
-  console.log('user usersCards', usersCards)
+  console.log('user usersCards', usersCards);
 
   return (
     <div>
@@ -21,8 +21,8 @@ const UserHand = (props) => {
       </div>
       <button onClick={props.playCard}>Play Card</button>
     </div>
-  )
-}
+  );
+};
 
 // UserHand.propTypes = {
 //   currentHand: PropTypes.array.isRequired,
