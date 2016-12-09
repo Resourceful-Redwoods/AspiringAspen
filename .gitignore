@@ -1,5 +1,5 @@
 node_modules
 client/public/lib
-client/public/compiled.js
+client/public/bundle.js
 db
 babel_cache
