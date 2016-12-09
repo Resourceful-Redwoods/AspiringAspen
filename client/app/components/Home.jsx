@@ -41,7 +41,7 @@ class Home extends React.Component {
     console.log('cancel');
     // cancel matchmaking
     // socket.emit('game', 'play');
-  }
+  };
 
   render() {
     let isMatchmaking = this.state.matchmaking;
