@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Router, Route, Link } from 'react-router';
 
 import Waiting from './Waiting.jsx';
 import Game from './Game.jsx';
@@ -8,14 +9,14 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      matchmaking: false
+      gameState: 'idle',
     };
   }
 
   componentDidMount () {
-    // socket.on('init', this._initialize);
+    this.props.socket.on('init', this._initialize);
     // listen to see if there is a match
-    // socket.on('is matched', this._isMatch);
+    this.props.socket.on('enter game', this._enterGame.bind(this));
   }
 
   componentWillUnmount() {}
@@ -24,33 +25,33 @@ class Home extends React.Component {
     // do things right away
   }
 
-  _isMatch() {
-    // redirect to /game
+  _enterGame() {
+    console.log(this);
+    this.props.router.push('/game');
   }
 
   playNow () {
     console.log('play now');
-    this.setState({ matchmaking: true });
-
-    // kick off matchmaking
-    // socket.emit('game', 'play');
+    this.setState({ gameState: 'waiting' });
+    this.props.socket.emit('game', 'play');
+    // gamestate is waiting
   }
 
   cancelMatchmaking () {
-    this.setState({ matchmaking: false });
-    console.log('cancel');
-    // cancel matchmaking
-    // socket.emit('game', 'play');
+    console.log('cancel looking');
+    this.setState({ gameState: 'idle' });
+    this.props.socket.emit('game', 'cancel');
+    // gameState is idle, emit it back to server
   }
 
   render() {
-    let isMatchmaking = this.state.matchmaking;
+    let gameState = this.state.gameState;
     return (
       <div>
         <div className="titlebar">
           <h1>DeckStomp</h1>
         </div>
-        { isMatchmaking ? <Waiting cancelMatchmaking={this.cancelMatchmaking.bind(this)} /> : null }
+        { gameState === 'waiting' ? <Waiting cancelMatchmaking={this.cancelMatchmaking.bind(this)} /> : null }
         <div>
           <form id='nameForm'>
             <label>
