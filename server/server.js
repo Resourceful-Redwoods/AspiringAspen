@@ -53,11 +53,23 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
 
   socket.on('game', function(action) {
     if (action === 'play') { //TODO: Forfeit if already in a game, do nothing if already waiting
+      console.log('in game play');
       if (socket.data.gameState !== 'waiting') {
+        console.log('in game play waiting');
         play(socket);
       }
     }
     //TODO: add action 'quit'
+  });
+
+  socket.on('select card', function(card) {
+    console.log('select card', card);
+    socket.data.hand.selectedCard = card;
+    socket.emit('card selected', card);
+  });
+
+  socket.on('play card', function(card) {
+    console.log('play card', card);
   });
 
   socket.on('chat message', function(msg) {
@@ -67,7 +79,7 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
   socket.on('disconnect', function() {
     let gameState = socket.data.gameState;
     console.log(`${chalk.red(socket.id)} disconnected while ${chalk.green(gameState)}`);
-    
+
     if (gameState === 'waiting') {
       return dequeue(socket);
     }
@@ -157,7 +169,7 @@ function newGame(id1, id2) {
   }
 
   var hands = dealHands();
-  
+
   var match = {
     id: id1 + id2,
     game: {
@@ -240,6 +252,8 @@ function play(socket) {
     if (!opponent || opponent.data.gameState !== 'waiting') { //safeguards against certain async issues
       return setTimeout(play.bind(this, socket), 0);
     }
+    socket.emit('enter game');
+    opponent.emit('enter game');
     makeRoom(socket, opponent);
     let room = socket.data.room;
     io.to(room).emit('chat message', `In room: ${room}`);

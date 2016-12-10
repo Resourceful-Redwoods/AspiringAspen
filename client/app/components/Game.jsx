@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import _ from 'lodash';
 
 import game from './util/gameHelpers.js';
 
@@ -86,7 +87,9 @@ class Game extends React.Component {
   componentWillMount () {}
 
   componentDidMount() {
-    // socket.on('init', this._initialize);
+    this.props.socket.on('init', this._initialize);
+    this.props.socket.on('hand', this._getHand.bind(this));
+    this.props.socket.on('card selected', this._getSelectedCard.bind(this));
     // socket.on('init', this._getCategory);
     // socket.on('init', this._getRoundOutcome);
     // socket.on('init', this._getGameOutcome);
@@ -95,6 +98,21 @@ class Game extends React.Component {
   componentWillUnmount () {}
 
   _initialize() {}
+
+  _getHand(data) {
+    console.log('from gethand', data.hand);
+    var change = _.extend({}, this.state);
+    change.board.userHand = data.hand;
+    this.setState(change);
+  }
+
+  _getSelectedCard(card) {
+    console.log('from _getSelectedCard', card);
+    var change = _.extend({}, this.state);
+    change.board.userHand.selectedCard = card;
+    this.setState(change);
+  }
+
   _getCategory() {}
   _getRoundOutcome() {}
   _getRoundOutcome() {}
@@ -102,12 +120,17 @@ class Game extends React.Component {
   selectCard(card) {
     console.log('select card', card);
     // save selected card in state
+    var change = _.extend({}, this.state);
+    change.board.userHand.selectedCard = card;
+    this.setState(change);
+    this.props.socket.emit('select card', card);
   }
 
   playCard() {
     console.log('play card', this.state);
     // socket.emit('play card', this.state.selectedCard);
     // set isWaiting to true
+    this.props.socket.emit('play card', this.state.board.userHand.selectedCard);
   }
 
   render() {
@@ -127,8 +150,8 @@ class Game extends React.Component {
        <div id='userhand'>
         <Userhand
           currentHand={this.state.board.userHand.currentHand}
-          selectCard={this.selectCard}
-          playCard={this.playCard} />
+          selectCard={this.selectCard.bind(this)}
+          playCard={this.playCard.bind(this)} />
         </div>
      </div>
     );
