@@ -59,7 +59,7 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
         play(socket);
       }
     }
-    //TODO: add action 'quit'
+    //TODO: add action 'quit'-
   });
 
   socket.on('select card', function(card) {
@@ -104,12 +104,40 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
       }
     }
   });
+
+  socket.on('play card', function(card) { // TODO: Verify functionality
+    let opponent = getSocket(socket.data.opponent);
+    let room = rooms[socket.data.room];
+    let category = room.board.currentCategory;
+    let oppCard = opponent.data.hand.selectedCard;
+    socket.data.hand.selectedCard = socket.data.currentHand[card];
+
+  // TODO: Add event for invalid card played
+    if (oppCard) {
+      let sockCard = socket.data.hand.selectedCard;
+      room.game.count++;
+      if (sockCard[category] > oppCard[category]) { // Current data has no equal values
+        room.game.wins[socket.id]++;
+      } else {
+        room.game.wins[opponent.id]++;
+      }
+      if (room.game.wins[socket.id] >= room.game.rounds.total / 2) {
+        gameEnd(socket, 'win');
+        gameEnd(opponent, 'lose');
+      } else if (room.game.wins[opponent.id] >= room.game.rounds.total / 2) {
+        gameEnd(opponent, 'win');
+        gameEnd(socket, 'lose');
+      } else {
+        chooseCategory(socket.data.room);
+      }
+    }
+  });
 });
 
 /**** SOCKETS END ****/
 /*** SOCKETS HELPERS START ***/
 
-function newGame(id1, id2) {
+function newGame(id1, id2, size = 2) {
   var dummyDeck = {
     'Nolan_Arenado': {
       name: 'Nolan Arenado',
@@ -153,7 +181,7 @@ function newGame(id1, id2) {
     }
   };
 
-  function dealHands(size = 2) {
+  function dealHands() {
     let cards = Object.keys(dummyDeck);
     let hand1 = {};
     let hand2 = {};
@@ -182,16 +210,14 @@ function newGame(id1, id2) {
     id: id1 + id2,
     game: {
       rounds: {
+        total: size,
         count: 0,
         wins: {}
       },
-      gameWinner: null,
-      gameOver: false,
       categories: ['hr', 'sb', 'avg', 'hits', 'rbi']
     },
     board: {
       currentCategory: null,
-      waiting: false,
       currentRound: {
         outcome: null
       }
@@ -207,9 +233,6 @@ function newGame(id1, id2) {
     currentHand: hands.shift(),
     selectedCard: null
   };
-
-  match.board.currentRound[`${id1}_HandCard`] = null;
-  match.board.currentRound[`${id2}_HandCard`] = null;
 
   match.game.rounds.wins[id1] = 0;
   match.game.rounds.wins[id2] = 0;
@@ -288,7 +311,7 @@ function leaveRoom(socket) {
   delete socket.data.room;
 }
 
-function gameEnd(socket, result) {
+function gameEnd(socket, result) { // TODO: change to accept winner & notify both players of outcome
   socket.emit('game end', result);
   console.log(`${chalk.red(socket.id)} ends match with ${chalk.magenta(result)}`);
   leaveRoom(socket);
