@@ -93,7 +93,7 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
     }
 
     if (gameState === 'playing') {
-      let opponent = getSocket(socket.data.opponent);
+      let opponent = getOpponent(socket);
       console.log(`${chalk.red(socket.id)} DC'd -> ${chalk.magenta('loses')}`);
       if (opponent) {
         console.log(`${chalk.red(opponent.id)} -> ${chalk.magenta('wins')}`);
@@ -106,7 +106,7 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
   });
 
   socket.on('play card', function(card) { // TODO: Verify functionality
-    let opponent = getSocket(socket.data.opponent);
+    let opponent = getOpponent(socket);
     let room = rooms[socket.data.room];
     let category = room.board.currentCategory;
     let oppCard = opponent.data.hand.selectedCard;
@@ -275,6 +275,10 @@ function getSocket(socketId) {
   }
 
   return socket;
+}
+
+function getOpponent(socket) {
+  return getSocket(socket.data.opponent);
 }
 
 function play(socket) {
