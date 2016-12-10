@@ -7,11 +7,11 @@ module.exports = {
   watch: true,
   module: {
     loaders: [
-      { test: /\.css$/, exclude: /\.useable\.css$/, loader: "style-loader!css-loader" },
-      { test: /\.useable\.css$/, loader: "style-loader/useable!css-loader" },
-      { test: /\.css$/, loader: "style-loader!css-loader" },
-      { test: /\.png$/, loader: "url-loader?limit=100000" },
-      { test: /\.jpg$/, loader: "file-loader" },
+      { test: /\.css$/, exclude: /\.useable\.css$/, loader: 'style-loader!css-loader' },
+      { test: /\.useable\.css$/, loader: 'style-loader/useable!css-loader' },
+      { test: /\.css$/, loader: 'style-loader!css-loader' },
+      { test: /\.png$/, loader: 'url-loader?limit=100000' },
+      { test: /\.jpg$/, loader: 'file-loader' },
       {
         test: /.jsx?$/,
         loader: 'babel-loader',
@@ -23,7 +23,7 @@ module.exports = {
       }
     ],
   },
-  devtool: "source-map",
+  devtool: 'source-map',
   resolveLoader: {
     root: [
       path.join(__dirname, 'node_modules'),

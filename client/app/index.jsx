@@ -8,7 +8,7 @@ import Game from './components/Game.jsx';
 
 let socket = io();
 
-$('body').on('submit', '#chatBox', function(e){
+$('body').on('submit', '#chatBox', function(e) {
   e.preventDefault();
   socket.emit('chat message', $('#m').val());
   $('#m').val('');
@@ -17,12 +17,12 @@ $('body').on('submit', '#chatBox', function(e){
 $('body').on('click', '#chat', function() {
   socket.emit('game', 'play');
 });
-socket.on('chat message', function(msg){
+socket.on('chat message', function(msg) {
   $('#test #messages').append($('<li>').text(msg));
 });
 socket.on('disconnect', function() {
   console.log('***DISCONNECTED***');
-})
+});
 socket.on('game end', function(msg) {
   console.log(msg);
 });

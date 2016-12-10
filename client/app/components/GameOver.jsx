@@ -1,5 +1,5 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 
 const GameOver = (props) => {
@@ -9,7 +9,7 @@ const GameOver = (props) => {
       <h2>{props.winner} wins!</h2>
       <button>Exit</button>
     </div>
-  )
-}
+  );
+};
 
 export default GameOver;

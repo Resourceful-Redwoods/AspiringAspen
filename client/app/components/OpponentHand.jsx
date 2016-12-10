@@ -1,21 +1,21 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-import Cardback from './Cardback.jsx'
+import Cardback from './Cardback.jsx';
 
 const OpponentHand = (props) => {
 
   const usersCards = Object.keys(props.currentHand).map((key) =>
     <Cardback key={key} />
-  )
+  );
 
   return (
     <div>
       OpponentHand
       {usersCards}
     </div>
-  )
-}
+  );
+};
 
 // OpponentHand.propTypes = {
 //   currentHand: React.PropTypes.array.isRequired,
