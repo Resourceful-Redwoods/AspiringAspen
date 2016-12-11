@@ -24,28 +24,7 @@ class Game extends React.Component {
       board: {
         currentCategory: null,
         userHand: {
-          currentHand: {
-            'Mike_Trout': {
-              name: 'Mike Trout',
-              info: {
-                hr: 29,
-                sb: 30,
-                avg: 100,
-                hits: 173,
-                rbi: 100
-              }
-            },
-            'Joey_Votto': {
-              name: 'Joey Votto',
-              info: {
-                hr: 29,
-                sb: 8,
-                avg: 326,
-                hits: 181,
-                rbi: 97
-              }
-            }
-          },
+          currentHand: {},
           selectedCard: null,
           username: null
         },
@@ -59,7 +38,9 @@ class Game extends React.Component {
     };
   }
 
-  componentWillMount () {}
+  componentWillMount () {
+
+  }
 
   componentDidMount() {
     this.props.socket.on('init', this._initialize);
@@ -67,7 +48,8 @@ class Game extends React.Component {
     this.props.socket.on('card selected', this._getSelectedCard.bind(this));
     this.props.socket.on('category', this._getCategory.bind(this));
     this.props.socket.on('card played', this._getPlayedCard.bind(this));
-    // socket.on('init', this._getRoundOutcome);
+    // this.props.socket.on('round end', this._getRoundOutcome.bind(this));
+    this.props.socket.on('round end', console.log('round ended'));
     // socket.on('init', this._getGameOutcome);
   }
 
@@ -103,8 +85,13 @@ class Game extends React.Component {
     this.setState(change);
   }
 
-  _getRoundOutcome() {}
-  _getRoundOutcome() {}
+  _getRoundOutcome(data) {
+    console.log('from _getRoundOutcome', data);
+    // var change = _.extend({}, this.state);
+    // change.board.currentRount.outcome = outcome;
+    // this.setState(change);
+  }
+  _getGameOutcome() {}
 
   selectCard(card) {
     console.log('select card', card);
@@ -112,14 +99,14 @@ class Game extends React.Component {
     var change = _.extend({}, this.state);
     change.board.userHand.selectedCard = card;
     this.setState(change);
-    this.props.socket.emit('select card', card);
+    // this.props.socket.emit('select card', card);
   }
 
   playCard() {
-    console.log('play card', this.state);
+    console.log('play card', this.state.board.userHand.selectedCard);
     // socket.emit('play card', this.state.selectedCard);
     // set isWaiting to true
-    this.props.socket.emit('play card', this.state.board.userHand.selectedCard);
+    this.props.socket.emit('play card', this.state.board.userHand.selectedCard.name);
   }
 
   render() {
