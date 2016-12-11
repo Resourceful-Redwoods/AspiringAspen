@@ -57,7 +57,7 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
         play(socket);
       }
     }
-    //TODO: add action 'quit'-
+    //TODO: add action 'quit'
   });
 
   socket.on('select card', function(card) {
@@ -106,16 +106,29 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
     if (oppCard) {
       let sockCard = socket.data.hand.selectedCard;
       room.game.count++;
+
       if (sockCard[category] > oppCard[category]) { // Current data has no equal values
         room.game.wins[socket.id]++;
+        socket.emit('round end', socket.id);
+        opponent.emit('round end', socket.id);
       } else {
         room.game.wins[opponent.id]++;
+        socket.emit('round end', opponent.id);
+        opponent.emit('round end', opponent.id);
       }
+
       if (room.game.wins[socket.id] >= room.game.rounds.total / 2) {
         declareWinner(socket);
       } else if (room.game.wins[opponent.id] >= room.game.rounds.total / 2) {
         declareWinner(opponent);
       } else {
+        // Removes the selected card from the players' hands
+        delete socket.data.selectedCard;
+        delete opponent.data.selectedCard;
+
+        socket.data.selectedCard = null;
+        opponent.data.selectedCard = null;
+
         chooseCategory(socket.data.room);
       }
     }
