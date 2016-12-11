@@ -62,7 +62,11 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
         dequeue(socket);
       }
     }
-    //TODO: add action 'quit'
+    if (action === 'quit') {
+      if (socket.data.gameState === 'playing') {
+        declareWinner(getOpponent(socket));
+      }
+    }
   });
 
   socket.on('select card', function(card) {
