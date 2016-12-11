@@ -71,18 +71,6 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
     socket.emit('card selected', card);
   });
 
-  socket.on('play card', function(card) {
-    console.log('play card');
-    rooms[socket.data.room].board.currentRound[socket.id + '_HandCard'] = card;
-    if ( rooms[socket.data.room].board.waiting ) {
-      // check the current stat between the two cards and reutn outcome and winner
-      // do server side stuff like increment round, add win to winner, etc...
-    }
-    console.log(rooms[socket.data.room]);
-    // socket.data.hand.selectedCard = card;
-    socket.emit('card played', card);
-  });
-
   socket.on('chat message', function(msg) {
     io.to(socket.data.room).emit('chat message', msg);
   });
@@ -107,6 +95,8 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
     let oppCard = opponent.data.hand.selectedCard;
     socket.data.hand.selectedCard = socket.data.currentHand[card];
 
+    socket.emit('card played');
+    
     // TODO: Add event for invalid card played
     if (oppCard) {
       let sockCard = socket.data.hand.selectedCard;
@@ -143,49 +133,8 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
 /**** SOCKETS END ****/
 /*** SOCKETS HELPERS START ***/
 
-function newGame(id1, id2, size = 2) {
-  var dummyDeck = {
-    'Nolan_Arenado': {
-      name: 'Nolan Arenado',
-      info: {
-        hr: 41,
-        sb: 2,
-        avg: 294,
-        hits: 182,
-        rbi: 133
-      }
-    },
-    'Mookie_Betts': {
-      name: 'Mookie Betts',
-      info: {
-        hr: 31,
-        sb: 26,
-        avg: 318,
-        hits: 214,
-        rbi: 113
-      }
-    },
-    'Mike_Trout': {
-      name: 'Mike Trout',
-      info: {
-        hr: 29,
-        sb: 30,
-        avg: 100,
-        hits: 173,
-        rbi: 100
-      }
-    },
-    'Joey_Votto': {
-      name: 'Joey Votto',
-      info: {
-        hr: 29,
-        sb: 8,
-        avg: 326,
-        hits: 181,
-        rbi: 97
-      }
-    }
-  };
+function newGame(id1, id2, size = 3) {
+  var dummyDeck = require('./data/baseballData.js');
 
   function dealHands() {
     let cards = Object.keys(dummyDeck);
@@ -267,8 +216,8 @@ function makeRoom(sock1, sock2) {
 
   rooms[room] = newGame(sock1.id, sock2.id);
   console.log(`Made Room: ${chalk.yellow(room)} with ${chalk.red(sock1.id)} & ${chalk.red(sock2.id)}`);
-  sock1.emit('hand', sock1.data);
-  sock2.emit('hand', sock2.data);
+  sock1.emit('hand', sock1.data.hand);
+  sock2.emit('hand', sock2.data.hand);
   chooseCategory(room);
 }
 
