@@ -69,7 +69,15 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
   });
 
   socket.on('play card', function(card) {
-    console.log('play card', card);
+    console.log('play card');
+    rooms[socket.data.room].board.currentRound[socket.id + '_HandCard'] = card;
+    if ( rooms[socket.data.room].board.waiting ) {
+      // check the current stat between the two cards and reutn outcome and winner
+      // do server side stuff like increment round, add win to winner, etc...
+    }
+    console.log(rooms[socket.data.room]);
+    // socket.data.hand.selectedCard = card;
+    socket.emit('card played', card);
   });
 
   socket.on('chat message', function(msg) {
@@ -289,6 +297,7 @@ function gameEnd(socket, result) {
 function chooseCategory(room) {
   let category = _.sample(rooms[room].game.categories);
   rooms[room].board.currentCategory = category;
+  console.log('in chooseCategory');
   io.to(room).emit('category', category);
   return category;
 }
