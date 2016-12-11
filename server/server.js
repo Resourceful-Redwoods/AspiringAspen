@@ -89,40 +89,39 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
   });
 
   socket.on('play card', function(card) { // TODO: Verify functionality
+    console.log('play card received');
     let opponent = getOpponent(socket);
     let room = rooms[socket.data.room];
     let category = room.board.currentCategory;
     let oppCard = opponent.data.hand.selectedCard;
-    socket.data.hand.selectedCard = socket.data.currentHand[card];
+    socket.data.hand.selectedCard = socket.data.hand.currentHand[card];
 
     socket.emit('card played');
-    
     // TODO: Add event for invalid card played
     if (oppCard) {
       let sockCard = socket.data.hand.selectedCard;
       room.game.count++;
-
-      if (sockCard[category] > oppCard[category]) { // Current data has no equal values
-        room.game.wins[socket.id]++;
+      if (sockCard.info[category] > oppCard.info[category]) { // Current data has no equal values
+        room.game.rounds.wins[socket.id]++;
         socket.emit('round end', socket.id);
         opponent.emit('round end', socket.id);
       } else {
-        room.game.wins[opponent.id]++;
+        room.game.rounds.wins[opponent.id]++;
         socket.emit('round end', opponent.id);
         opponent.emit('round end', opponent.id);
       }
 
-      if (room.game.wins[socket.id] >= room.game.rounds.total / 2) {
+      if (room.game.rounds.wins[socket.id] >= room.game.rounds.total / 2) {
         declareWinner(socket);
-      } else if (room.game.wins[opponent.id] >= room.game.rounds.total / 2) {
+      } else if (room.game.rounds.wins[opponent.id] >= room.game.rounds.total / 2) {
         declareWinner(opponent);
       } else {
         // Removes the selected card from the players' hands
-        delete socket.data.selectedCard;
-        delete opponent.data.selectedCard;
+        delete socket.data.hand.selectedCard;
+        delete opponent.data.hand.selectedCard;
 
-        socket.data.selectedCard = null;
-        opponent.data.selectedCard = null;
+        socket.data.hand.selectedCard = null;
+        opponent.data.hand.selectedCard = null;
 
         chooseCategory(socket.data.room);
       }
