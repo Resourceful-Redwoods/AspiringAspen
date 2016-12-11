@@ -47,20 +47,28 @@ class Home extends React.Component {
   render() {
     let gameState = this.state.gameState;
     return (
-      <div>
-        <div className="titlebar">
-          <h1>DeckStomp</h1>
+      <div id='home' className='wrapper'>
+        <div className='row'>
+          <div className="titlebar col s12">
+            <h1>DECK</h1>
+            <img className='cardIcon' src='img/cardIcon.svg'></img>
+          </div>
         </div>
         { gameState === 'waiting' ? <Waiting cancelMatchmaking={this.cancelMatchmaking.bind(this)} /> : null }
-        <div>
-          <form id='nameForm'>
-            <label>
-              Enter a name:
-              <input type="text" name="name" />
-            </label>
-            <input type="submit" value="Submit" />
-          </form>
-          <button onClick={ this.playNow.bind(this) }> Play Now! </button>
+        <div className='row lower'>
+          <div id='' className='col s12'>
+          <h1>STOMP</h1>
+            <div className='center-block nameForm'>
+              <form>
+                <label>
+                  Enter a name:
+                  <input type="text" name="name" />
+                </label>
+                <input type="submit" value="Submit" />
+              </form>
+            </div>
+            <button onClick={ this.playNow.bind(this) }>PLAY <img src='img/playBtn.svg'></img> </button>
+          </div>
         </div>
       </div>
     );

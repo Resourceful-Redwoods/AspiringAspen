@@ -1,0 +1,48 @@
+
+<svg width="249px" height="286px" viewBox="907 384 249 286" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 41.2 (35397) - http://www.bohemiancoding.com/sketch -->
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="19" y="37" width="87" height="126" rx="10"></rect>
+        <filter x="-100%" y="-100%" width="110%" height="300%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="25" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <rect id="path-3" x="19" y="37" width="87" height="126" rx="10"></rect>
+        <filter x="-100%" y="-100%" width="300%" height="300%" filterUnits="objectBoundingBox" id="filter-4">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="25" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <rect id="path-5" x="19" y="37" width="87" height="126" rx="10"></rect>
+        <filter x="-100%" y="-100%" width="300%" height="300%" filterUnits="objectBoundingBox" id="filter-6">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="25" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Cards" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" transform="translate(938.000000, 395.000000)">
+        <g id="Back-Card">
+            <g id="card-shadow">
+                <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                <use fill="#EEF0F3" fill-rule="evenodd" xlink:href="#path-1"></use>
+            </g>
+            <rect id="card-" fill="#66AFDC" x="0" y="0" width="125" height="175" rx="10"></rect>
+        </g>
+        <g id="Mid-Card" transform="translate(30.000000, 30.000000)">
+            <g id="card-shadow">
+                <use fill="black" fill-opacity="1" filter="url(#filter-4)" xlink:href="#path-3"></use>
+                <use fill="#EEF0F3" fill-rule="evenodd" xlink:href="#path-3"></use>
+            </g>
+            <rect id="card-" fill="#E0DF6B" x="0" y="0" width="125" height="175" rx="10"></rect>
+        </g>
+        <g id="Front-Card" transform="translate(61.000000, 60.000000)">
+            <g id="card-shadow">
+                <use fill="black" fill-opacity="1" filter="url(#filter-6)" xlink:href="#path-5"></use>
+                <use fill="#EEF0F3" fill-rule="evenodd" xlink:href="#path-5"></use>
+            </g>
+            <rect id="card-" fill="#DA5252" x="0" y="0" width="125" height="175" rx="10"></rect>
+        </g>
+    </g>
+</svg>

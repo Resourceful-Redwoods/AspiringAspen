@@ -14,9 +14,8 @@ const UserHand = (props) => {
   // console.log('user usersCards', usersCards);
 
   return (
-    <div>
-      <p>Hello</p>
-      <div>
+    <div className='row'>
+      <div className='userHand col s8 offset-s2'>
         {usersCards}
       </div>
       <button onClick={props.playCard}>Play Card</button>

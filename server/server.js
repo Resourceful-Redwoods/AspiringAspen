@@ -70,6 +70,11 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
 
   socket.on('play card', function(card) {
     console.log('play card', card);
+    // if has both player cards
+      // calculate outcome
+    // else if only user has played
+      // display 'waiting for opponent card'
+
   });
 
   socket.on('chat message', function(msg) {
@@ -111,7 +116,8 @@ function newGame(id1, id2) {
         avg: 294,
         hits: 182,
         rbi: 133
-      }
+      },
+      imageUrl: 'http://a.espncdn.com/combiner/i?img=/i/headshots/mlb/players/full/31261.png&w=350&h=254'
     },
     'Mookie_Betts': {
       name: 'Mookie Betts',
@@ -121,7 +127,8 @@ function newGame(id1, id2) {
         avg: 318,
         hits: 214,
         rbi: 113
-      }
+      },
+      imageUrl: 'http://a.espncdn.com/combiner/i?img=/i/headshots/mlb/players/full/33039.png&w=350&h=254'
     },
     'Mike_Trout': {
       name: 'Mike Trout',
@@ -131,7 +138,8 @@ function newGame(id1, id2) {
         avg: 100,
         hits: 173,
         rbi: 100
-      }
+      },
+      imageUrl: 'http://a.espncdn.com/combiner/i?img=/i/headshots/mlb/players/full/30836.png&w=350&h=254'
     },
     'Joey_Votto': {
       name: 'Joey Votto',
@@ -141,7 +149,8 @@ function newGame(id1, id2) {
         avg: 326,
         hits: 181,
         rbi: 97
-      }
+      },
+      imageUrl: 'http://a.espncdn.com/combiner/i?img=/i/headshots/mlb/players/full/28670.png&w=350&h=254'
     }
   };
 
@@ -291,6 +300,10 @@ function chooseCategory(room) {
   rooms[room].board.currentCategory = category;
   io.to(room).emit('category', category);
   return category;
+}
+
+function calcOutcome() {
+  //match.board.currentCategory
 }
 
 /*** SOCKETS HELPERS END ***/

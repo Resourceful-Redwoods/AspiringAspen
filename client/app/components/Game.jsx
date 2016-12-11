@@ -33,7 +33,8 @@ class Game extends React.Component {
                 avg: 100,
                 hits: 173,
                 rbi: 100
-              }
+              },
+              imageUrl: 'http://a.espncdn.com/combiner/i?img=/i/headshots/mlb/players/full/30836.png&w=350&h=254'
             },
             'Joey_Votto': {
               name: 'Joey Votto',
@@ -43,7 +44,41 @@ class Game extends React.Component {
                 avg: 326,
                 hits: 181,
                 rbi: 97
-              }
+              },
+              imageUrl: 'http://a.espncdn.com/combiner/i?img=/i/headshots/mlb/players/full/28670.png&w=350&h=254'
+            },
+            'Joey_Votto2': {
+              name: 'Joey Votto',
+              info: {
+                hr: 29,
+                sb: 8,
+                avg: 326,
+                hits: 181,
+                rbi: 97
+              },
+              imageUrl: 'http://a.espncdn.com/combiner/i?img=/i/headshots/mlb/players/full/28670.png&w=350&h=254'
+            },
+            'Joey_Votto4': {
+              name: 'Joey Votto',
+              info: {
+                hr: 29,
+                sb: 8,
+                avg: 326,
+                hits: 181,
+                rbi: 97
+              },
+              imageUrl: 'http://a.espncdn.com/combiner/i?img=/i/headshots/mlb/players/full/28670.png&w=350&h=254'
+            },
+            'Joey_Votto5': {
+              name: 'Joey Votto',
+              info: {
+                hr: 29,
+                sb: 8,
+                avg: 326,
+                hits: 181,
+                rbi: 97
+              },
+              imageUrl: 'http://a.espncdn.com/combiner/i?img=/i/headshots/mlb/players/full/28670.png&w=350&h=254'
             }
           },
           selectedCard: null,
@@ -128,17 +163,18 @@ class Game extends React.Component {
 
   playCard() {
     console.log('play card', this.state);
+    var card = this.state.board.userHand.selectedCard;
     // socket.emit('play card', this.state.selectedCard);
     // set isWaiting to true
-    this.props.socket.emit('play card', this.state.board.userHand.selectedCard);
+    this.props.socket.emit('play card', card);
   }
 
   render() {
     const gameOver = this.state.game.gameOver;
 
     return (
-     <div>
-       <div id='opponent'>
+     <div className='game'>
+       <div className='center'>
         <OpponentHand
           currentHand={this.state.board.opponentHand.currentHand} />
         </div>
@@ -147,7 +183,7 @@ class Game extends React.Component {
         { this.state.hasOutcome ? <Board /> : null }
         </div>
         { gameOver ? <GameOver winner={this.state.game.gameWinner} /> : null }
-       <div id='userhand'>
+       <div className='center'>
         <Userhand
           currentHand={this.state.board.userHand.currentHand}
           selectCard={this.selectCard.bind(this)}
