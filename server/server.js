@@ -53,9 +53,7 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
 
   socket.on('game', function(action) {
     if (action === 'play') { //TODO: Forfeit if already in a game, do nothing if already waiting
-      console.log('in game play');
-      if (socket.data.gameState !== 'waiting') {
-        console.log('in game play waiting');
+      if (socket.data.gameState === 'idle') {
         play(socket);
       }
     }
@@ -93,15 +91,7 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
     }
 
     if (gameState === 'playing') {
-      let opponent = getOpponent(socket);
-      console.log(`${chalk.red(socket.id)} DC'd -> ${chalk.magenta('loses')}`);
-      if (opponent) {
-        console.log(`${chalk.red(opponent.id)} -> ${chalk.magenta('wins')}`);
-        opponent.emit('chat message', 'Opponent disconnected');
-        gameEnd(opponent, 'win');
-      } else {
-        console.log(chalk.magenta(`No opponenent, connected: ${chalk.red(io.sockets.connected)}`));
-      }
+      declareWinner(getOpponent(socket));
     }
   });
 
@@ -122,11 +112,9 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
         room.game.wins[opponent.id]++;
       }
       if (room.game.wins[socket.id] >= room.game.rounds.total / 2) {
-        gameEnd(socket, 'win');
-        gameEnd(opponent, 'lose');
+        declareWinner(socket);
       } else if (room.game.wins[opponent.id] >= room.game.rounds.total / 2) {
-        gameEnd(opponent, 'win');
-        gameEnd(socket, 'lose');
+        declareWinner(opponent);
       } else {
         chooseCategory(socket.data.room);
       }
@@ -310,15 +298,22 @@ function dequeue(socket) {
   }
 }
 
-function leaveRoom(socket) {
+function leaveGame(socket) {
   socket.leave(socket.data.room);
   delete socket.data.room;
+  delete socket.data.opponent;
 }
 
-function gameEnd(socket, result) { // TODO: change to accept winner & notify both players of outcome
-  socket.emit('game end', result);
-  console.log(`${chalk.red(socket.id)} ends match with ${chalk.magenta(result)}`);
-  leaveRoom(socket);
+function declareWinner(winner) {
+  winner.emit('game end', 'win');
+  console.log(`${chalk.red(winner.id)} ${chalk.magenta('wins')}`);
+  console.log(`${chalk.red(winner.data.opponent)} ${chalk.magenta('loses')}`);
+  let loser = getOpponent(winner);
+  if (loser) {
+    loser.emit('game end', 'lose');
+    leaveGame(loser);
+  }
+  leaveGame(winner);
 }
 
 function chooseCategory(room) {
@@ -334,5 +329,5 @@ function chooseCategory(room) {
 
 
 http.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
+  console.log(`DeckStomp listening on port ${chalk.yellow('3000')}`);
 });
