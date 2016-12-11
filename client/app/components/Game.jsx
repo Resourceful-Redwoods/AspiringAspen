@@ -75,10 +75,10 @@ class Game extends React.Component {
 
   _initialize() {}
 
-  _getHand(data) {
-    console.log('from gethand', data.hand);
+  _getHand(hand) {
+    console.log('from gethand', hand);
     var change = _.extend({}, this.state);
-    change.board.userHand = data.hand;
+    change.board.userHand = hand;
     this.setState(change);
   }
 
