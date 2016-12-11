@@ -67,7 +67,7 @@ class Game extends React.Component {
     this.props.socket.on('card selected', this._getSelectedCard.bind(this));
     this.props.socket.on('category', this._getCategory.bind(this));
     this.props.socket.on('card played', this._getPlayedCard.bind(this));
-    // socket.on('init', this._getRoundOutcome);
+    this.props.socket.on('round outcome', this._getRoundOutcome);
     // socket.on('init', this._getGameOutcome);
   }
 
@@ -103,8 +103,13 @@ class Game extends React.Component {
     this.setState(change);
   }
 
-  _getRoundOutcome() {}
-  _getRoundOutcome() {}
+  _getRoundOutcome() {
+    console.log('from _getRoundOutcome');
+    var change = _.extend({}, this.state);
+    change.board.roundOutcome = ''; //confirm state name, add player
+    this.setState(change);
+  }
+  _getGameOutcome() {}
 
   selectCard(card) {
     console.log('select card', card);
