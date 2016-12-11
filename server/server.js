@@ -57,6 +57,11 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
         play(socket);
       }
     }
+    if (action === 'cancel') {
+      if (socket.data.gameState === 'waiting') {
+        dequeue(socket);
+      }
+    }
     //TODO: add action 'quit'
   });
 
@@ -102,7 +107,7 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
     let oppCard = opponent.data.hand.selectedCard;
     socket.data.hand.selectedCard = socket.data.currentHand[card];
 
-  // TODO: Add event for invalid card played
+    // TODO: Add event for invalid card played
     if (oppCard) {
       let sockCard = socket.data.hand.selectedCard;
       room.game.count++;
@@ -308,6 +313,7 @@ function dequeue(socket) {
   if (socket.data.gameState === 'waiting') {
     waiting.splice(waiting.indexOf(socket.id), 1);
     socket.data.gameState === 'idle';
+    socket.emit('dequeued');
   }
 }
 
