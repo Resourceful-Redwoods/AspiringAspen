@@ -46,39 +46,6 @@ class Game extends React.Component {
                 rbi: 97
               },
               imageUrl: 'http://a.espncdn.com/combiner/i?img=/i/headshots/mlb/players/full/28670.png&w=350&h=254'
-            },
-            'Joey_Votto2': {
-              name: 'Joey Votto',
-              info: {
-                hr: 29,
-                sb: 8,
-                avg: 326,
-                hits: 181,
-                rbi: 97
-              },
-              imageUrl: 'http://a.espncdn.com/combiner/i?img=/i/headshots/mlb/players/full/28670.png&w=350&h=254'
-            },
-            'Joey_Votto4': {
-              name: 'Joey Votto',
-              info: {
-                hr: 29,
-                sb: 8,
-                avg: 326,
-                hits: 181,
-                rbi: 97
-              },
-              imageUrl: 'http://a.espncdn.com/combiner/i?img=/i/headshots/mlb/players/full/28670.png&w=350&h=254'
-            },
-            'Joey_Votto5': {
-              name: 'Joey Votto',
-              info: {
-                hr: 29,
-                sb: 8,
-                avg: 326,
-                hits: 181,
-                rbi: 97
-              },
-              imageUrl: 'http://a.espncdn.com/combiner/i?img=/i/headshots/mlb/players/full/28670.png&w=350&h=254'
             }
           },
           selectedCard: null,
