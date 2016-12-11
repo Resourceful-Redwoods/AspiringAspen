@@ -49,32 +49,7 @@ class Game extends React.Component {
           selectedCard: null,
           username: null
         },
-        opponentHand: {
-          currentHand: {
-            'Nolan_Arenado': {
-              name: 'Nolan Arenado',
-              info: {
-                hr: 41,
-                sb: 2,
-                avg: 294,
-                hits: 182,
-                rbi: 133
-              }
-            },
-            'Mookie_Betts': {
-              name: 'Mookie_Betts',
-              info: {
-                hr: 31,
-                sb: 26,
-                avg: 318,
-                hits: 214,
-                rbi: 113
-              }
-            }
-          },
-          username: null
-        },
-        waiting: false,
+        isWaiting: false,
         currentRound: {
           userHandCard: null,
           opponentHandCard: null,
@@ -90,7 +65,8 @@ class Game extends React.Component {
     this.props.socket.on('init', this._initialize);
     this.props.socket.on('hand', this._getHand.bind(this));
     this.props.socket.on('card selected', this._getSelectedCard.bind(this));
-    // socket.on('init', this._getCategory);
+    this.props.socket.on('category', this._getCategory.bind(this));
+    this.props.socket.on('card played', this._getPlayedCard.bind(this));
     // socket.on('init', this._getRoundOutcome);
     // socket.on('init', this._getGameOutcome);
   }
@@ -113,7 +89,20 @@ class Game extends React.Component {
     this.setState(change);
   }
 
-  _getCategory() {}
+  _getCategory(cat) {
+    console.log('from _getCategory', cat);
+    var change = _.extend({}, this.state);
+    change.board.currentCategory = cat;
+    this.setState(change);
+  }
+
+  _getPlayedCard() {
+    console.log('from _getPlayedCard');
+    var change = _.extend({}, this.state);
+    change.board.isWaiting = true;
+    this.setState(change);
+  }
+
   _getRoundOutcome() {}
   _getRoundOutcome() {}
 
@@ -140,10 +129,11 @@ class Game extends React.Component {
      <div>
        <div id='opponent'>
         <OpponentHand
-          currentHand={this.state.board.opponentHand.currentHand} />
+          currentHand={this.state.board.userHand.currentHand} />
         </div>
        <div id='board'>
-        { this.state.isWaiting && !this.state.hasOutcome ? <p>Waiting for opponent...</p> : null }
+        <p>Current Category: { this.state.board.currentCategory }</p>
+        { this.state.board.isWaiting && !this.state.board.currentRound.outcome ? <p>Waiting for opponent...</p> : null }
         { this.state.hasOutcome ? <Board /> : null }
         </div>
         { gameOver ? <GameOver winner={this.state.game.gameWinner} /> : null }
