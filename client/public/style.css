@@ -144,7 +144,7 @@ body {
 
 .outcome {
   background:#EEF0F3;
-  z-index:5;
+  z-index:6;
   position:absolute;
   top:20%;
   left:10%;
@@ -338,6 +338,18 @@ body {
   text-shadow: 0 1px 2px rgba(0,0,0,0.24);
   color:#DA5252;
   position:relative;
+}
+
+.cover {
+  height:100%;
+  width:100%;
+  left:0;
+  top:0;
+  position: absolute;
+  background-color:rgba(238, 240, 243, 0.4);
+  z-index:5;
+  padding:0;
+  margin:0;
 }
 
 #chat {
