@@ -10,6 +10,8 @@ import OpponentHand from './OpponentHand.jsx';
 import Userhand from './Userhand.jsx';
 import GameOver from './GameOver.jsx';
 
+// functions with a _ in front are functions that are done due to an action from the server
+
 class Game extends React.Component {
   constructor(props) {
     super(props);
@@ -21,7 +23,8 @@ class Game extends React.Component {
           playerBWins: 0
         },
         gameWinner: null,
-        gameOver: false
+        gameOver: false,
+        opponentUsername: ''
       },
       board: {
         currentCategory: null,
@@ -41,128 +44,126 @@ class Game extends React.Component {
     };
   }
 
-  componentWillMount () {
-
-  }
-
   componentDidMount() {
-    this.props.socket.on('init', this._initialize);
+    console.log(socket)
     this.props.socket.on('hand', this._getHand.bind(this));
-    this.props.socket.on('card selected', this._getSelectedCard.bind(this));
     this.props.socket.on('category', this._getCategory.bind(this));
     this.props.socket.on('card played', this._getPlayedCard.bind(this));
     this.props.socket.on('round end', this._getRoundOutcome.bind(this));
     this.props.socket.on('game end', this._getGameOutcome.bind(this));
     this.props.socket.on('chat message', this._getChatMessage.bind(this));
-    this.props.socket.on('opponent card'. this._setOpponentCard.bind(this));
-
+    this.props.socket.on('opponent card', this._setOpponentCard.bind(this));
+    this.props.socket.on('opponent username', this._setOpponentUsername.bind(this));
   }
 
   componentWillUnmount () {}
 
-  _initialize() {}
-
   _getHand(hand) {
-    console.log('from gethand', hand);
+    // gets the hand from the server and sets the state with it
+    // we have to use extend so that we can easily change a nested state
     var change = _.extend({}, this.state);
     change.board.userHand = hand;
     this.setState(change);
   }
 
-  _getSelectedCard(card) {
-    console.log('from _getSelectedCard', card);
-    var change = _.extend({}, this.state);
-    change.board.userHand.selectedCard = card;
-    this.setState(change);
-  }
-
   _getCategory(cat) {
-    console.log('from _getCategory', cat);
+    // gets the current category from the server and sets the state with it
     var change = _.extend({}, this.state);
     change.board.currentCategory = cat;
     this.setState(change);
   }
 
   _getPlayedCard() {
-    console.log('from _getPlayedCard');
+    // get confirmation of the played card and changes state so that the player is waitings
     var change = _.extend({}, this.state);
     change.board.isWaiting = true;
     this.setState(change);
-    // should remove from hand
-    // render to board
   }
 
   _setOpponentCard(card) {
-    console.log('oppcard', card);
+    // get opponent card from server and set state with it
     var change = _.extend({}, this.state);
     change.board.currentRound.opponentCard = card;
     this.setState(change);
   }
 
+  _setOpponentUsername(username) {
+    console.log('username', username);
+    // set opponents username
+    var change = _.extend({}, this.state);
+    change.game.opponentUsername = username;
+    this.setState(change);
+  }
+
   _getRoundOutcome(outcome) {
-    console.log('from _getRoundOutcome', outcome);
+    // get round outcome from server
     var change = _.extend({}, this.state);
     change.board.currentRound.outcome = outcome;
     change.board.isWaiting = false;
     change.board.currentRound.hasOutcome = true;
     this.setState(change);
+    // onlny show the outcome for 4 seconds
     setTimeout(() =>
-    this._outComeTimeOut()
+      this._outComeTimeOut()
     , 4000);
   }
 
   _outComeTimeOut() {
-    console.log('timeout');
+    // remove outcome display
     var change = _.extend({}, this.state);
     change.board.currentRound.hasOutcome = false;
     this.setState(change);
-    
   }
 
   _getGameOutcome(outcome) {
-    console.log('from _getGameOutcome', outcome);
+    // get game outcome from server and indicate winner/loser
     var change = _.extend({}, this.state);
     change.game.gameWinner = outcome.toString();
     change.game.gameOver = true;
     this.setState(change);
-    console.log('gameOver', this.state.game.gameOver);
   }
 
-  _getChatMessage(msg) {
-    $('#test #messages').append($('<li>').text(msg));
+  _getChatMessage(data) {
+    // get the chat message from the server
+    var message = $('<li></li>');
+    console.log(socket, data.user);
+    var username = socket.id === data.user ? 'me' : this.state.game.opponentUsername;
+
+    var messagecontent = $('<p>' + username + ': <br/> ' + data.message + ' </p>');
+    message.append(messagecontent);
+    $('#chat #messages').append(message);
   }
 
   selectCard(card) {
-    console.log('select card', card);
     // save selected card in state
     var change = _.extend({}, this.state);
     change.board.userHand.selectedCard = card;
     this.setState(change);
-    // this.props.socket.emit('select card', card);
   }
 
   playCard() {
     if ( this.state.board.isWaiting === true ) {
+      // if player is waiting, they are not allowed to play another card
       return;
     }
-    console.log('play card', this.state.board.userHand.selectedCard);
-    // socket.emit('play card', this.state.selectedCard);
-    // set isWaiting to true
+    // send palyed card to server
     var playedCard = this.state.board.userHand.selectedCard.name;
     this.props.socket.emit('play card', playedCard);
     var change = _.extend({}, this.state);
+    // remove card from hand
     delete change.board.userHand.currentHand[playedCard];
-    console.log(change.board.userHand);
+    // update state so that the removed card is not in state
     this.setState(change);
 
   }
 
   exitGame() {
-    this.props.socket.emit('game exit');
+    // allow a user to go back to home screen
     this.props.router.push('/');
   }
 
   handleChatClick(e) {
+    // when a user adds a message
     e.preventDefault();
     this.props.socket.emit('chat message', $('#m').val());
     $('#m').val('');
@@ -179,7 +180,7 @@ class Game extends React.Component {
        <div className='game col s9'>
          <div className='center'>
           <OpponentHand
-            currentHand={this.state.board.userHand.currentHand} />
+            currentHand={this.state.board.userHand.currentHand} username={this.state.game.opponentUsername} />
           </div>
          <div id='board'>
           <div id='category'>
@@ -197,12 +198,11 @@ class Game extends React.Component {
             disabled={this.state.board.isWaiting} />
           </div>
        </div>
-       <div id='test' className='sidebar col s3'>
-          <button id="chat">Chat!</button>
+       <div id='chat' className='sidebar col s3'>
           <ul id="messages"></ul>
-          <form action="" id="chatBox">
-          <input id="m" autoComplete="off" /><button onClick={this.handleChatClick.bind(this)}>Send</button>
-          </form>
+          <div className="chat-input">
+            <input id="m" autoComplete="off" /><button onClick={this.handleChatClick.bind(this)}>Send</button>
+          </div>
         </div>
      </div>
     );

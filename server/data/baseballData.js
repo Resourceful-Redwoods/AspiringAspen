@@ -1,12 +1,14 @@
+// TODO: use api to have all player information
+// (round winner currently favors first card played during a tie)
 module.exports = {
   'Mike_Trout': {
     name: 'Mike Trout',
     info: {
-      hr: 29,
-      sb: 31,
-      avg: 315,
-      hits: 173,
-      rbi: 100
+      'Home Runs': 29,
+      'Stolen Bases': 31,
+      'Average': 315,
+      'Hits': 173,
+      'RBI': 100
     },
     imageUrl: 'http://a.espncdn.com/combiner/i?img=/i/headshots/mlb/players/full/30836.png&w=350&h=254'
   },
@@ -24,11 +26,11 @@ module.exports = {
   'Joey_Votto': {
     name: 'Joey Votto',
     info: {
-      hr: 30,
-      sb: 8,
-      avg: 326,
-      hits: 181,
-      rbi: 97
+      'Home Runs': 30,
+      'Stolen Bases': 8,
+      'Average': 326,
+      'Hits': 181,
+      'RBI': 97
     },
     imageUrl: 'http://a.espncdn.com/combiner/i?img=/i/headshots/mlb/players/full/28670.png&w=350&h=254'
   },

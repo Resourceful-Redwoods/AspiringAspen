@@ -8,6 +8,8 @@ import Game from './Game.jsx';
 class Home extends React.Component {
   constructor(props) {
     super(props);
+    // state for the home page
+    // mainly storing username and if the current player is waiting for an opponent or not
     this.state = {
       gameState: 'idle',
       username: '',
@@ -17,49 +19,47 @@ class Home extends React.Component {
   }
 
   componentDidMount () {
-    this.props.socket.on('init', this._initialize);
     // listen to see if there is a match
     this.props.socket.on('enter game', this._enterGame.bind(this));
   }
 
   componentWillUnmount() {}
 
-  _initialize() {
-    // do things right away
-  }
-
   _enterGame() {
-    console.log(this);
+    // if there is a game, send the user to /game ot match up against opponent
     this.props.socket.emit('set username', this.state.username);
     this.props.router.push('/game');
   }
 
   playNow () {
-    console.log('play now');
+    // indicates that the user is waiting on the client side and tells server that they are ready to play
     this.setState({ gameState: 'waiting' });
     this.props.socket.emit('game', 'play');
     // gamestate is waiting
   }
 
   cancelMatchmaking () {
-    console.log('cancel looking');
+    // cancels match making and tells server
     this.setState({ gameState: 'idle' });
-    this.props.socket.emit('game', 'cancel');
     // gameState is idle, emit it back to server
+    this.props.socket.emit('game', 'cancel');
   }
 
   handleUsernameChange(e) {
+    // when a user types in the form, set that value to be the username state and that the username has a username
     this.setState({username: e.target.value});
     this.setState({ hasUsername: true });
-    console.log('user', this.state.username);
   }
 
-  handleUsername(e) {
+  handleSubmit(e) {
     e.preventDefault();
+    // submit is not allowed if there is no username
     if ( this.state.username !== '' ) {
-      console.log(this.state.username);
       this.setState({ hasUsername: true, showForm: false });
+      // emits the username to the server
       this.props.socket.emit('set username', this.state.username);
+      // fires playNow
+      this.playNow();
     }
   }
 
@@ -79,11 +79,11 @@ class Home extends React.Component {
           <h1>STOMP</h1>
             <div className='center-block'>
               { this.state.showForm ? (
-              <form className='nameForm'>
+              <form className='nameForm' onSubmit={this.handleSubmit.bind(this)}>
                 <label>
                   <input type="text" placeholder='enter a name' name="name" onChange={this.handleUsernameChange.bind(this)}/>
                 </label>
-                
+
               </form>
               ) : <p>Welcome {this.state.username}!</p> }
             </div>
