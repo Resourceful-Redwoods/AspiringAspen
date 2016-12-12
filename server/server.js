@@ -284,11 +284,13 @@ function leaveGame(socket) {
 }
 
 function declareWinner(winner) {
-  winner.emit('game end', 'win');
-  console.log(`${chalk.red(winner.id)} ${chalk.magenta('wins')}`);
-  console.log(`${chalk.red(winner.data.opponent)} ${chalk.magenta('loses')}`);
+  if (winner) {
+    winner.emit('game end', 'win');
+    console.log(`${chalk.red(winner.id)} ${chalk.magenta('wins')}`);
+  }
   let loser = getOpponent(winner);
   if (loser) {
+    console.log(`${chalk.red(loser.data.opponent)} ${chalk.magenta('wins')}`);
     loser.emit('game end', 'lose');
     leaveGame(loser);
   }
