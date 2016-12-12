@@ -19,10 +19,13 @@ class Waiting extends React.Component {
 
   render() {
     return (
-      <div className="waiting z-depth-5 valign-wrapper">
-        <div className='valign center-block'>
-          <h2 className=''>WAITING</h2>
-          <button onClick={ this.props.cancelMatchmaking.bind(this) }> Cancel </button>
+      <div className='cover'>
+        <div className="waiting z-depth-5 valign-wrapper">
+          <div className='valign center-block'>
+            <p>Welcome {this.props.username}!</p>
+            <h2 className=''>SEARCHING</h2>
+            <button onClick={ this.props.cancelMatchmaking.bind(this) } className="playbtn"> Cancel </button>
+          </div>
         </div>
       </div>
     );
