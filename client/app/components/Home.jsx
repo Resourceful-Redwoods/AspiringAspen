@@ -10,6 +10,8 @@ class Home extends React.Component {
     super(props);
     this.state = {
       gameState: 'idle',
+      username: '',
+      hasUsername: false
     };
   }
 
@@ -44,6 +46,19 @@ class Home extends React.Component {
     // gameState is idle, emit it back to server
   }
 
+  handleUsernameChange(e) {
+    this.setState({username: e.target.value});
+  }
+
+  handleUsername(e) {
+    e.preventDefault();
+    if ( this.state.username !== '' ) {
+      console.log(this.state.username);
+      this.setState({ hasUsername: true });
+      this.props.socket.emit('set username', this.state.username);
+    }
+  }
+
   render() {
     let gameState = this.state.gameState;
     return (
@@ -62,12 +77,12 @@ class Home extends React.Component {
               <form>
                 <label>
                   Enter a name:
-                  <input type="text" name="name" />
+                  <input type="text" name="name" onChange={this.handleUsernameChange.bind(this)}/>
                 </label>
-                <input type="submit" value="Submit" />
+                <input type="submit" onClick={this.handleUsername.bind(this)} value="Submit" />
               </form>
             </div>
-            <button onClick={ this.playNow.bind(this) }>PLAY <img src='img/playBtn.svg'></img> </button>
+            { this.state.hasUsername ? <button onClick={ this.playNow.bind(this) }>PLAY <img src='img/playBtn.svg'></img> </button> : null }
           </div>
         </div>
       </div>
