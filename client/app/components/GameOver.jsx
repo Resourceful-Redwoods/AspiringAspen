@@ -9,7 +9,7 @@ const GameOver = (props) => {
       <div className='youWin z-depth-5 valign-wrapper'>
         <div className='valign center-block'>
           <h2>YOU WIN</h2>
-          <button onClick={props.exit}>Exit</button>
+          <button onClick={props.exitGame}>Exit</button>
         </div>
       </div>
     );
@@ -18,7 +18,7 @@ const GameOver = (props) => {
       <div className='youLose z-depth-5 valign-wrapper'>
         <div className='valign center-block'>
           <h2>YOU LOSE</h2>
-          <button onClick={props.exit}>Exit</button>
+          <button onClick={props.exitGame}>Exit</button>
         </div>
       </div>
     );
