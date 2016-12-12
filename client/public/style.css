@@ -148,6 +148,16 @@ body {
   margin:2px;
 }
 
+.cardBackWrapper {
+  background-image: url('img/cardBack.svg');
+  background-repeat:no-repeat;
+  height:80%;
+  width:80%;
+  position:absolute;
+  overflow:show;
+  background-position: center; 
+}
+
 .statsWrapper {
   position:relative;
   top:40%;
@@ -155,7 +165,7 @@ body {
 
 .cardBack {
   top:-70px;
-  width:27%;
+  width:30%;
   height:100%;
   background:#EEF0F3;
   border-radius:15px;

@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 import game from './util/gameHelpers.js';
 
-import Board from './Board.jsx';
+import Outcome from './Outcome.jsx';
 import OpponentHand from './OpponentHand.jsx';
 import Userhand from './Userhand.jsx';
 import GameOver from './GameOver.jsx';
@@ -33,7 +33,8 @@ class Game extends React.Component {
         currentRound: {
           userHandCard: null,
           opponentHandCard: null,
-          outcome: null
+          outcome: null,
+          hasOutcome: null
         }
       }
     };
@@ -94,7 +95,17 @@ class Game extends React.Component {
     var change = _.extend({}, this.state);
     change.board.currentRound.outcome = outcome;
     change.board.isWaiting = false;
+    change.board.currentRound.hasOutcome = true;
     this.setState(change);
+    this._outComeTimeOut();
+  }
+
+  _outComeTimeOut() {
+    var change = _.extend({}, this.state);
+    change.board.currentRound.hasOutcome = false;
+    setTimeout(() => {
+      this.setState(change);
+    }, 2000);
   }
 
   _getGameOutcome(outcome) {
@@ -149,7 +160,7 @@ class Game extends React.Component {
 
   render() {
     const gameOver = this.state.game.gameOver;
-
+    const hasOutCome = this.state.board.currentRound.hasOutcome;
     return (
      <div className='row'>
        <div className='game col s9'>
@@ -160,7 +171,7 @@ class Game extends React.Component {
          <div id='board'>
           <p>Current Category: { this.state.board.currentCategory }</p>
           { this.state.board.isWaiting && !this.state.board.currentRound.outcome ? <p>Waiting for opponent...</p> : null }
-          { this.state.hasOutcome ? <Board /> : null }
+          { hasOutCome ? <Outcome oppCard={this.state.board.userHand.selectedCard} userCard={this.state.board.userHand.selectedCard}/> : null }
           </div>
           { gameOver ? <GameOver winner={this.state.game.gameWinner} exit={this.exit}/> : null }
          <div className='center'>

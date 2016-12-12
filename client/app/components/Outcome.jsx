@@ -1,12 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-class Waiting extends React.Component {
+import Card from './Card.jsx';
+
+class Outcome extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      foundMatch: false
-    };
   }
 
   componentDidMount () {
@@ -19,14 +18,16 @@ class Waiting extends React.Component {
 
   render() {
     return (
-      <div className="outCome z-depth-5 valign-wrapper">
+      <div className="waiting z-depth-5 valign-wrapper">
         <div className='valign center-block'>
-          <h2 className=''>WAITING</h2>
-          <button onClick={ this.props.cancelMatchmaking.bind(this) }> Cancel </button>
+          <h2 className=''>OUTCOME</h2>
+          
+          <Card card={this.props.userCard} />
+          <Card card={this.props.oppCard}/>
         </div>
       </div>
     );
   }
 }
 
-export default Waiting;
+export default Outcome;
