@@ -205,6 +205,10 @@ function makeRoom(sock1, sock2) {
 
   rooms[room] = newGame(sock1.id, sock2.id);
   console.log(`Made Room: ${chalk.yellow(room)} with ${chalk.red(sock1.id)} & ${chalk.red(sock2.id)}`);
+
+  sock1.emit('opponent username', sock2.data.username);
+  sock2.emit('opponent username', sock1.data.username);
+
   sock1.emit('hand', sock1.data.hand);
   sock2.emit('hand', sock2.data.hand);
   chooseCategory(room);
@@ -282,7 +286,6 @@ function chooseCategory(room) {
   let category = _.sample(rooms[room].game.categories);
   rooms[room].board.currentCategory = category;
   io.to(room).emit('category', category);
-  return category;
 }
 
 /*** SOCKETS HELPERS END ***/
