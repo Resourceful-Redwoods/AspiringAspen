@@ -73,7 +73,7 @@ class Home extends React.Component {
             <img className='cardIcon' src='img/cardIcon.svg'></img>
           </div>
         </div>
-        { gameState === 'waiting' ? <Waiting cancelMatchmaking={this.cancelMatchmaking.bind(this)} /> : null }
+        { gameState === 'waiting' ? <Waiting cancelMatchmaking={this.cancelMatchmaking.bind(this)} username={this.state.username} /> : null }
         <div className='row lower'>
           <div id='' className='col s12'>
           <h1>STOMP</h1>
