@@ -8,7 +8,8 @@
     "postinstall": "npm run webpack",
     "webpack": "node node_modules/webpack/bin/webpack.js",
     "webpack-watch": "node node_modules/webpack/bin/webpack.js --watch",
-    "start": "node server/server.js"
+    "start": "node server/server.js",
+    "start-dev": "npm start & npm run webpack-watch"
   },
   "keywords": [],
   "author": "",
