@@ -297,6 +297,10 @@ function chooseCategory(room) {
   return category;
 }
 
+function calcOutcome() {
+  //match.board.currentCategory
+}
+
 /*** SOCKETS HELPERS END ***/
 
 

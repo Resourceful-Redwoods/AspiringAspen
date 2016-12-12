@@ -7,6 +7,7 @@ import game from './util/gameHelpers.js';
 import Board from './Board.jsx';
 import OpponentHand from './OpponentHand.jsx';
 import Userhand from './Userhand.jsx';
+import GameOver from './GameOver.jsx';
 
 class Game extends React.Component {
   constructor(props) {
@@ -48,10 +49,9 @@ class Game extends React.Component {
     this.props.socket.on('card selected', this._getSelectedCard.bind(this));
     this.props.socket.on('category', this._getCategory.bind(this));
     this.props.socket.on('card played', this._getPlayedCard.bind(this));
-    // this.props.socket.on('round end', this._getRoundOutcome.bind(this));
     this.props.socket.on('round end', this._getRoundOutcome.bind(this));
     this.props.socket.on('game end', this._getGameOutcome.bind(this));
-    // socket.on('init', this._getGameOutcome);
+
   }
 
   componentWillUnmount () {}
@@ -98,7 +98,7 @@ class Game extends React.Component {
   _getGameOutcome(outcome) {
     console.log('from _getGameOutcome', outcome);
     var change = _.extend({}, this.state);
-    change.game.gameWinner = outcome;
+    change.game.gameWinner = outcome.toString();
     change.game.gameOver = true;
     this.setState(change);
     console.log('gameOver', this.state.game.gameOver);
@@ -114,6 +114,7 @@ class Game extends React.Component {
   }
 
   playCard() {
+
     console.log('play card', this.state.board.userHand.selectedCard);
     // socket.emit('play card', this.state.selectedCard);
     // set isWaiting to true
@@ -123,28 +124,38 @@ class Game extends React.Component {
     delete change.board.userHand.currentHand[playedCard];
     console.log(change.board.userHand);
     this.setState(change);
+
   }
 
   render() {
     const gameOver = this.state.game.gameOver;
 
     return (
-     <div>
-       <div id='opponent'>
-        <OpponentHand
-          currentHand={this.state.board.userHand.currentHand} />
-        </div>
-       <div id='board'>
-        <p>Current Category: { this.state.board.currentCategory }</p>
-        { this.state.board.isWaiting && !this.state.board.currentRound.outcome ? <p>Waiting for opponent...</p> : null }
-        { this.state.hasOutcome ? <Board /> : null }
-        </div>
-        { gameOver ? <GameOver outcome={this.state.game.gameWinner} /> : null }
-       <div id='userhand'>
-        <Userhand
-          currentHand={this.state.board.userHand.currentHand}
-          selectCard={this.selectCard.bind(this)}
-          playCard={this.playCard.bind(this)} />
+     <div className='row'>
+       <div className='game col s9'>
+         <div className='center'>
+          <OpponentHand
+            currentHand={this.state.board.userHand.currentHand} />
+          </div>
+         <div id='board'>
+          <p>Current Category: { this.state.board.currentCategory }</p>
+          { this.state.board.isWaiting && !this.state.board.currentRound.outcome ? <p>Waiting for opponent...</p> : null }
+          { this.state.hasOutcome ? <Board /> : null }
+          </div>
+          { gameOver ? <GameOver winner={this.state.game.gameWinner} /> : null }
+         <div className='center'>
+          <Userhand
+            currentHand={this.state.board.userHand.currentHand}
+            selectCard={this.selectCard.bind(this)}
+            playCard={this.playCard.bind(this)} />
+          </div>
+       </div>
+       <div id='test' className='sidebar col s3'>
+          <button id="chat">Chat!</button>
+          <ul id="messages"></ul>
+          <form action="" id="chatBox">
+          <input id="m" autoComplete="off" /><button>Send</button>
+          </form>
         </div>
      </div>
     );

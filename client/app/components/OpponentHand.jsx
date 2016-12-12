@@ -12,9 +12,10 @@ const OpponentHand = (props) => {
   
 
   return (
-    <div>
-      OpponentHand
+    <div className='row'>
+      <div className='col s6 offset-s3 opponentHand'>
       {usersCards}
+      </div>
     </div>
   );
 };
