@@ -46,7 +46,7 @@ let rooms = {};
 
 io.on('connection', function(socket) { // 'chat message' used to console.log (for now)
   console.log(`User Connected - ${chalk.red(socket.id)}`);
-  socket.emit('chat message', `Your Id: ${socket.id}`);
+  // socket.emit('chat message', `Your Id: ${socket.id}`); User has access to this data on socket.id
   socket.data = {
     gameState: 'idle'
   };
@@ -75,6 +75,10 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
     }
   });
 
+  socket.on('set username', function(name) {
+    socket.data.username = name;
+  });
+
   socket.on('select card', function(card) {
     console.log('select card', card);
     socket.data.hand.selectedCard = card;
@@ -87,7 +91,7 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
 
   socket.on('disconnect', function() {
     let gameState = socket.data.gameState;
-    console.log(`${chalk.red(socket.id)} disconnected while ${chalk.green(gameState)}`);
+    console.log(`${chalk.red(getUsername(socket.id))} disconnected while ${chalk.green(gameState)}`);
 
     if (gameState === 'waiting') {
       return dequeue(socket);
@@ -226,7 +230,7 @@ function makeRoom(sock1, sock2) {
   sock2.join(room);
 
   rooms[room] = newGame(sock1.id, sock2.id);
-  console.log(`Made Room: ${chalk.yellow(room)} with ${chalk.red(sock1.id)} & ${chalk.red(sock2.id)}`);
+  console.log(`Made Room: ${chalk.yellow(room)} with ${chalk.red(getUsername(sock1.id))} & ${chalk.red(getUsername(sock2.id))}`);
   sock1.emit('hand', sock1.data.hand);
   sock2.emit('hand', sock2.data.hand);
   chooseCategory(room);
@@ -244,7 +248,18 @@ function getSocket(socketId) {
 }
 
 function getOpponent(socket) {
+  if (!socket) {
+    return null;
+  }
   return getSocket(socket.data.opponent);
+}
+
+function getUsername(socketId) {
+  let socket = getSocket(socketId);
+  if (!socket) {
+    return socketId;
+  }
+  return socket.data.username ? socket.data.username : socket.id;
 }
 
 function play(socket) {
@@ -278,19 +293,21 @@ function dequeue(socket) {
 }
 
 function leaveGame(socket) {
-  socket.leave(socket.data.room);
-  delete socket.data.room;
-  delete socket.data.opponent;
+  if (socket) {
+    socket.leave(socket.data.room);
+    delete socket.data.room;
+    delete socket.data.opponent;
+  }
 }
 
 function declareWinner(winner) {
   if (winner) {
     winner.emit('game end', 'win');
-    console.log(`${chalk.red(winner.id)} ${chalk.magenta('wins')}`);
+    console.log(`${chalk.red(getUsername(winner.id))} ${chalk.magenta('wins')}`);
   }
   let loser = getOpponent(winner);
   if (loser) {
-    console.log(`${chalk.red(loser.data.opponent)} ${chalk.magenta('wins')}`);
+    console.log(`${chalk.red(getUsername(loser.data.opponent))} ${chalk.magenta('wins')}`);
     loser.emit('game end', 'lose');
     leaveGame(loser);
   }
