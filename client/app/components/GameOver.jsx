@@ -18,7 +18,7 @@ const GameOver = (props) => {
       <div className='youLose z-depth-5 valign-wrapper'>
         <div className='valign center-block'>
           <h2>YOU LOSE</h2>
-          <button>Exit</button>
+          <button onClick={this.props.exit}>Exit</button>
         </div>
       </div>
     );

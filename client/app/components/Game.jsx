@@ -51,6 +51,7 @@ class Game extends React.Component {
     this.props.socket.on('card played', this._getPlayedCard.bind(this));
     this.props.socket.on('round end', this._getRoundOutcome.bind(this));
     this.props.socket.on('game end', this._getGameOutcome.bind(this));
+    this.props.socket.on('chat message', this._getChatMessage.bind(this));
 
   }
 
@@ -84,7 +85,7 @@ class Game extends React.Component {
     var change = _.extend({}, this.state);
     change.board.isWaiting = true;
     this.setState(change);
-    // should remove from hand 
+    // should remove from hand
     // render to board
   }
 
@@ -95,6 +96,7 @@ class Game extends React.Component {
     change.board.isWaiting = false;
     this.setState(change);
   }
+
   _getGameOutcome(outcome) {
     console.log('from _getGameOutcome', outcome);
     var change = _.extend({}, this.state);
@@ -102,6 +104,10 @@ class Game extends React.Component {
     change.game.gameOver = true;
     this.setState(change);
     console.log('gameOver', this.state.game.gameOver);
+  }
+
+  _getChatMessage(msg) {
+    $('#test #messages').append($('<li>').text(msg));
   }
 
   selectCard(card) {
@@ -114,7 +120,9 @@ class Game extends React.Component {
   }
 
   playCard() {
-
+    if ( this.state.board.isWaiting === true ) {
+      return;
+    }
     console.log('play card', this.state.board.userHand.selectedCard);
     // socket.emit('play card', this.state.selectedCard);
     // set isWaiting to true
@@ -125,6 +133,18 @@ class Game extends React.Component {
     console.log(change.board.userHand);
     this.setState(change);
 
+  }
+
+  exit() {
+    this.props.socket.emit('game exit', playedCard);
+    this.props.router.push('/');
+  }
+
+  handleChatClick(e) {
+    e.preventDefault();
+    this.props.socket.emit('chat message', $('#m').val());
+    $('#m').val('');
+    return false;
   }
 
   render() {
@@ -142,19 +162,20 @@ class Game extends React.Component {
           { this.state.board.isWaiting && !this.state.board.currentRound.outcome ? <p>Waiting for opponent...</p> : null }
           { this.state.hasOutcome ? <Board /> : null }
           </div>
-          { gameOver ? <GameOver winner={this.state.game.gameWinner} /> : null }
+          { gameOver ? <GameOver winner={this.state.game.gameWinner} exit={this.exit}/> : null }
          <div className='center'>
           <Userhand
             currentHand={this.state.board.userHand.currentHand}
             selectCard={this.selectCard.bind(this)}
-            playCard={this.playCard.bind(this)} />
+            playCard={this.playCard.bind(this)}
+            disabled={this.state.board.isWaiting} />
           </div>
        </div>
        <div id='test' className='sidebar col s3'>
           <button id="chat">Chat!</button>
           <ul id="messages"></ul>
           <form action="" id="chatBox">
-          <input id="m" autoComplete="off" /><button>Send</button>
+          <input id="m" autoComplete="off" /><button onClick={this.handleChatClick.bind(this)}>Send</button>
           </form>
         </div>
      </div>
