@@ -24,34 +24,7 @@ class Game extends React.Component {
       board: {
         currentCategory: null,
         userHand: {
-<<<<<<< HEAD
           currentHand: {},
-=======
-          currentHand: {
-            'Mike_Trout': {
-              name: 'Mike Trout',
-              info: {
-                hr: 29,
-                sb: 30,
-                avg: 100,
-                hits: 173,
-                rbi: 100
-              },
-              imageUrl: 'http://a.espncdn.com/combiner/i?img=/i/headshots/mlb/players/full/30836.png&w=350&h=254'
-            },
-            'Joey_Votto': {
-              name: 'Joey Votto',
-              info: {
-                hr: 29,
-                sb: 8,
-                avg: 326,
-                hits: 181,
-                rbi: 97
-              },
-              imageUrl: 'http://a.espncdn.com/combiner/i?img=/i/headshots/mlb/players/full/28670.png&w=350&h=254'
-            }
-          },
->>>>>>> gui
           selectedCard: null,
           username: null
         },
@@ -157,22 +130,31 @@ class Game extends React.Component {
     const gameOver = this.state.game.gameOver;
 
     return (
-     <div className='game'>
-       <div className='center'>
-        <OpponentHand
-          currentHand={this.state.board.userHand.currentHand} />
-        </div>
-       <div id='board'>
-        <p>Current Category: { this.state.board.currentCategory }</p>
-        { this.state.board.isWaiting && !this.state.board.currentRound.outcome ? <p>Waiting for opponent...</p> : null }
-        { this.state.hasOutcome ? <Board /> : null }
-        </div>
-        { gameOver ? <GameOver winner={this.state.game.gameWinner} /> : null }
-       <div className='center'>
-        <Userhand
-          currentHand={this.state.board.userHand.currentHand}
-          selectCard={this.selectCard.bind(this)}
-          playCard={this.playCard.bind(this)} />
+     <div className='row'>
+       <div className='game col s9'>
+         <div className='center'>
+          <OpponentHand
+            currentHand={this.state.board.userHand.currentHand} />
+          </div>
+         <div id='board'>
+          <p>Current Category: { this.state.board.currentCategory }</p>
+          { this.state.board.isWaiting && !this.state.board.currentRound.outcome ? <p>Waiting for opponent...</p> : null }
+          { this.state.hasOutcome ? <Board /> : null }
+          </div>
+          { gameOver ? <GameOver winner={this.state.game.gameWinner} /> : null }
+         <div className='center'>
+          <Userhand
+            currentHand={this.state.board.userHand.currentHand}
+            selectCard={this.selectCard.bind(this)}
+            playCard={this.playCard.bind(this)} />
+          </div>
+       </div>
+       <div id='test' className='sidebar col s3'>
+          <button id="chat">Chat!</button>
+          <ul id="messages"></ul>
+          <form action="" id="chatBox">
+          <input id="m" autoComplete="off" /><button>Send</button>
+          </form>
         </div>
      </div>
     );

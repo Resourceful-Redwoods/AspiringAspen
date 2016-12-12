@@ -17,7 +17,7 @@ const UserHand = (props) => {
       <div className='userHand col s8 offset-s2'>
         {usersCards}
       </div>
-      <button onClick={props.playCard}>Play Card</button>
+      <button className='playbtn' onClick={props.playCard}>Play Card</button>
     </div>
   );
 };

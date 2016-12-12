@@ -30,6 +30,7 @@ let socket = io();
 //   console.log(category);
 // });
 
+
 render((
 <div>
   <Router history={hashHistory}>
@@ -38,12 +39,6 @@ render((
       <Route path="/game" component={Game} />
     </Route>
   </Router>
-  <div id="test">
-    <button id="chat">Chat!</button>
-    <ul id="messages"></ul>
-    <form action="" id="chatBox">
-    <input id="m" autoComplete="off" /><button>Send</button>
-    </form>
-  </div>
+  
 </div>
 ), document.getElementById('root'));

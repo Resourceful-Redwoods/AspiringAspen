@@ -7,7 +7,8 @@ module.exports = {
       avg: 315,
       hits: 173,
       rbi: 100
-    }
+    },
+    imageUrl: 'http://a.espncdn.com/combiner/i?img=/i/headshots/mlb/players/full/30836.png&w=350&h=254'
   },
   'Freddie_Freeman': {
     name: 'Freddie Freeman',
@@ -27,7 +28,8 @@ module.exports = {
       avg: 326,
       hits: 181,
       rbi: 97
-    }
+    },
+    imageUrl: 'http://a.espncdn.com/combiner/i?img=/i/headshots/mlb/players/full/28670.png&w=350&h=254'
   },
   'Paul_Goldschmidt': {
     name: 'Paul Goldschmidt',

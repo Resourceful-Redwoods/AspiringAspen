@@ -10,7 +10,7 @@ const Card = (props) => {
       <img src={props.card.imageUrl}></img>
       <div className='statsWrapper left-align'>
         <p>Player: {props.card.name}</p>
-        <p>Stats</p>
+        Stats
         <ul>
           <li>Home Runs: {props.card.info.hr}</li>
           <li>Average: {props.card.info.avg}</li>
