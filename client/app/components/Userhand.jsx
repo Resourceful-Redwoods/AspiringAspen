@@ -7,7 +7,7 @@ const UserHand = (props) => {
 
   // maps over the user cards, giving them all props from game
   const usersCards = Object.keys(props.currentHand).map((card, key) =>
-    <Card card={props.currentHand[card]} selectCard={props.selectCard} key={key} />
+    <Card card={props.currentHand[card]} selectCard={props.selectCard} currentSelectedCard={props.currentSelectedCard} key={key} />
   );
 
   return (
