@@ -201,7 +201,7 @@ body {
   width:100%;
   position:absolute;
   overflow:show;
-  background-position: center; 
+  background-position: center;
 }
 
 .statsWrapper {
@@ -291,31 +291,39 @@ body {
   position:relative;
 }
 
-#test { 
+#chat {
   height:100%;
   right:0px;
-  position:fixed;
+  position:absolute;
   z-index:10;
+  overflow: scroll;
 }
-#test form {
+#chat form {
   /*background: #000;*/
   /*padding: 3px;*/
-  position: absolute;
+  position: fixed;
   bottom: 0;
   right:0;
-  width: 100%;
+  width: 25%;
 }
-#test form input {
+#chat form input {
   border: 0;
-  /*padding: 10px;*/
+  padding: 0 10px;
   width: 100%;
+  margin-bottom: 0;
   /*margin-right: .5%;*/
   /*position:absolute;*/
 }
 
-#test button { width: 100%; background: rgb(130, 224, 255); border: none; padding: 10px; }
-#test #messages { list-style-type: none; margin: 0; padding: 0; }
-#test #messages li { padding: 5px 10px; }
-#test #messages li:nth-child(odd) { background: #eee; }
-#test #chat { width: 50%; }
+#chat .chat-input {
+  background-color: #EEF0F3;
+  width: calc(25% - 20px);
+  bottom: 0;
+  position: fixed;
+}
+
+#chat button { width: 100%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+#chat #messages { list-style-type: none; margin: 0; padding: 0; }
+#chat #messages li { padding: 5px 10px; }
+#chat #messages li:nth-child(odd) { background: #eee; }
 
