@@ -70,10 +70,13 @@ body {
 
 .nameForm input[type="text"] {
   font-size:1.7em;
+  color:rgba(59, 59, 56, 0.81);
+  border-bottom:5px solid rgba(59, 59, 56, 0.2);
 }
 
 .nameForm input::-webkit-input-placeholder {
-  font-size:1.3em;
+  font-size:1.2em;
+  color:rgba(59, 59, 56, 0.81);
 }
 
 .lower h1 {
@@ -289,6 +292,10 @@ body {
   background:rgba(224, 224, 107, 0.47);
 }
 
+.playbtn:focus {
+  background:rgba(224, 224, 107, 1);
+}
+
 .opponentHand {
   display:flex;
   justify-content:space-between;
@@ -356,6 +363,30 @@ body {
   z-index:5;
   padding:0;
   margin:0;
+}
+
+.oppWaiting {
+  top:50%;
+  left:42%;
+  position:absolute;
+  color:#DA5252;
+  font-size:1.4em;
+  font-family:Poppins, sans-serif;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.24);
+}
+.flash {
+  animation: pulse 0.5s infinite;
+  animation-timing-function: ease-out;
+  animation-direction: alternate;
+}
+
+@keyframes pulse {
+  0% {
+    opacity:0;
+  }
+  100% {
+    opacity:1;
+  }
 }
 
 #chat {
