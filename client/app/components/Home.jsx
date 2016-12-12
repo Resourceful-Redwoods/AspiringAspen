@@ -54,12 +54,13 @@ class Home extends React.Component {
     console.log('user', this.state.username);
   }
 
-  handleUsername(e) {
+  handleSubmit(e) {
     e.preventDefault();
     if ( this.state.username !== '' ) {
       console.log(this.state.username);
       this.setState({ hasUsername: true, showForm: false });
       this.props.socket.emit('set username', this.state.username);
+      this.playNow();
     }
   }
 
@@ -79,11 +80,11 @@ class Home extends React.Component {
           <h1>STOMP</h1>
             <div className='center-block'>
               { this.state.showForm ? (
-              <form className='nameForm'>
+              <form className='nameForm' onSubmit={this.handleSubmit.bind(this)}>
                 <label>
                   <input type="text" placeholder='enter a name' name="name" onChange={this.handleUsernameChange.bind(this)}/>
                 </label>
-                
+
               </form>
               ) : <p>Welcome {this.state.username}!</p> }
             </div>
