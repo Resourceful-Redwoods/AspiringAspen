@@ -5,12 +5,10 @@ import Card from './Card.jsx';
 
 const UserHand = (props) => {
 
-  // console.log('userhand', props.currentHand);
-
+  // maps over the user cards, giving them all props from game
   const usersCards = Object.keys(props.currentHand).map((card, key) =>
     <Card card={props.currentHand[card]} selectCard={props.selectCard} key={key} />
   );
-
 
   return (
     <div className='row'>
@@ -21,11 +19,5 @@ const UserHand = (props) => {
     </div>
   );
 };
-
-// UserHand.propTypes = {
-//   currentHand: PropTypes.array.isRequired,
-//   username: PropTypes.string.isRequired,
-//   playCard: PropTypes.func.isRequired
-// }
 
 export default UserHand;

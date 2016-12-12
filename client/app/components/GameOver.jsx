@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-
 const GameOver = (props) => {
-  console.log('GameOver', props);
+  // displays the winner/loser of the game
   if (props.winner === 'win') {
     return (
       <div className='youWin z-depth-5 valign-wrapper'>

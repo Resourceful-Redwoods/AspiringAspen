@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 const Card = (props) => {
-  console.log('card', props);
+  // receives the selectCard prop from game which sets the current card
 
   return (
 
@@ -22,10 +22,5 @@ const Card = (props) => {
     </div>
   );
 };
-
-// Card.propTypes = {
-//   card: React.PropTypes.object,
-//   selectCard: React.PropTypes.func
-// };
 
 export default Card;
