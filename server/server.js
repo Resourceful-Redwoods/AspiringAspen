@@ -33,6 +33,7 @@ io.on('connection', function(socket) {
   };
 
   socket.on('game', function(action) {
+    console.log(`${socket.id} wants to ${chalk.green(action)}`);
     if (action === 'play') {
       if (socket.data.gameState === 'idle') {
         play(socket);
@@ -263,6 +264,7 @@ function dequeue(socket) {
 function leaveGame(socket) {
   if (socket) {
     socket.leave(socket.data.room);
+    socket.data.gameState = 'idle';
     delete socket.data.room;
     delete socket.data.opponent;
   }

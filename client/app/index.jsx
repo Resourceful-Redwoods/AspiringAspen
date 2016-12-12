@@ -14,6 +14,5 @@ render((
       <Route path="/game" component={Game} />
     </Route>
   </Router>
-
 </div>
 ), document.getElementById('root'));
