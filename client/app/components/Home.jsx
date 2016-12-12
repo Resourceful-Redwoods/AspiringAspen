@@ -77,12 +77,11 @@ class Home extends React.Component {
         <div className='row lower'>
           <div id='' className='col s12'>
           <h1>STOMP</h1>
-            <div className='center-block nameForm'>
+            <div className='center-block'>
               { this.state.showForm ? (
-              <form>
+              <form className='nameForm'>
                 <label>
-                  Enter a name:
-                  <input type="text" name="name" onChange={this.handleUsernameChange.bind(this)}/>
+                  <input type="text" placeholder='enter a name' name="name" onChange={this.handleUsernameChange.bind(this)}/>
                 </label>
                 
               </form>

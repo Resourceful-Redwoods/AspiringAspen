@@ -192,7 +192,7 @@ function newGame(id1, id2, size = 3) {
         count: 0,
         wins: {}
       },
-      categories: ['hr', 'sb', 'avg', 'hits', 'rbi']
+      categories: ['Home Runs', 'Stolen Bases', 'Average', 'Hits', 'RBI']
     },
     board: {
       currentCategory: null,

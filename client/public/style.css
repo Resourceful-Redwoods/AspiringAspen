@@ -7,6 +7,7 @@
 .wrapper {
   height:100%;
 }
+
 .lower {
   top:50%;
   height:50%;
@@ -17,6 +18,16 @@
 
 body {
   background-color: #EEF0F3;
+}
+
+#category p {
+  font-family: Poppins, sans-serif;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.24);
+  position:absolute;
+  top:40%;
+  left:10%;
+  font-size:1.8em;
+  color:rgba(59, 59, 56, 0.81);
 }
 
 .titlebar h1 {
@@ -44,6 +55,15 @@ body {
   left:40%;
   width:15%;
   z-index:0;
+  /*font-size:3em;*/
+}
+
+.nameForm input[type="text"] {
+  font-size:1.7em;
+}
+
+.nameForm input::-webkit-input-placeholder {
+  font-size:1.3em;
 }
 
 .lower h1 {
@@ -103,12 +123,37 @@ body {
   position:relative;
 }
 
-
 .waiting button {
   background:#EEF0F3;
   position:relative;
   left:35%;
   border:none;
+}
+
+.outcome {
+  background:#EEF0F3;
+  z-index:5;
+  position:absolute;
+  top:20%;
+  left:10%;
+  width:80%;
+  height:55%;
+  border-radius:10px;
+  /*display:flex;*/
+}
+
+.outcomeCardwrapper {
+  top:10%;
+  position:absolute;
+  height: 80%;
+  display:flex;
+}
+
+.outcome h2 {
+  font-family: Poppins, sans-serif;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.24);
+  color:#DA5252;
+  position:relative;
 }
 
 .game {
@@ -120,8 +165,8 @@ body {
 
 .cardFront {
   display:flex;
-  width:25%;
-  height:100%;
+  width:200px;
+  height:280px;
   background:#EEF0F3;
   border-radius:15px;
   box-shadow: 0px 5px 5px rgba(0,0,0,0.24);
@@ -144,6 +189,7 @@ body {
   line-height:10px;
   margin:10px;
 }
+
 .cardFront ul {
   margin:2px;
 }
@@ -151,8 +197,8 @@ body {
 .cardBackWrapper {
   background-image: url('img/cardBack.svg');
   background-repeat:no-repeat;
-  height:80%;
-  width:80%;
+  height:100%;
+  width:100%;
   position:absolute;
   overflow:show;
   background-position: center; 
@@ -181,8 +227,6 @@ body {
   position:absolute;
   height:35%;
 }
-
-
 
 .playbtn {
   position:absolute;
@@ -214,13 +258,13 @@ body {
   left:35%;
   border:none;
 }
+
 .youWin h2 {
   font-family: Poppins, sans-serif;
   text-shadow: 0 1px 2px rgba(0,0,0,0.24);
   color:#DA5252;
   position:relative;
 }
-
 
 .youLose {
   background:#EEF0F3;
@@ -232,6 +276,7 @@ body {
   height:30%;
   border-radius:10px;
 }
+
 .youLose button {
   background:#EEF0F3;
   position:relative;
@@ -267,6 +312,7 @@ body {
   /*margin-right: .5%;*/
   /*position:absolute;*/
 }
+
 #test button { width: 100%; background: rgb(130, 224, 255); border: none; padding: 10px; }
 #test #messages { list-style-type: none; margin: 0; padding: 0; }
 #test #messages li { padding: 5px 10px; }
