@@ -24,6 +24,7 @@ class Home extends React.Component {
     TweenMax.fromTo('.titlebar', 1.25, {y: -900, opacity: 0.8}, {y: 0, opacity: 1, ease: Expo.easeOut, delay: 0.35});
     TweenMax.fromTo('.lower', 1.25, {y: 900, opacity: 0.8}, {y: 0, opacity: 1, ease: Expo.easeOut, delay: 0.35});
     TweenMax.fromTo('.titlebar img', 0.5, {opacity: 0}, {opacity: 1, ease: Expo.easeOut, delay: 1.75});
+    TweenMax.fromTo('.nameForm', 1.25, {opacity: 0}, {opacity: 1, ease: Expo.easeOut, delay: 3});
   }
 
   componentWillUnmount() {}
