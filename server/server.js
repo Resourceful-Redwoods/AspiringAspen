@@ -119,6 +119,10 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
     if (oppCard) {
       let sockCard = socket.data.hand.selectedCard;
       room.game.count++;
+
+      socket.emit('opponent card', oppCard);
+      opponent.emit('opponent card', sockCard);
+      
       if (sockCard.info[category] > oppCard.info[category]) { // Current data has no equal values
         console.log('round end trigger s.id');
         room.game.rounds.wins[socket.id]++;
