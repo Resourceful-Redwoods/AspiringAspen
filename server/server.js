@@ -16,24 +16,6 @@ app.use(bodyParser.json());
 
 app.use(express.static(path.resolve(__dirname, '..', 'client/public')));
 
-// players is set up to send back player data to be used in the game
-// right now it is using dummy data in data/baseballData.js
-// TODO: use api to have all player information
-
-app.get('/players', function (req, res) {
-  console.log('get /players');
-  res.json(playerData);
-});
-
-app.get('/deck', function (req, res) {
-  console.log('get /deck');
-  var team = {
-    hand: []
-  };
-
-  res.json( helper.getDeck(playerData, team.hand, 2 ) );
-});
-
 // Always return the main index.html, so react-router render the route in the client
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', 'client', 'index.html'));
@@ -44,15 +26,14 @@ app.get('*', (req, res) => {
 let waiting = [];
 let rooms = {};
 
-io.on('connection', function(socket) { // 'chat message' used to console.log (for now)
+io.on('connection', function(socket) {
   console.log(`User Connected - ${chalk.red(socket.id)}`);
-  // socket.emit('chat message', `Your Id: ${socket.id}`); User has access to this data on socket.id
   socket.data = {
     gameState: 'idle'
   };
 
   socket.on('game', function(action) {
-    if (action === 'play') { //TODO: Forfeit if already in a game, do nothing if already waiting
+    if (action === 'play') {
       if (socket.data.gameState === 'idle') {
         play(socket);
       }
@@ -67,22 +48,10 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
         declareWinner(getOpponent(socket));
       }
     }
-    if (action === 'exit') {
-      if (socket.data.gameState === 'playing') {
-        // when a user clicks exit at the end of a the game. not sure if anything needs to happen server side when that hapens
-        declareWinner(getOpponent(socket));
-      }
-    }
   });
 
   socket.on('set username', function(name) {
     socket.data.username = name;
-  });
-
-  socket.on('select card', function(card) {
-    console.log('select card', card);
-    socket.data.hand.selectedCard = card;
-    socket.emit('card selected', card);
   });
 
   socket.on('chat message', function(msg) {
@@ -106,8 +75,7 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
     }
   });
 
-  socket.on('play card', function(card) { // TODO: Verify functionality
-    console.log('play card received');
+  socket.on('play card', function(card) {
     let opponent = getOpponent(socket);
     let room = rooms[socket.data.room];
     let category = room.board.currentCategory;
@@ -123,13 +91,11 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
       socket.emit('opponent card', oppCard);
       opponent.emit('opponent card', sockCard);
       
-      if (sockCard.info[category] > oppCard.info[category]) { // Current data has no equal values
-        console.log('round end trigger s.id');
+      if (sockCard.info[category] > oppCard.info[category]) { // Current data cannot create ties
         room.game.rounds.wins[socket.id]++;
         socket.emit('round end', 'win');
         opponent.emit('round end', 'loss');
       } else {
-        console.log('round end trigger o.id');
         room.game.rounds.wins[opponent.id]++;
         opponent.emit('round end', 'win');
         socket.emit('round end', 'loss');
@@ -272,7 +238,6 @@ function play(socket) {
     opponent.emit('enter game', socket.data.username);
     makeRoom(socket, opponent);
     let room = socket.data.room;
-    // io.to(room).emit('chat message', `In room: ${room}`);
   } else {
     queue(socket);
   }
@@ -281,7 +246,6 @@ function play(socket) {
 function queue(socket) {
   waiting.push(socket.id);
   socket.data.gameState = 'waiting';
-  // socket.emit('chat message', 'Searching for opponent...');
 }
 
 function dequeue(socket) {
@@ -317,13 +281,8 @@ function declareWinner(winner) {
 function chooseCategory(room) {
   let category = _.sample(rooms[room].game.categories);
   rooms[room].board.currentCategory = category;
-  console.log('in chooseCategory');
   io.to(room).emit('category', category);
   return category;
-}
-
-function calcOutcome() {
-  //match.board.currentCategory
 }
 
 /*** SOCKETS HELPERS END ***/
