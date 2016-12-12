@@ -16,7 +16,7 @@ const GameOver = (props) => {
     );
   } else {
     return (
-      <div className=''>
+      <div className='cover'>
         <div className='youLose z-depth-5 valign-wrapper'>
           <div className='valign center-block'>
             <h2>YOU LOSE</h2>
