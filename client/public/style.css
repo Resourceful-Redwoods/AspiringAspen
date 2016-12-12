@@ -34,7 +34,7 @@ body {
   font-family: Poppins, sans-serif;
   text-shadow: 0 1px 2px rgba(0,0,0,0.24);
   position:absolute;
-  top:40%;
+  top: 200px;
   left:10%;
   font-size:1.8em;
   color:rgba(59, 59, 56, 0.81);
@@ -97,6 +97,7 @@ body {
   background:#DA5252;
   position:absolute;
   height:20%;
+  min-height:72px;
   width:20%;
   min-width: 142px;
   border:none;
@@ -129,7 +130,7 @@ body {
   width:25%;
   height:30%;
   border-radius:10px;
-  min-width: 240px;
+  min-width: 316px;
   min-height: 150px;
 }
 
@@ -145,6 +146,10 @@ body {
   position:relative;
   left:35%;
   border:none;
+}
+
+.waiting p {
+  text-align: center;
 }
 
 .outcome {
@@ -222,7 +227,7 @@ body {
 .statsWrapper {
   line-height: 20px;
   position:absolute;
-  top:48%;
+  bottom:0px;
   padding-left:10px;
   z-index:3;
 }
@@ -263,11 +268,11 @@ body {
 }
 
 .userHand {
-  top:65%;
+  bottom:0px;
   display:flex;
   justify-content:space-between;
   position:absolute;
-  height:35%;
+  height:280px;
 }
 
 .selected {
