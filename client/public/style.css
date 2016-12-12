@@ -69,10 +69,13 @@ body {
 
 .nameForm input[type="text"] {
   font-size:1.7em;
+  color:rgba(59, 59, 56, 0.81);
+  border-bottom:5px solid rgba(59, 59, 56, 0.2);
 }
 
 .nameForm input::-webkit-input-placeholder {
-  font-size:1.3em;
+  font-size:1.2em;
+  color:rgba(59, 59, 56, 0.81);
 }
 
 .lower h1 {
