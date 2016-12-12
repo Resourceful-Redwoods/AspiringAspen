@@ -64,7 +64,6 @@ class Game extends React.Component {
     change.board.userHand = hand;
     change.board.opponentHandLength = Object.keys(hand.currentHand).length;
     this.setState(change);
-    console.log(Object.keys(hand.currentHand).length);
   }
 
   _getCategory(cat) {
@@ -82,14 +81,13 @@ class Game extends React.Component {
   }
 
   _setOpponentCard(card) {
-    // get opponent card from server and set state with it
+    // get opponent card from server and set state with ita
     var change = _.extend({}, this.state);
     change.board.currentRound.opponentCard = card;
     this.setState(change);
   }
 
   _setOpponentUsername(username) {
-    console.log('username', username);
     // set opponents username
     var change = _.extend({}, this.state);
     change.game.opponentUsername = username;
@@ -100,7 +98,6 @@ class Game extends React.Component {
     // get round outcome from server
     var change = _.extend({}, this.state);
     change.board.currentRound.outcome = outcome;
-    console.log(outcome);
     if ( outcome === 'loss' ) {
       change.game.rounds.opponentWins = change.game.rounds.opponentWins + 1;
     } else {
@@ -134,7 +131,6 @@ class Game extends React.Component {
   _getChatMessage(data) {
     // get the chat message from the server
     var message = $('<li></li>');
-    console.log(socket, data.user);
     var username = socket.id === data.user ? 'me' : this.state.game.opponentUsername;
 
     var messagecontent = $('<p>' + username + ': <br/> ' + data.message + ' </p>');
@@ -198,7 +194,7 @@ class Game extends React.Component {
             </p>
           </div>
           { this.state.board.isWaiting && !this.state.board.currentRound.outcome ? <p>Waiting for opponent...</p> : null }
-          { hasOutCome ? <Outcome cat={category} outcome={thisOutcome} oppCard={this.state.board.userHand.selectedCard} userCard={this.state.board.userHand.selectedCard}/> : null }
+          { hasOutCome ? <Outcome cat={category} outcome={thisOutcome} oppCard={this.state.board.currentRound.opponentCard} userCard={this.state.board.userHand.selectedCard}/> : null }
           </div>
           { gameOver ? <GameOver exitGame={this.exitGame.bind(this)} winner={this.state.game.gameWinner}/> : null }
          <div className='center'>
