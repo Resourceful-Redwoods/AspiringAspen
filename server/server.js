@@ -67,6 +67,12 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
         declareWinner(getOpponent(socket));
       }
     }
+    if (action === 'exit') {
+      if (socket.data.gameState === 'playing') {
+        // when a user clicks exit at the end of a the game. not sure if anything needs to happen server side when that hapens
+        declareWinner(getOpponent(socket));
+      }
+    }
   });
 
   socket.on('select card', function(card) {
@@ -125,7 +131,7 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
         // Removes the selected card from the players' hands
         delete socket.data.hand.selectedCard;
         delete opponent.data.hand.selectedCard;
-        
+
         socket.data.hand.selectedCard = null;
         opponent.data.hand.selectedCard = null;
 
