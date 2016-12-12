@@ -1,3 +1,5 @@
+// TODO: use api to have all player information
+// (round winner currently favors first card played during a tie)
 module.exports = {
   'Mike_Trout': {
     name: 'Mike Trout',
