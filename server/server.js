@@ -86,12 +86,16 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
   });
 
   socket.on('chat message', function(msg) {
-    io.to(socket.data.room).emit('chat message', msg);
+    let message = {
+      message: msg,
+      user: socket.id
+    };
+    io.to(socket.data.room).emit('chat message', message);
   });
 
   socket.on('disconnect', function() {
     let gameState = socket.data.gameState;
-    console.log(`${chalk.red(getUsername(socket.id))} disconnected while ${chalk.green(gameState)}`);
+    console.log(`${chalk.red(socket.id)} disconnected while ${chalk.green(gameState)}`);
 
     if (gameState === 'waiting') {
       return dequeue(socket);
@@ -216,21 +220,21 @@ function makeRoom(sock1, sock2) {
     room: room,
     opponent: sock2.id,
     gameState: 'playing',
-    username: null
+    username: 'Guest'
   });
 
   _.extend(sock2.data, {
     room: room,
     opponent: sock1.id,
     gameState: 'playing',
-    username: null
+    username: 'Guest'
   });
 
   sock1.join(room);
   sock2.join(room);
 
   rooms[room] = newGame(sock1.id, sock2.id);
-  console.log(`Made Room: ${chalk.yellow(room)} with ${chalk.red(getUsername(sock1.id))} & ${chalk.red(getUsername(sock2.id))}`);
+  console.log(`Made Room: ${chalk.yellow(room)} with ${chalk.red(sock1.id)} & ${chalk.red(sock2.id)}`);
   sock1.emit('hand', sock1.data.hand);
   sock2.emit('hand', sock2.data.hand);
   chooseCategory(room);
@@ -254,25 +258,17 @@ function getOpponent(socket) {
   return getSocket(socket.data.opponent);
 }
 
-function getUsername(socketId) {
-  let socket = getSocket(socketId);
-  if (!socket) {
-    return socketId;
-  }
-  return socket.data.username ? socket.data.username : socket.id;
-}
-
 function play(socket) {
   if (waiting.length) {
     let opponent = getSocket(waiting.shift());
     if (!opponent || opponent.data.gameState !== 'waiting') { //safeguards against certain async issues
       return setTimeout(play.bind(this, socket), 0);
     }
-    socket.emit('enter game');
-    opponent.emit('enter game');
+    socket.emit('enter game', opponent.data.username);
+    opponent.emit('enter game', socket.data.username);
     makeRoom(socket, opponent);
     let room = socket.data.room;
-    io.to(room).emit('chat message', `In room: ${room}`);
+    // io.to(room).emit('chat message', `In room: ${room}`);
   } else {
     queue(socket);
   }
@@ -281,7 +277,7 @@ function play(socket) {
 function queue(socket) {
   waiting.push(socket.id);
   socket.data.gameState = 'waiting';
-  socket.emit('chat message', 'Searching for opponent...');
+  // socket.emit('chat message', 'Searching for opponent...');
 }
 
 function dequeue(socket) {
@@ -303,11 +299,11 @@ function leaveGame(socket) {
 function declareWinner(winner) {
   if (winner) {
     winner.emit('game end', 'win');
-    console.log(`${chalk.red(getUsername(winner.id))} ${chalk.magenta('wins')}`);
+    console.log(`${chalk.red(winner.id)} ${chalk.magenta('wins')}`);
   }
   let loser = getOpponent(winner);
   if (loser) {
-    console.log(`${chalk.red(getUsername(loser.data.opponent))} ${chalk.magenta('wins')}`);
+    console.log(`${chalk.red(loser.data.opponent)} ${chalk.magenta('wins')}`);
     loser.emit('game end', 'lose');
     leaveGame(loser);
   }
