@@ -83,7 +83,6 @@ class Home extends React.Component {
                 <label>
                   <input type="text" placeholder='enter a name' name="name" onChange={this.handleUsernameChange.bind(this)}/>
                 </label>
-
               </form>
               ) : <p>Welcome {this.state.username}!</p> }
             </div>

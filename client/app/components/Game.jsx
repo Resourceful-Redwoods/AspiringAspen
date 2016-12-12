@@ -28,11 +28,13 @@ class Game extends React.Component {
       },
       board: {
         currentCategory: null,
+        inGame: false,
         userHand: {
           currentHand: {},
           selectedCard: null,
           username: null
         },
+        opponentHandLength: 0,
         isWaiting: false,
         currentRound: {
           userCard: null,
@@ -55,14 +57,14 @@ class Game extends React.Component {
     this.props.socket.on('opponent username', this._setOpponentUsername.bind(this));
   }
 
-  componentWillUnmount () {}
-
   _getHand(hand) {
     // gets the hand from the server and sets the state with it
     // we have to use extend so that we can easily change a nested state
     var change = _.extend({}, this.state);
     change.board.userHand = hand;
+    change.board.opponentHandLength = Object.keys(hand.currentHand).length;
     this.setState(change);
+    console.log(Object.keys(hand.currentHand).length);
   }
 
   _getCategory(cat) {
@@ -104,6 +106,7 @@ class Game extends React.Component {
     } else {
       change.game.rounds.userWins = change.game.rounds.userWins + 1;
     }
+    change.board.opponentHandLength = change.board.opponentHandLength - 1;
     change.board.isWaiting = false;
     change.board.currentRound.hasOutcome = true;
     this.setState(change);
@@ -185,7 +188,7 @@ class Game extends React.Component {
        <div className='game col s9'>
          <div className='center'>
           <OpponentHand
-            currentHand={this.state.board.userHand.currentHand} username={this.state.game.opponentUsername} />
+            currentHandLength={this.state.board.opponentHandLength} username={this.state.game.opponentUsername} />
           </div>
          <div id='board'>
           <div id='category'>
