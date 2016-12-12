@@ -10,6 +10,7 @@ html {
   position:absolute;
   background-color:#EEF0F3;
   height:50%;
+  z-index:3;
 }
 
 .wrapper {
@@ -56,7 +57,7 @@ body {
   position:absolute;
   bottom:-148px;
   left:65%;
-  z-index:1;
+  z-index:10;
 }
 
 .nameForm {
