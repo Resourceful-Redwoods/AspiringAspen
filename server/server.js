@@ -106,10 +106,12 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
       let sockCard = socket.data.hand.selectedCard;
       room.game.count++;
       if (sockCard.info[category] > oppCard.info[category]) { // Current data has no equal values
+        console.log('round end trigger s.id');
         room.game.rounds.wins[socket.id]++;
         socket.emit('round end', socket.id);
         opponent.emit('round end', socket.id);
       } else {
+        console.log('round end trigger o.id');
         room.game.rounds.wins[opponent.id]++;
         socket.emit('round end', opponent.id);
         opponent.emit('round end', opponent.id);
@@ -123,7 +125,7 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
         // Removes the selected card from the players' hands
         delete socket.data.hand.selectedCard;
         delete opponent.data.hand.selectedCard;
-
+        
         socket.data.hand.selectedCard = null;
         opponent.data.hand.selectedCard = null;
 

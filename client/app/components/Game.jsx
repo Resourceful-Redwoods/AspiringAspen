@@ -49,7 +49,8 @@ class Game extends React.Component {
     this.props.socket.on('category', this._getCategory.bind(this));
     this.props.socket.on('card played', this._getPlayedCard.bind(this));
     // this.props.socket.on('round end', this._getRoundOutcome.bind(this));
-    this.props.socket.on('round end', console.log('round ended'));
+    this.props.socket.on('round end', this._getRoundOutcome.bind(this));
+    this.props.socket.on('game end', this._getGameOutcome.bind(this));
     // socket.on('init', this._getGameOutcome);
   }
 
@@ -83,15 +84,25 @@ class Game extends React.Component {
     var change = _.extend({}, this.state);
     change.board.isWaiting = true;
     this.setState(change);
+    // should remove from hand 
+    // render to board
   }
 
-  _getRoundOutcome(data) {
-    console.log('from _getRoundOutcome', data);
-    // var change = _.extend({}, this.state);
-    // change.board.currentRount.outcome = outcome;
-    // this.setState(change);
+  _getRoundOutcome(outcome) {
+    console.log('from _getRoundOutcome', outcome);
+    var change = _.extend({}, this.state);
+    change.board.currentRound.outcome = outcome;
+    change.board.isWaiting = false;
+    this.setState(change);
   }
-  _getGameOutcome() {}
+  _getGameOutcome(outcome) {
+    console.log('from _getGameOutcome', outcome);
+    var change = _.extend({}, this.state);
+    change.game.gameWinner = outcome;
+    change.game.gameOver = true;
+    this.setState(change);
+    console.log('gameOver', this.state.game.gameOver);
+  }
 
   selectCard(card) {
     console.log('select card', card);
@@ -106,7 +117,12 @@ class Game extends React.Component {
     console.log('play card', this.state.board.userHand.selectedCard);
     // socket.emit('play card', this.state.selectedCard);
     // set isWaiting to true
-    this.props.socket.emit('play card', this.state.board.userHand.selectedCard.name);
+    var playedCard = this.state.board.userHand.selectedCard.name;
+    this.props.socket.emit('play card', playedCard);
+    var change = _.extend({}, this.state);
+    delete change.board.userHand.currentHand[playedCard];
+    console.log(change.board.userHand);
+    this.setState(change);
   }
 
   render() {
@@ -123,7 +139,7 @@ class Game extends React.Component {
         { this.state.board.isWaiting && !this.state.board.currentRound.outcome ? <p>Waiting for opponent...</p> : null }
         { this.state.hasOutcome ? <Board /> : null }
         </div>
-        { gameOver ? <GameOver winner={this.state.game.gameWinner} /> : null }
+        { gameOver ? <GameOver outcome={this.state.game.gameWinner} /> : null }
        <div id='userhand'>
         <Userhand
           currentHand={this.state.board.userHand.currentHand}
