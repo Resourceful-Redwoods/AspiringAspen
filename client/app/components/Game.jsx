@@ -24,7 +24,34 @@ class Game extends React.Component {
       board: {
         currentCategory: null,
         userHand: {
+<<<<<<< HEAD
           currentHand: {},
+=======
+          currentHand: {
+            'Mike_Trout': {
+              name: 'Mike Trout',
+              info: {
+                hr: 29,
+                sb: 30,
+                avg: 100,
+                hits: 173,
+                rbi: 100
+              },
+              imageUrl: 'http://a.espncdn.com/combiner/i?img=/i/headshots/mlb/players/full/30836.png&w=350&h=254'
+            },
+            'Joey_Votto': {
+              name: 'Joey Votto',
+              info: {
+                hr: 29,
+                sb: 8,
+                avg: 326,
+                hits: 181,
+                rbi: 97
+              },
+              imageUrl: 'http://a.espncdn.com/combiner/i?img=/i/headshots/mlb/players/full/28670.png&w=350&h=254'
+            }
+          },
+>>>>>>> gui
           selectedCard: null,
           username: null
         },
@@ -113,6 +140,7 @@ class Game extends React.Component {
   }
 
   playCard() {
+
     console.log('play card', this.state.board.userHand.selectedCard);
     // socket.emit('play card', this.state.selectedCard);
     // set isWaiting to true
@@ -122,14 +150,15 @@ class Game extends React.Component {
     delete change.board.userHand.currentHand[playedCard];
     console.log(change.board.userHand);
     this.setState(change);
+
   }
 
   render() {
     const gameOver = this.state.game.gameOver;
 
     return (
-     <div>
-       <div id='opponent'>
+     <div className='game'>
+       <div className='center'>
         <OpponentHand
           currentHand={this.state.board.userHand.currentHand} />
         </div>
@@ -138,8 +167,8 @@ class Game extends React.Component {
         { this.state.board.isWaiting && !this.state.board.currentRound.outcome ? <p>Waiting for opponent...</p> : null }
         { this.state.hasOutcome ? <Board /> : null }
         </div>
-        { gameOver ? <GameOver outcome={this.state.game.gameWinner} /> : null }
-       <div id='userhand'>
+        { gameOver ? <GameOver winner={this.state.game.gameWinner} /> : null }
+       <div className='center'>
         <Userhand
           currentHand={this.state.board.userHand.currentHand}
           selectCard={this.selectCard.bind(this)}

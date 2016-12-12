@@ -3,8 +3,7 @@ import ReactDOM from 'react-dom';
 
 const Cardback = (props) => {
   return (
-    <div>
-      <p>Back of card</p>
+    <div className='cardBack center-block'>
     </div>
   );
 };
