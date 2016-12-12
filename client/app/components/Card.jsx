@@ -5,7 +5,7 @@ const Card = (props) => {
   return (
     <div className='cardFront hoverable center-block' onClick={() => props.selectCard(props.card)}>
       <div className='cardFrontWrapper'>
-        <img className='circle' src={git stprops.card.imageUrl}></img>
+        <img className='circle' src={props.card.imageUrl}></img>
         <div className='statsWrapper left-align'>
           <p>{props.card.name}</p>
           <ul>
