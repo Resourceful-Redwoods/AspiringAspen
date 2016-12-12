@@ -3,18 +3,23 @@ import ReactDOM from 'react-dom';
 
 
 const GameOver = (props) => {
+  console.log('GameOver', props);
   if (props.outcome === 'win') {
     return (
-      <div>
-        <h1>YOU WIN</h1>
-        <button>Exit</button>
+      <div className='youWin z-depth-5 valign-wrapper'>
+        <div className='you valign center-block'>
+          <h2>YOU WIN</h2>
+          <button>Exit</button>
+        </div>
       </div>
     );
   } else {
     return (
-      <div>
-        <h1>YOU LOSE</h1>
-        <button>Exit</button>
+      <div className='youLose z-depth-5 valign-wrapper'>
+        <div className='valign center-block'>
+          <h2>YOU LOSE</h2>
+          <button>Exit</button>
+        </div>
       </div>
     );
   }

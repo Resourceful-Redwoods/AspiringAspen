@@ -173,7 +173,6 @@ body {
   bottom:5%;
 }
 
-
 .opponentHand {
   display:flex;
   justify-content:space-between;
@@ -181,6 +180,54 @@ body {
   height:30%;
 }
 
+.youWin {
+  background:#EEF0F3;
+  z-index:5;
+  position:absolute;
+  top:35%;
+  left:37%;
+  width:25%;
+  height:30%;
+  border-radius:10px;
+}
+
+.youWin button {
+  background:#EEF0F3;
+  position:relative;
+  left:35%;
+  border:none;
+}
+.youWin h2 {
+  font-family: Poppins, sans-serif;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.24);
+  color:#DA5252;
+  position:relative;
+}
+
+
+.youLose {
+  background:#EEF0F3;
+  z-index:5;
+  position:absolute;
+  top:35%;
+  left:37%;
+  width:25%;
+  height:30%;
+  border-radius:10px;
+}
+.youLose button {
+  background:#EEF0F3;
+  position:relative;
+  left:35%;
+  border:none;
+}
+
+.youLose h2 {
+  font-family: Poppins, sans-serif;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.24);
+  color:#DA5252;
+  position:relative;
+}
 
 #test { 
   height:100%;

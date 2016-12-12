@@ -7,6 +7,7 @@ import game from './util/gameHelpers.js';
 import Board from './Board.jsx';
 import OpponentHand from './OpponentHand.jsx';
 import Userhand from './Userhand.jsx';
+import GameOver from './GameOver.jsx';
 
 class Game extends React.Component {
   constructor(props) {
