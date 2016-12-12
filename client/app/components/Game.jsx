@@ -48,10 +48,9 @@ class Game extends React.Component {
     this.props.socket.on('card selected', this._getSelectedCard.bind(this));
     this.props.socket.on('category', this._getCategory.bind(this));
     this.props.socket.on('card played', this._getPlayedCard.bind(this));
-    // this.props.socket.on('round end', this._getRoundOutcome.bind(this));
     this.props.socket.on('round end', this._getRoundOutcome.bind(this));
     this.props.socket.on('game end', this._getGameOutcome.bind(this));
-    // socket.on('init', this._getGameOutcome);
+
   }
 
   componentWillUnmount () {}
