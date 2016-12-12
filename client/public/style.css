@@ -318,12 +318,12 @@ body {
   width:25%;
   height:30%;
   border-radius:10px;
+  text-align:center;
 }
 
 .youWin button {
   background:#EEF0F3;
   position:relative;
-  left:35%;
   border:none;
 }
 
@@ -343,12 +343,12 @@ body {
   width:25%;
   height:30%;
   border-radius:10px;
+  text-align: center;
 }
 
 .youLose button {
   background:#EEF0F3;
   position:relative;
-  left:35%;
   border:none;
 }
 
