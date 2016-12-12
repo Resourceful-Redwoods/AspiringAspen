@@ -1,6 +1,6 @@
-# Project Name
+# DeckStomp
 
-> Pithy project description
+> A stats-based card game that's more fun than it sounds
 
 ## Team
 
@@ -24,11 +24,9 @@
 
 ## Requirements
 
-- Node 0.10.x
-- Redis 2.6.x
-- Postgresql 9.1.x
-- etc
-- etc
+- Node >= 6.3.1
+- webpack >= 1.14.0
+- bower >= 1.8.0
 
 ## Development
 
@@ -38,13 +36,14 @@ From within the root directory:
 
 ```sh
 sudo npm install -g bower
+sudo npm install -g webpack
 npm install
 bower install
 ```
 
 ### Roadmap
 
-View the project roadmap [here](LINK_TO_PROJECT_ISSUES)
+View the project roadmap [here](https://waffle.io/AspiringAspen/AspiringAspen)
 
 
 ## Contributing

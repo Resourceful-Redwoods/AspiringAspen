@@ -46,7 +46,7 @@ let rooms = {};
 
 io.on('connection', function(socket) { // 'chat message' used to console.log (for now)
   console.log(`User Connected - ${chalk.red(socket.id)}`);
-  socket.emit('chat message', `Your Id: ${socket.id}`);
+  // socket.emit('chat message', `Your Id: ${socket.id}`); User has access to this data on socket.id
   socket.data = {
     gameState: 'idle'
   };
@@ -75,6 +75,10 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
     }
   });
 
+  socket.on('set username', function(name) {
+    socket.data.username = name;
+  });
+
   socket.on('select card', function(card) {
     console.log('select card', card);
     socket.data.hand.selectedCard = card;
@@ -82,7 +86,11 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
   });
 
   socket.on('chat message', function(msg) {
-    io.to(socket.data.room).emit('chat message', msg);
+    let message = {
+      message: msg,
+      user: socket.id
+    };
+    io.to(socket.data.room).emit('chat message', message);
   });
 
   socket.on('disconnect', function() {
@@ -111,6 +119,10 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
     if (oppCard) {
       let sockCard = socket.data.hand.selectedCard;
       room.game.count++;
+
+      socket.emit('opponent card', oppCard);
+      opponent.emit('opponent card', sockCard);
+      
       if (sockCard.info[category] > oppCard.info[category]) { // Current data has no equal values
         console.log('round end trigger s.id');
         room.game.rounds.wins[socket.id]++;
@@ -212,14 +224,14 @@ function makeRoom(sock1, sock2) {
     room: room,
     opponent: sock2.id,
     gameState: 'playing',
-    username: null
+    username: 'Guest'
   });
 
   _.extend(sock2.data, {
     room: room,
     opponent: sock1.id,
     gameState: 'playing',
-    username: null
+    username: 'Guest'
   });
 
   sock1.join(room);
@@ -244,6 +256,9 @@ function getSocket(socketId) {
 }
 
 function getOpponent(socket) {
+  if (!socket) {
+    return null;
+  }
   return getSocket(socket.data.opponent);
 }
 
@@ -253,11 +268,11 @@ function play(socket) {
     if (!opponent || opponent.data.gameState !== 'waiting') { //safeguards against certain async issues
       return setTimeout(play.bind(this, socket), 0);
     }
-    socket.emit('enter game');
-    opponent.emit('enter game');
+    socket.emit('enter game', opponent.data.username);
+    opponent.emit('enter game', socket.data.username);
     makeRoom(socket, opponent);
     let room = socket.data.room;
-    io.to(room).emit('chat message', `In room: ${room}`);
+    // io.to(room).emit('chat message', `In room: ${room}`);
   } else {
     queue(socket);
   }
@@ -266,7 +281,7 @@ function play(socket) {
 function queue(socket) {
   waiting.push(socket.id);
   socket.data.gameState = 'waiting';
-  socket.emit('chat message', 'Searching for opponent...');
+  // socket.emit('chat message', 'Searching for opponent...');
 }
 
 function dequeue(socket) {
@@ -278,9 +293,11 @@ function dequeue(socket) {
 }
 
 function leaveGame(socket) {
-  socket.leave(socket.data.room);
-  delete socket.data.room;
-  delete socket.data.opponent;
+  if (socket) {
+    socket.leave(socket.data.room);
+    delete socket.data.room;
+    delete socket.data.opponent;
+  }
 }
 
 function declareWinner(winner) {

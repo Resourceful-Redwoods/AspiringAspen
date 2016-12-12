@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Router, Route, Link } from 'react-router';
 import _ from 'lodash';
 
 import game from './util/gameHelpers.js';
@@ -146,9 +147,9 @@ class Game extends React.Component {
 
   }
 
-  exit() {
-    this.props.socket.emit('game exit', playedCard);
-    this.props.router.push('/#/');
+  exitGame() {
+    this.props.socket.emit('game exit');
+    this.props.router.push('/');
   }
 
   handleChatClick(e) {
@@ -173,7 +174,7 @@ class Game extends React.Component {
           { this.state.board.isWaiting && !this.state.board.currentRound.outcome ? <p>Waiting for opponent...</p> : null }
           { hasOutCome ? <Outcome oppCard={this.state.board.userHand.selectedCard} userCard={this.state.board.userHand.selectedCard}/> : null }
           </div>
-          { gameOver ? <GameOver winner={this.state.game.gameWinner} exit={this.exit}/> : null }
+          { gameOver ? <GameOver exitGame={this.exitGame.bind(this)} winner={this.state.game.gameWinner}/> : null }
          <div className='center'>
           <Userhand
             currentHand={this.state.board.userHand.currentHand}
