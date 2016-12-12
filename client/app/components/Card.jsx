@@ -9,8 +9,8 @@ const Card = (props) => {
     <div className='cardFront hoverable center-block' onClick={() => props.selectCard(props.card)}>
       <img src={props.card.imageUrl}></img>
       <div className='statsWrapper left-align'>
-        <p>Player: {props.card.name}</p>
-        Stats
+        <p>{props.card.name}</p>
+        <p>Stats</p>
         <ul>
           <li>Home Runs: {props.card.info.hr}</li>
           <li>Average: {props.card.info.avg}</li>

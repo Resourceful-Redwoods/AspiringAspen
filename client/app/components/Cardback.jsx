@@ -3,7 +3,10 @@ import ReactDOM from 'react-dom';
 
 const Cardback = (props) => {
   return (
-    <div className='cardBack center-block'>
+    <div className="valign-wrapper center cardBack">
+      <div className='valign'>
+      <img src='img/cardBack.svg'></img>
+      </div>
     </div>
   );
 };
