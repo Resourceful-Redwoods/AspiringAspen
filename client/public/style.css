@@ -141,8 +141,13 @@ body {
   /*display:flex;*/
   /*position:absolute;*/
   font-family: Poppins, sans-serif;
-  padding:10px;
+  line-height:10px;
+  margin:10px;
 }
+.cardFront ul {
+  margin:2px;
+}
+
 .statsWrapper {
   position:relative;
   top:40%;
@@ -150,7 +155,7 @@ body {
 
 .cardBack {
   top:-70px;
-  width:25%;
+  width:27%;
   height:100%;
   background:#EEF0F3;
   border-radius:15px;
@@ -160,12 +165,14 @@ body {
 }
 
 .userHand {
-  top:60%;
+  top:65%;
   display:flex;
   justify-content:space-between;
   position:absolute;
   height:35%;
 }
+
+
 
 .playbtn {
   position:absolute;

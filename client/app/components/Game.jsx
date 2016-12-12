@@ -137,7 +137,7 @@ class Game extends React.Component {
 
   exit() {
     this.props.socket.emit('game exit', playedCard);
-    this.props.router.push('/');
+    this.props.router.push('/#/');
   }
 
   handleChatClick(e) {
