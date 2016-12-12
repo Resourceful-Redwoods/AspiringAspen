@@ -30,7 +30,7 @@ io.on('connection', function(socket) {
   };
   // Used for clients queueing up for new game, canceling match search, & quitting current game
   socket.on('game', function(action) {
-    console.log(`${socket.id} wants to ${chalk.green(action)}`);
+    console.log(`${chalk.red(socket.id)} wants to ${chalk.green(action)}`);
     if (action === 'play') {
       if (socket.data.gameState === 'idle') {
         play(socket);
