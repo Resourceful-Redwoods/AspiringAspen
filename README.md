@@ -20,25 +20,32 @@
 
 ## Usage
 
-> Some usage instructions
+> Go to the site and wait for an opponent to appear! Once matched up, you will face off with them having to strategize on which cards to play when.
 
 ## Requirements
 
 - Node >= 6.3.1
-- webpack >= 1.14.0
-- bower >= 1.8.0
+- Webpack >= 1.14.0
+- Socket.io >= 1.7.1
+- React >= 15.4.1
 
 ## Development
+
+From within the root directory:
+
+```sh
+npm install
+npm run start-dev
+```
 
 ### Installing Dependencies
 
 From within the root directory:
 
 ```sh
-sudo npm install -g bower
 sudo npm install -g webpack
 npm install
-bower install
+npm run start
 ```
 
 ### Roadmap
