@@ -98,7 +98,7 @@ class Game extends React.Component {
   _getGameOutcome(outcome) {
     console.log('from _getGameOutcome', outcome);
     var change = _.extend({}, this.state);
-    change.game.gameWinner = outcome;
+    change.game.gameWinner = outcome.toString();
     change.game.gameOver = true;
     this.setState(change);
     console.log('gameOver', this.state.game.gameOver);

@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 
 const GameOver = (props) => {
   console.log('GameOver', props);
-  if (props.outcome === 'win') {
+  if (props.winner === 'win') {
     return (
       <div className='youWin z-depth-5 valign-wrapper'>
         <div className='you valign center-block'>
