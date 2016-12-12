@@ -12,7 +12,6 @@ import GameOver from './GameOver.jsx';
 
 // functions with a _ in front are functions that are done due to an action from the server
 
-
 class Game extends React.Component {
   constructor(props) {
     super(props);
@@ -25,8 +24,7 @@ class Game extends React.Component {
         },
         gameWinner: null,
         gameOver: false,
-        opponentUsername: '',
-        yourUsername: ''
+        opponentUsername: ''
       },
       board: {
         currentCategory: null,
@@ -47,15 +45,15 @@ class Game extends React.Component {
   }
 
   componentDidMount() {
+    console.log(socket)
     this.props.socket.on('hand', this._getHand.bind(this));
     this.props.socket.on('category', this._getCategory.bind(this));
     this.props.socket.on('card played', this._getPlayedCard.bind(this));
     this.props.socket.on('round end', this._getRoundOutcome.bind(this));
     this.props.socket.on('game end', this._getGameOutcome.bind(this));
     this.props.socket.on('chat message', this._getChatMessage.bind(this));
-    this.props.socket.on('opponent card'. this._setOpponentCard.bind(this));
-    this.props.socket.on('opponent username'. this._setOpponentUsername.bind(this));
-
+    this.props.socket.on('opponent card', this._setOpponentCard.bind(this));
+    this.props.socket.on('opponent username', this._setOpponentUsername.bind(this));
   }
 
   componentWillUnmount () {}
@@ -90,7 +88,11 @@ class Game extends React.Component {
   }
 
   _setOpponentUsername(username) {
+    console.log('username', username);
     // set opponents username
+    var change = _.extend({}, this.state);
+    change.game.opponentUsername = username;
+    this.setState(change);
   }
 
   _getRoundOutcome(outcome) {
@@ -124,7 +126,10 @@ class Game extends React.Component {
   _getChatMessage(data) {
     // get the chat message from the server
     var message = $('<li></li>');
-    var messagecontent = $('<p>' + data.user + ': <br/> ' + data.message + ' </p>');
+    console.log(socket, data.user);
+    var username = socket.id === data.user ? 'me' : this.state.game.opponentUsername;
+
+    var messagecontent = $('<p>' + username + ': <br/> ' + data.message + ' </p>');
     message.append(messagecontent);
     $('#chat #messages').append(message);
   }
@@ -175,7 +180,7 @@ class Game extends React.Component {
        <div className='game col s9'>
          <div className='center'>
           <OpponentHand
-            currentHand={this.state.board.userHand.currentHand} />
+            currentHand={this.state.board.userHand.currentHand} username={this.state.game.opponentUsername} />
           </div>
          <div id='board'>
           <div id='category'>
