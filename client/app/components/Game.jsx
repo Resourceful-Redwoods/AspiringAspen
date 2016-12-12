@@ -82,6 +82,7 @@ class Game extends React.Component {
 
   _setOpponentCard(card) {
     // get opponent card from server and set state with ita
+    console.log(card);
     var change = _.extend({}, this.state);
     change.board.currentRound.opponentCard = card;
     this.setState(change);
@@ -125,7 +126,9 @@ class Game extends React.Component {
     var change = _.extend({}, this.state);
     change.game.gameWinner = outcome.toString();
     change.game.gameOver = true;
-    this.setState(change);
+    setTimeout(() =>
+      this.setState(change)
+    , 4000);
   }
 
   _getChatMessage(data) {
