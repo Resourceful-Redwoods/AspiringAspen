@@ -13,29 +13,16 @@ class GameOver extends React.Component {
   }
 
   render() {
-    if (this.props.winner === 'win') {
-      return (
-        <div className='cover'>
-          <div className='gameOver youWin z-depth-5 valign-wrapper'>
-            <div className='valign center-block'>
-              <h2>YOU WIN</h2>
-              <button onClick={this.props.exitGame}>Exit</button>
-            </div>
+    return (
+      <div className='cover'>
+        <div className='gameOver youWin z-depth-5 valign-wrapper'>
+          <div className='valign center-block'>
+            <h2>{this.props.winner === 'win' ? 'YOU WIN' : 'YOU LOSE'}</h2>
+            <button onClick={this.props.exitGame}>Exit</button>
           </div>
         </div>
-      );
-    } else {
-      return (
-        <div className='cover'>
-          <div className='gameOver youLose z-depth-5 valign-wrapper'>
-            <div className='valign center-block'>
-              <h2>YOU LOSE</h2>
-              <button onClick={this.props.exitGame}>Exit</button>
-            </div>
-          </div>
-        </div>
-      );
-    }
+      </div>
+    );
   }
 }
 
