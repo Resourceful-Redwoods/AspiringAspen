@@ -16,12 +16,13 @@ html {
   height:100%;
 }
 
-.lower {
+.row.lower {
   top:50%;
-  height:50%;
+  height: 50%;
   width:100%;
   position:absolute;
   background-color:#DA5252;
+  margin-bottom: 0px;
 }
 
 body {
@@ -42,7 +43,7 @@ body {
   font-family: Poppins, sans-serif;
   color:#EEF0F3;
   position:absolute;
-  top:75%;
+  bottom: 0px;
   left:3%;
   margin:0;
   -webkit-text-stroke: 5px rgba(59, 59, 56, 0.81);
@@ -62,7 +63,7 @@ body {
   position:absolute;
   left:40%;
   width:15%;
-  min-width:140px;
+  min-width:148px;
   z-index:0;
   /*font-size:3em;*/
 }
@@ -84,7 +85,7 @@ body {
   position:relative;
   margin:0;
   top:8%;
-  left:2%;
+  padding-left:2%;
   font-weight:600;
   font-size:10em;
   z-index:0;
@@ -96,6 +97,7 @@ body {
   position:absolute;
   height:20%;
   width:20%;
+  min-width: 142px;
   border:none;
   left:63%;
   color:rgba(59, 59, 56, 0.81);
@@ -126,6 +128,8 @@ body {
   width:25%;
   height:30%;
   border-radius:10px;
+  min-width: 240px;
+  min-height: 150px;
 }
 
 .waiting h2 {

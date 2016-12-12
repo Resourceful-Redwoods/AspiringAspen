@@ -2,9 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 const Card = (props) => {
-
-
-
   return (
     <div className='cardFront hoverable center-block' onClick={() => props.selectCard(props.card)}>
       <div className='cardFrontWrapper'>
