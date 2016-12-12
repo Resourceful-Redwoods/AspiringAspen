@@ -314,7 +314,7 @@ function chooseCategory(room) {
 
 /*** SOCKETS HELPERS END ***/
 
-
-http.listen(3000, function () {
-  console.log(`DeckStomp listening on port ${chalk.yellow('3000')}`);
+const port = process.env.PORT || 3000;
+http.listen(port, function () {
+  console.log(`DeckStomp listening on port ${chalk.yellow(port)}`);
 });
