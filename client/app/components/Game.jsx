@@ -196,7 +196,7 @@ class Game extends React.Component {
               Score: You {this.state.game.rounds.userWins} | Opponent {this.state.game.rounds.opponentWins}
             </p>
           </div>
-          { this.state.board.isWaiting && !this.state.board.currentRound.outcome ? <p>Waiting for opponent...</p> : null }
+          { this.state.board.isWaiting && !this.state.board.currentRound.outcome ? <p className='oppWaiting flash'>Waiting for opponent...</p> : null }
           { hasOutCome ? <Outcome cat={category} outcome={thisOutcome} oppCard={this.state.board.currentRound.opponentCard} userCard={this.state.board.userHand.selectedCard}/> : null }
           </div>
           { gameOver ? <GameOver exitGame={this.exitGame.bind(this)} winner={this.state.game.gameWinner}/> : null }
