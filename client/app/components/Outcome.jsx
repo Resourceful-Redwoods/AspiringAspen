@@ -13,14 +13,16 @@ class Outcome extends React.Component {
 
   render() {
     return (
-      <div className="outcome row z-depth-5 valign-wrapper">
-        <div className='col s3'>
-          <h2>{this.props.outcome}</h2>
-        </div>
-          <div className='col s9 outcomeCardwrapper'>
-            <Card card={this.props.userCard} />
-            <Card card={this.props.oppCard} />
+      <div className='cover'>
+        <div className="outcome row z-depth-5 valign-wrapper">
+          <div className='col s3'>
+            <h2>{this.props.outcome}</h2>
           </div>
+            <div className='col s9 outcomeCardwrapper'>
+              <Card card={this.props.userCard} />
+              <Card card={this.props.oppCard} />
+            </div>
+        </div>
       </div>
     );
   }
