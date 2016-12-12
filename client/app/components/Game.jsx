@@ -147,7 +147,7 @@ class Game extends React.Component {
 
     message.append(messageOutput);
 
-    $('#chat #messages').append(message);
+    $('#chat #messages').prepend(message);
   }
 
   selectCard(card) {
