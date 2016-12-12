@@ -4,7 +4,7 @@ var webpack = require('webpack');
 module.exports = {
   entry: './client/app/index.jsx',
   output: { path: __dirname + '/client/public', filename: 'bundle.js' },
-  watch: true,
+  watch: false,
   module: {
     loaders: [
       { test: /\.css$/, exclude: /\.useable\.css$/, loader: 'style-loader!css-loader' },
