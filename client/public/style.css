@@ -16,12 +16,13 @@ html {
   height:100%;
 }
 
-.lower {
+.row.lower {
   top:50%;
-  height: calc(50% - 20px);
+  height: 50%;
   width:100%;
   position:absolute;
   background-color:#DA5252;
+  margin-bottom: 0px;
 }
 
 body {
@@ -81,7 +82,7 @@ body {
   position:relative;
   margin:0;
   top:8%;
-  left:2%;
+  padding-left:2%;
   font-weight:600;
   font-size:10em;
   z-index:0;
