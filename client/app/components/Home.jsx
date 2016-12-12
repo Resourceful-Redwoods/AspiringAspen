@@ -30,6 +30,7 @@ class Home extends React.Component {
 
   _enterGame() {
     console.log(this);
+    this.props.socket.emit('set username', this.state.username);
     this.props.router.push('/game');
   }
 
@@ -49,6 +50,8 @@ class Home extends React.Component {
 
   handleUsernameChange(e) {
     this.setState({username: e.target.value});
+    this.setState({ hasUsername: true });
+    console.log('user', this.state.username);
   }
 
   handleUsername(e) {
@@ -74,14 +77,13 @@ class Home extends React.Component {
         <div className='row lower'>
           <div id='' className='col s12'>
           <h1>STOMP</h1>
-            <div className='center-block nameForm'>
+            <div className='center-block'>
               { this.state.showForm ? (
-              <form>
+              <form className='nameForm'>
                 <label>
-                  Enter a name:
-                  <input type="text" name="name" onChange={this.handleUsernameChange.bind(this)}/>
+                  <input type="text" placeholder='enter a name' name="name" onChange={this.handleUsernameChange.bind(this)}/>
                 </label>
-                <input type="submit" onClick={this.handleUsername.bind(this)} value="Submit" />
+                
               </form>
               ) : <p>Welcome {this.state.username}!</p> }
             </div>
