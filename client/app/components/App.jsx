@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-let socket = io();
-
 class App extends React.Component {
   constructor(props) {
     super(props);
