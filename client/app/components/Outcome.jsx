@@ -11,6 +11,13 @@ class Outcome extends React.Component {
     super(props);
   }
 
+  componentDidMount() {
+    TweenMax.fromTo('.outcome', 0.7, {y: -100, opacity: 0}, {y: 0, opacity: 1, ease: Expo.easeOut});
+  }
+  componentWillUnmount() {
+    TweenMax.fromTo('.outcome', 0.7, {y: 0, opacity: 1}, {y: -100, opacity: 0, ease: Expo.easeOut});
+  }
+
   render() {
     return (
       <div className='cover'>

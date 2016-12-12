@@ -9,12 +9,13 @@ class Waiting extends React.Component {
     };
   }
 
-  componentDidMount () {
-    //enter display
+  componentDidMount() {
+    const el = ReactDOM.findDOMNode(this);
+    TweenMax.fromTo('.waiting', 0.7, {y: -100, opacity: 0}, {y: 0, opacity: 1, ease: Expo.easeOut});
   }
-
-  componentWillUnmount () {
-    //leave display
+  componentWillUnmount() {
+    const el = ReactDOM.findDOMNode(this);
+    TweenMax.fromTo('.waiting', 0.7, {y: 0, opacity: 1}, {y: -100, opacity: 0, ease: Expo.easeOut});
   }
 
   render() {
