@@ -8,9 +8,6 @@ var chalk = require('chalk');
 var _ = require('lodash');
 var bodyParser = require('body-parser');
 
-var playerData = require('./data/baseballData.js');
-var helper = require('./util/helper.js');
-
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
