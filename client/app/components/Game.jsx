@@ -19,8 +19,8 @@ class Game extends React.Component {
       game: {
         rounds: {
           totalNum: 0,
-          playerAWins: 0,
-          playerBWins: 0
+          userWins: 0,
+          opponentWins: 0
         },
         gameWinner: null,
         gameOver: false,
@@ -45,7 +45,6 @@ class Game extends React.Component {
   }
 
   componentDidMount() {
-    console.log(socket)
     this.props.socket.on('hand', this._getHand.bind(this));
     this.props.socket.on('category', this._getCategory.bind(this));
     this.props.socket.on('card played', this._getPlayedCard.bind(this));
@@ -99,6 +98,12 @@ class Game extends React.Component {
     // get round outcome from server
     var change = _.extend({}, this.state);
     change.board.currentRound.outcome = outcome;
+    console.log(outcome);
+    if ( outcome === 'loss' ) {
+      change.game.rounds.opponentWins = change.game.rounds.opponentWins + 1;
+    } else {
+      change.game.rounds.userWins = change.game.rounds.userWins + 1;
+    }
     change.board.isWaiting = false;
     change.board.currentRound.hasOutcome = true;
     this.setState(change);
@@ -184,7 +189,10 @@ class Game extends React.Component {
           </div>
          <div id='board'>
           <div id='category'>
-            <p>Current Category: { category }</p>
+            <p>
+              Current Category: { category }<br />
+              Score: You {this.state.game.rounds.userWins} | Opponent {this.state.game.rounds.opponentWins}
+            </p>
           </div>
           { this.state.board.isWaiting && !this.state.board.currentRound.outcome ? <p>Waiting for opponent...</p> : null }
           { hasOutCome ? <Outcome cat={category} outcome={thisOutcome} oppCard={this.state.board.userHand.selectedCard} userCard={this.state.board.userHand.selectedCard}/> : null }
