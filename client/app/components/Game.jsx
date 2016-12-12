@@ -136,8 +136,17 @@ class Game extends React.Component {
     var message = $('<li></li>');
     var username = socket.id === data.user ? 'me' : this.state.game.opponentUsername;
 
-    var messagecontent = $('<p>' + username + ': <br/> ' + data.message + ' </p>');
-    message.append(messagecontent);
+    var usernameContent = $('<strong></strong>');
+    usernameContent.text(username);
+
+    var messageContent = $('<span></span>');
+    messageContent.text(data.message);
+
+    var messageOutput = $('<p></p>');
+    messageOutput.append(usernameContent).append('<br />').append(messageContent);
+
+    message.append(messageOutput);
+
     $('#chat #messages').append(message);
   }
 
@@ -172,7 +181,19 @@ class Game extends React.Component {
   handleChatClick(e) {
     // when a user adds a message
     e.preventDefault();
-    this.props.socket.emit('chat message', $('#m').val());
+    if ( $('#m').val() !== '' ) {
+      this.props.socket.emit('chat message', $('#m').val());
+    }
+    $('#m').val('');
+    return false;
+  }
+
+  handleChatSubmit(e) {
+    // when a user adds a message
+    e.preventDefault();
+    if ( $('#m').val() !== '' ) {
+      this.props.socket.emit('chat message', $('#m').val());
+    }
     $('#m').val('');
     return false;
   }
@@ -204,15 +225,16 @@ class Game extends React.Component {
           <Userhand
             currentHand={this.state.board.userHand.currentHand}
             selectCard={this.selectCard.bind(this)}
+            currentSelectedCard={this.state.board.userHand.selectedCard}
             playCard={this.playCard.bind(this)}
             disabled={this.state.board.isWaiting} />
           </div>
        </div>
        <div id='chat' className='sidebar col s3'>
           <ul id="messages"></ul>
-          <div className="chat-input">
+          <form className="chat-input" onSubmit={this.handleChatSubmit.bind(this)}>
             <input id="m" autoComplete="off" /><button onClick={this.handleChatClick.bind(this)}>Send</button>
-          </div>
+          </form>
         </div>
      </div>
     );

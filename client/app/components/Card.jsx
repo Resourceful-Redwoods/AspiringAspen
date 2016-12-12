@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 
 const Card = (props) => {
   return (
-    <div className='cardFront hoverable center-block' onClick={() => props.selectCard(props.card)}>
+    <div className={props.currentSelectedCard === props.card ? 'selected-card cardFront hoverable center-block' : 'cardFront hoverable center-block'} onClick={() => props.selectCard(props.card)}>
       <div className='cardFrontWrapper'>
         <img className='circle' src={props.card.imageUrl}></img>
         <div className='statsWrapper left-align'>

@@ -90,7 +90,7 @@ io.on('connection', function(socket) {
       // Send opponent's card data for rendering
       socket.emit('opponent card', oppCard);
       opponent.emit('opponent card', sockCard);
-      
+
       // Compare cards to determine winner
       // (current data cannot lead to ties)
 
@@ -133,14 +133,14 @@ function makeRoom(sock1, sock2) {
     room: room,
     opponent: sock2.id,
     gameState: 'playing',
-    username: sock1.data.uesrname || 'Guest'
+    username: sock1.data.username || 'Guest'
   });
 
   _.extend(sock2.data, {
     room: room,
     opponent: sock1.id,
     gameState: 'playing',
-    username: sock2.data.uesrname || 'Guest'
+    username: sock2.data.username || 'Guest'
   });
 
   sock1.join(room);
