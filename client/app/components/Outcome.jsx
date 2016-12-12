@@ -4,16 +4,11 @@ import ReactDOM from 'react-dom';
 import Card from './Card.jsx';
 
 class Outcome extends React.Component {
+
+  // display the the outcome of the round
+
   constructor(props) {
     super(props);
-  }
-
-  componentDidMount () {
-    //enter display
-  }
-
-  componentWillUnmount () {
-    //leave display
   }
 
   render() {
