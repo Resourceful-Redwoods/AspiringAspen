@@ -11,7 +11,8 @@ class Home extends React.Component {
     this.state = {
       gameState: 'idle',
       username: '',
-      hasUsername: false
+      hasUsername: false,
+      showForm: true
     };
   }
 
@@ -54,7 +55,7 @@ class Home extends React.Component {
     e.preventDefault();
     if ( this.state.username !== '' ) {
       console.log(this.state.username);
-      this.setState({ hasUsername: true });
+      this.setState({ hasUsername: true, showForm: false });
       this.props.socket.emit('set username', this.state.username);
     }
   }
@@ -74,6 +75,7 @@ class Home extends React.Component {
           <div id='' className='col s12'>
           <h1>STOMP</h1>
             <div className='center-block nameForm'>
+              { this.state.showForm ? (
               <form>
                 <label>
                   Enter a name:
@@ -81,6 +83,7 @@ class Home extends React.Component {
                 </label>
                 <input type="submit" onClick={this.handleUsername.bind(this)} value="Submit" />
               </form>
+              ) : <p>Welcome {this.state.username}!</p> }
             </div>
             { this.state.hasUsername ? <button onClick={ this.playNow.bind(this) }>PLAY <img src='img/playBtn.svg'></img> </button> : null }
           </div>
