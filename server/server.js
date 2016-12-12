@@ -114,13 +114,13 @@ io.on('connection', function(socket) { // 'chat message' used to console.log (fo
       if (sockCard.info[category] > oppCard.info[category]) { // Current data has no equal values
         console.log('round end trigger s.id');
         room.game.rounds.wins[socket.id]++;
-        socket.emit('round end', socket.id);
-        opponent.emit('round end', socket.id);
+        socket.emit('round end', 'win');
+        opponent.emit('round end', 'loss');
       } else {
         console.log('round end trigger o.id');
         room.game.rounds.wins[opponent.id]++;
-        socket.emit('round end', opponent.id);
-        opponent.emit('round end', opponent.id);
+        opponent.emit('round end', 'win');
+        socket.emit('round end', 'loss');
       }
 
       if (room.game.rounds.wins[socket.id] >= room.game.rounds.total / 2) {
