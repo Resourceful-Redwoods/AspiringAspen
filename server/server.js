@@ -157,7 +157,7 @@ function makeRoom(sock1, sock2) {
   chooseCategory(room);
 
   // Creates new game data & stores new hands for both clients
-  function newGame(id1, id2, size = 3) {
+  function newGame(id1, id2, size = 5) {
     let dummyDeck = require('./data/baseballData.js');
 
     // Returns two hands drawn from the dekc
