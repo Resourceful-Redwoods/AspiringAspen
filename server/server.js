@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-
+var db = require('./db/database.js');
 var path = require('path');
 var chalk = require('chalk');
 var _ = require('lodash');
