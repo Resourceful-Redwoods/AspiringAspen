@@ -7,7 +7,11 @@ var userSchema = mongoose.Schema({
     required: true
   },
   wins: Number,
-  losses: Number
+  losses: Number,
+  image: {
+    type: String,
+    required: true
+  }
 });
 
 var User = mongoose.model('User', userSchema);

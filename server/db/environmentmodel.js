@@ -6,7 +6,11 @@ var environmentSchema = mongoose.Schema({
     unique: true,
     required: true
   },
-  affects: mongoose.Schema.Types.Mixed
+  affects: mongoose.Schema.Types.Mixed,
+  image: {
+    type: String,
+    required: true
+  }
 });
 
 var Environment = mongoose.model('Environment', environmentSchema);
