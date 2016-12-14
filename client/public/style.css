@@ -152,6 +152,19 @@ body {
   text-align: center;
 }
 
+.leaderboard {
+  background:#EEF0F3;
+  z-index:5;
+  position:absolute;
+  top:10%;
+  left:37%;
+  width:25%;
+  height:30%;
+  border-radius:10px;
+  min-width: 300px;
+  min-height: 600px;
+}
+
 .outcome {
   background:#EEF0F3;
   z-index:6;
@@ -435,4 +448,3 @@ body {
 #chat #messages { list-style-type: none; margin: 0; padding: 0; }
 #chat #messages li { padding: 5px 10px; }
 #chat #messages li:nth-child(odd) { background: #eee; }
-
