@@ -61,7 +61,25 @@ Cards.find().exec(function(err, cards) {
       });
 
       socket.on('set username', function(name) {
-        socket.data.username = name;
+        Users.findOne({name: name})
+        .exec((err, user)=>{
+          if (err) {
+            console.log(err);
+            return;
+          }
+          if (!user) {
+            Users.create({
+              name: name,
+              wins: 0,
+              losses: 0
+
+            }, function(err, user) {
+              socket.data.username = user.name;
+            });
+          } else {
+            socket.data.username = user.name;
+          }
+        });
       });
       // Sends chat messages to sender & sender's opponent (only sends messages while in a game)
       socket.on('chat message', function(msg) {
