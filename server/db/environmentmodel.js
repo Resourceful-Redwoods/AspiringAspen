@@ -6,7 +6,7 @@ var environmentSchema = mongoose.Schema({
     unique: true,
     required: true
   },
-  affects: Schema.Types.Mixed
+  affects: mongoose.Schema.Types.Mixed
 });
 
 var Environment = mongoose.model('Environment', environmentSchema);

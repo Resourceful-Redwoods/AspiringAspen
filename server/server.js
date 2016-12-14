@@ -185,8 +185,6 @@ function makeRoom(sock1, sock2) {
           hand2[card.name] = card;
         }
       }
-      console.log(`Hand 1 - ${chalk.red(JSON.stringify(hand1))}`)
-      console.log(`Hand 2 - ${chalk.yellow(JSON.stringify(hand2))}`)
       return [hand1, hand2];
     }
 
