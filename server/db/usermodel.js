@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var usersSchema = mongoose.Schema({
+var userSchema = mongoose.Schema({
   name: {
     type: String,
     unique: true,
@@ -10,4 +10,6 @@ var usersSchema = mongoose.Schema({
   losses: Number
 });
 
-var User = mongoose.model('User', usersSchema);
+var User = mongoose.model('User', userSchema);
+
+module.export = User;

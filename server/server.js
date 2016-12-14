@@ -2,11 +2,15 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var db = require('./db/database.js');
 var path = require('path');
 var chalk = require('chalk');
 var _ = require('lodash');
 var bodyParser = require('body-parser');
+
+var db = require('./db/database.js');
+var User = require('./db/usermodel.js');
+var Card = require('./db/cardmodel.js');
+var Environment = require('./db/environmentmodel.js');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
