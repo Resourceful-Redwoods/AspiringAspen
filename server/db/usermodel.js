@@ -7,11 +7,7 @@ var userSchema = mongoose.Schema({
     required: true
   },
   wins: Number,
-  losses: Number,
-  image: {
-    type: String,
-    required: true
-  }
+  losses: Number
 });
 
 var User = mongoose.model('User', userSchema);

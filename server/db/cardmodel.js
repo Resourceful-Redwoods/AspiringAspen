@@ -13,6 +13,14 @@ var cardSchema = mongoose.Schema({
   power: {
     type: Number,
     required: true
+  },
+  advantages: {
+    type: mongoose.Schema.Types.Mixed,
+    required: true
+  },
+  image: {
+    type: String,
+    required: true
   }
 });
 
