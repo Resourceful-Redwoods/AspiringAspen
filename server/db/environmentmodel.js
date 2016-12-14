@@ -18,4 +18,4 @@ var environmentSchema = mongoose.Schema({
 
 var Environment = mongoose.model('Environment', environmentSchema);
 
-module.export = Environment;
+module.exports = Environment;

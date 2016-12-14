@@ -8,9 +8,9 @@ var _ = require('lodash');
 var bodyParser = require('body-parser');
 
 var db = require('./db/database.js');
-var User = require('./db/usermodel.js');
-var Card = require('./db/cardmodel.js');
-var Environment = require('./db/environmentmodel.js');
+var Users = require('./db/usermodel.js');
+var Cards = require('./db/cardmodel.js');
+var Environments = require('./db/environmentmodel.js');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
