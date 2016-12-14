@@ -99,7 +99,7 @@ class Game extends React.Component {
     // get round outcome from server
     var change = _.extend({}, this.state);
     change.board.currentRound.outcome = outcome;
-    if ( outcome === 'You chose wrong and were defeated.' ) {
+    if ( outcome === 'You were outmatched and defeated.' ) {
       change.game.rounds.opponentWins = change.game.rounds.opponentWins + 1;
     } else if (outcome === 'tie') {
       // tie is like loss but with random reasoning. If the outcomes is tie, it means the cards matched and the server randomly picked a winner...and this one is not it.   
