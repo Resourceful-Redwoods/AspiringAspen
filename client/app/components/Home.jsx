@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, Link } from 'react-router';
 
 import Waiting from './Waiting.jsx';
 import Game from './Game.jsx';
