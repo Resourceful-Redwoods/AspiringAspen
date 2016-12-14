@@ -41,6 +41,10 @@ class Home extends React.Component {
     // gamestate is waiting
   }
 
+  showLeaderBoard () {
+    console.log('leaderboard!');
+  }
+
   cancelMatchmaking () {
     // cancels match making and tells server
     this.setState({ gameState: 'idle' });
@@ -87,9 +91,10 @@ class Home extends React.Component {
                   <input type="text" placeholder='enter a name' name="name" onChange={this.handleUsernameChange.bind(this)}/>
                 </label>
               </form>
-              ) : <p>Welcome {this.state.username}!</p> }
+            ) : null }
             </div>
-            { this.state.hasUsername ? <button onClick={ this.playNow.bind(this) }>PLAY <img src='img/playBtn.svg'></img> </button> : null }
+            <button className='leaderboard-button' onClick={this.showLeaderBoard.bind(this)}>LEADERBOARD</button>
+            { this.state.hasUsername ? <button className='play-button' onClick={ this.playNow.bind(this) }>PLAY <img src='img/playBtn.svg'></img> </button> : null }
           </div>
         </div>
       </div>

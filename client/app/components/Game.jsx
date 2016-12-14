@@ -139,8 +139,9 @@ class Game extends React.Component {
 
   _getChatMessage(data) {
     // get the chat message from the server
-    var message = $('<li></li>');
+    var message = $('<li class="message"></li>');
     var username = socket.id === data.user ? 'me' : this.state.game.opponentUsername;
+    // Why is opponentUsername showing up as guest?
 
     var usernameContent = $('<strong></strong>');
     usernameContent.text(username);
@@ -154,6 +155,8 @@ class Game extends React.Component {
     message.append(messageOutput);
 
     $('#chat #messages').prepend(message);
+    // This would allow the chat box to automatically scroll, but it is not working...
+    // $('.messages-container').scrollTop($(this).height());
   }
 
   selectCard(card) {
@@ -237,10 +240,14 @@ class Game extends React.Component {
           </div>
        </div>
        <div id='chat' className='sidebar col s3'>
-          <ul id="messages"></ul>
-          <form className="chat-input" onSubmit={this.handleChatSubmit.bind(this)}>
-            <input id="m" autoComplete="off" /><button onClick={this.handleChatClick.bind(this)}>Send</button>
-          </form>
+         <div className="messages-container">
+           <ul id="messages" className='message-list'></ul>
+         </div>
+         <div className="chat-form-container">
+           <form className="chat-input" onSubmit={this.handleChatSubmit.bind(this)}>
+             <input id="m" autoComplete="off" /><button onClick={this.handleChatClick.bind(this)}>Send</button>
+           </form>
+         </div>
         </div>
      </div>
     );
