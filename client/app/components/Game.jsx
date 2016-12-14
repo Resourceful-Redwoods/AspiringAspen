@@ -27,7 +27,7 @@ class Game extends React.Component {
         opponentUsername: ''
       },
       board: {
-        currentCategory: null,
+        currentCategory: JSON.stringify({name: 'loading'}),
         inGame: false,
         userHand: {
           currentHand: {},
@@ -213,12 +213,12 @@ class Game extends React.Component {
          <div id='board'>
           <div id='category'>
             <p>
-              Current Category: { category }<br />
+              Current Category: { JSON.parse(category).name }<br />
               Score: You {this.state.game.rounds.userWins} | Opponent {this.state.game.rounds.opponentWins}
             </p>
           </div>
           { this.state.board.isWaiting && !this.state.board.currentRound.outcome ? <p className='oppWaiting flash'>Waiting for opponent...</p> : null }
-          { hasOutCome ? <Outcome cat={category} outcome={thisOutcome} oppCard={this.state.board.currentRound.opponentCard} userCard={this.state.board.userHand.selectedCard}/> : null }
+          { hasOutCome ? <Outcome cat={JSON.parse(category).name} outcome={thisOutcome} oppCard={this.state.board.currentRound.opponentCard} userCard={this.state.board.userHand.selectedCard}/> : null }
           </div>
           { gameOver ? <GameOver exitGame={this.exitGame.bind(this)} winner={this.state.game.gameWinner}/> : null }
          <div className='center'>
