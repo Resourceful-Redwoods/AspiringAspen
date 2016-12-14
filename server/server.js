@@ -155,7 +155,6 @@ Cards.find().exec(function(err, cards) {
 });
 
 
-
 /**** SOCKETS END ****/
 /*** SOCKETS HELPERS START ***/
 

@@ -10,11 +10,12 @@ const Card = (props) => {
         <div className='statsWrapper left-align'>
           <p>{props.card.name}</p>
           <ul>
-            <li>Home Runs: {props.card.type}</li>
-            <li>Average: {props.card.power}</li>
-            <li>Hits: {props.card.advantages['Space Cowboy']}</li>
-            <li>RBI: {props.card.advantages['Space Samurai']}</li>
-            <li>Stolen Bases: {props.card.advantages['Space Wizard']}</li>
+            <li>Class: {props.card.type}</li>
+            <li>Power: {props.card.power}</li>
+            <p>Power Boosts</p>
+            <li>Vs Cowboy: {props.card.advantages['Space Cowboy']}</li>
+            <li>Vs Samurai: {props.card.advantages['Space Samurai']}</li>
+            <li>Vs Wizard: {props.card.advantages['Space Wizard']}</li>
           </ul>
         </div>
       </div>
