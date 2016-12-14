@@ -10,7 +10,8 @@
     "webpack-watch": "node node_modules/webpack/bin/webpack.js --watch",
     "start": "node server/server.js",
     "start-dev": "npm run lint && nodemon server/server.js & npm run webpack-watch",
-    "lint": "eslint ./"
+    "lint": "eslint ./",
+    "populate": "node server/populateDatabase.js"
   },
   "keywords": [],
   "author": "",

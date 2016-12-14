@@ -12,6 +12,7 @@ var Users = require('./db/usermodel.js');
 var Cards = require('./db/cardmodel.js');
 var Environments = require('./db/environmentmodel.js');
 
+
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
@@ -27,106 +28,130 @@ app.get('*', (req, res) => {
 let waiting = [];
 let rooms = {};
 
-io.on('connection', function(socket) {
-  console.log(`User Connected - ${chalk.red(socket.id)}`);
-  socket.data = {
-    gameState: 'idle'
-  };
-  // Used for clients queueing up for new game, canceling match search, & quitting current game
-  socket.on('game', function(action) {
-    console.log(`${chalk.red(socket.id)} wants to ${chalk.green(action)}`);
-    if (action === 'play') {
-      if (socket.data.gameState === 'idle') {
-        play(socket);
-      }
-    }
-    if (action === 'cancel') {
-      if (socket.data.gameState === 'waiting') {
-        dequeue(socket);
-      }
-    }
-    if (action === 'quit') {
-      if (socket.data.gameState === 'playing') {
-        declareWinner(getOpponent(socket));
-      }
-    }
-  });
+Cards.find().exec(function(err, cards) {
+  Environments.find().exec(function(err, environments) {
+    console.log(cards);
+    console.log(environments);
 
-  socket.on('set username', function(name) {
-    socket.data.username = name;
-  });
-  // Sends chat messages to sender & sender's opponent (only sends messages while in a game)
-  socket.on('chat message', function(msg) {
-    let message = {
-      message: msg,
-      user: socket.id
-    };
-    io.to(socket.data.room).emit('chat message', message);
-  });
+    io.on('connection', function(socket) {
+      console.log(`User Connected - ${chalk.red(socket.id)}`);
+      socket.data = {
+        gameState: 'idle'
+      };
+      // Used for clients queueing up for new game, canceling match search, & quitting current game
+      socket.on('game', function(action) {
+        console.log(`${chalk.red(socket.id)} wants to ${chalk.green(action)}`);
+        if (action === 'play') {
+          if (socket.data.gameState === 'idle') {
+            play(socket);
+          }
+        }
+        if (action === 'cancel') {
+          if (socket.data.gameState === 'waiting') {
+            dequeue(socket);
+          }
+        }
+        if (action === 'quit') {
+          if (socket.data.gameState === 'playing') {
+            declareWinner(getOpponent(socket));
+          }
+        }
+      });
 
-  socket.on('disconnect', function() {
-    let gameState = socket.data.gameState;
-    console.log(`${chalk.red(socket.id)} disconnected while ${chalk.green(gameState)}`);
+      socket.on('set username', function(name) {
+        socket.data.username = name;
+      });
+      // Sends chat messages to sender & sender's opponent (only sends messages while in a game)
+      socket.on('chat message', function(msg) {
+        let message = {
+          message: msg,
+          user: socket.id
+        };
+        io.to(socket.data.room).emit('chat message', message);
+      });
 
-    if (gameState === 'waiting') {
-      return dequeue(socket);
-    }
+      socket.on('disconnect', function() {
+        let gameState = socket.data.gameState;
+        console.log(`${chalk.red(socket.id)} disconnected while ${chalk.green(gameState)}`);
 
-    if (gameState === 'playing') {
-      declareWinner(getOpponent(socket));
-    }
-  });
+        if (gameState === 'waiting') {
+          return dequeue(socket);
+        }
 
-  socket.on('play card', function(card) {
-    let opponent = getOpponent(socket);
-    let room = rooms[socket.data.room];
-    let category = room.board.currentCategory;
-    let oppCard = opponent.data.hand.selectedCard;
+        if (gameState === 'playing') {
+          declareWinner(getOpponent(socket));
+        }
+      });
 
-    socket.data.hand.selectedCard = socket.data.hand.currentHand[card];
-    socket.emit('card played');
+      socket.on('play card', function(card) {
+        let opponent = getOpponent(socket);
+        let room = rooms[socket.data.room];
+        let category = room.board.currentCategory;
+        let oppCard = opponent.data.hand.selectedCard;
 
-    // TODO: Add event for invalid card played
-    if (oppCard) { // Determine winner if both players have played
-      let sockCard = socket.data.hand.selectedCard;
-      room.game.count++;
+        socket.data.hand.selectedCard = socket.data.hand.currentHand[card];
+        socket.emit('card played');
 
-      // Send opponent's card data for rendering
-      socket.emit('opponent card', oppCard);
-      opponent.emit('opponent card', sockCard);
+        // TODO: Add event for invalid card played
+        if (oppCard) { // Determine winner if both players have played
+          let sockCard = socket.data.hand.selectedCard;
+          room.game.count++;
 
-      // Compare cards to determine winner
-      // (current data cannot lead to ties)
+          // Send opponent's card data for rendering
+          socket.emit('opponent card', oppCard);
+          opponent.emit('opponent card', sockCard);
 
-      if (sockCard.info[category] > oppCard.info[category]) {
-        room.game.rounds.wins[socket.id]++;
-        socket.emit('round end', 'win');
-        opponent.emit('round end', 'loss');
-      } else {
-        room.game.rounds.wins[opponent.id]++;
-        opponent.emit('round end', 'win');
-        socket.emit('round end', 'loss');
-      }
+          // Compare cards to determine winner
+          // (current data cannot lead to ties)
+          let sockCardPower = sockCard[power];
+          let oppCardPower = oppCard[power];
 
-      // Check if either player has won the game
-      if (room.game.rounds.wins[socket.id] >= room.game.rounds.total / 2) {
-        declareWinner(socket);
-      } else if (room.game.rounds.wins[opponent.id] >= room.game.rounds.total / 2) {
-        declareWinner(opponent);
-      } else {
-        // Removes the selected card from the players' hands
-        delete socket.data.hand.selectedCard;
-        delete opponent.data.hand.selectedCard;
+          sockCardPower += category[affects][sockCard.type] + sockCard[advantages][oppCard.type];
+          oppCardPower += category[affects][oppCard.type] + oppCard[advantages][sockCard.type];
+          if (sockCardPower > oppCardPower) {
+            room.game.rounds.wins[socket.id]++;
+            socket.emit('round end', 'You are mighty and crushed your foe!');
+            opponent.emit('round end', 'You were outmatched and defeated.');
+          } else if (sockCardPower === oppCardPower) {
+            var randomSelector = Math.random();
+            if (randomSelector > .5) {
+              room.game.rounds.wins[socket.id]++;
+              socket.emit('round end', 'While evenly matched the Universe favors you. WIN');
+              opponent.emit('round end', 'tie');
+            } else {
+              room.game.rounds.wins[opponent.id]++;
+              opponent.emit('round end', 'While evenly matched the Universe favors you. WIN');
+              socket.emit('round end', 'tie');
+            }
+          } else {
+            room.game.rounds.wins[opponent.id]++;
+            opponent.emit('round end', 'win');
+            socket.emit('round end', 'loss');
+          }
 
-        // Deselects the currently selected cards
-        socket.data.hand.selectedCard = null;
-        opponent.data.hand.selectedCard = null;
+          // Check if either player has won the game
+          if (room.game.rounds.wins[socket.id] >= room.game.rounds.total / 2) {
+            declareWinner(socket);
+          } else if (room.game.rounds.wins[opponent.id] >= room.game.rounds.total / 2) {
+            declareWinner(opponent);
+          } else {
+            // Removes the selected card from the players' hands
+            delete socket.data.hand.selectedCard;
+            delete opponent.data.hand.selectedCard;
 
-        chooseCategory(socket.data.room);
-      }
-    }
+            // Deselects the currently selected cards
+            socket.data.hand.selectedCard = null;
+            opponent.data.hand.selectedCard = null;
+
+            chooseCategory(socket.data.room);
+          }
+        }
+      });
+    });
   });
 });
+
+
 
 /**** SOCKETS END ****/
 /*** SOCKETS HELPERS START ***/
@@ -162,10 +187,10 @@ function makeRoom(sock1, sock2) {
 
   // Creates new game data & stores new hands for both clients
   function newGame(id1, id2, size = 5) {
-    let dummyDeck = require('./data/baseballData.js');
+    let dummyDeck = require('./carddata.js');
     // Returns two hands drawn from the dekc
     function dealHands() {
-      let cards = Object.keys(dummyDeck);
+      let cards = dummyDeck.cards;
       let hand1 = {};
       let hand2 = {};
 
@@ -173,7 +198,7 @@ function makeRoom(sock1, sock2) {
       function drawCard() {
         let cardIndex = Math.floor(Math.random() * cards.length);
         let card = cards.splice(cardIndex, 1)[0];
-        return dummyDeck[card];
+        return card;
       }
 
       // Alternates drawing a card for each hand
