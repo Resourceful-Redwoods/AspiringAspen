@@ -27,11 +27,13 @@ app.get('*', (req, res) => {
 /** SOCKETS DATA **/
 let waiting = [];
 let rooms = {};
+let deckData;
+let locations;
 
 Cards.find().exec(function(err, cards) {
   Environments.find().exec(function(err, environments) {
-    console.log(cards);
-    console.log(environments);
+    deckData = cards;
+    locations = environments;
 
     io.on('connection', function(socket) {
       console.log(`User Connected - ${chalk.red(socket.id)}`);
@@ -103,11 +105,12 @@ Cards.find().exec(function(err, cards) {
 
           // Compare cards to determine winner
           // (current data cannot lead to ties)
-          let sockCardPower = sockCard[power];
-          let oppCardPower = oppCard[power];
+          console.log(sockCard);
+          let sockCardPower = sockCard['power'];
+          let oppCardPower = oppCard['power'];
 
-          sockCardPower += category[affects][sockCard.type] + sockCard[advantages][oppCard.type];
-          oppCardPower += category[affects][oppCard.type] + oppCard[advantages][sockCard.type];
+          sockCardPower += category['affects'][sockCard.type] + sockCard['advantages'][oppCard.type];
+          oppCardPower += category['affects'][oppCard.type] + oppCard['advantages'][sockCard.type];
           if (sockCardPower > oppCardPower) {
             room.game.rounds.wins[socket.id]++;
             socket.emit('round end', 'You are mighty and crushed your foe!');
@@ -187,10 +190,10 @@ function makeRoom(sock1, sock2) {
 
   // Creates new game data & stores new hands for both clients
   function newGame(id1, id2, size = 5) {
-    let dummyDeck = require('./carddata.js');
+    let deck = deckData;
     // Returns two hands drawn from the dekc
     function dealHands() {
-      let cards = dummyDeck.cards;
+      let cards = deck;
       let hand1 = {};
       let hand2 = {};
 
@@ -224,7 +227,7 @@ function makeRoom(sock1, sock2) {
           count: 0,
           wins: {}
         },
-        categories: ['Home Runs', 'Stolen Bases', 'Average', 'Hits', 'RBI']
+        categories: locations,
       },
       board: {
         currentCategory: null
