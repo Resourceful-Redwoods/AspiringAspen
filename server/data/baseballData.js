@@ -89,8 +89,8 @@ module.exports = {
     },
     imageUrl: 'http://a.espncdn.com/combiner/i?img=/i/headshots/mlb/players/full/33039.png&w=350&h=254'
   },
-  'Mike_Trout': {
-    name: 'Mike Trout',
+  'Mike_Stout': {
+    name: 'Mike Srout',
     info: {
       'Home Runs': 29,
       'Stolen Bases': 31,
@@ -100,8 +100,8 @@ module.exports = {
     },
     imageUrl: 'http://a.espncdn.com/combiner/i?img=/i/headshots/mlb/players/full/30836.png&w=350&h=254'
   },
-  'Freddie_Freeman': {
-    name: 'Freddie Freeman',
+  'Freddie_Reeman': {
+    name: 'Freddie Reeman',
     info: {
       'Home Runs': 34,
       'Stolen Bases': 6,
@@ -111,8 +111,8 @@ module.exports = {
     },
     imageUrl: 'http://a.espncdn.com/combiner/i?img=/i/headshots/mlb/players/full/30193.png&w=350&h=254'
   },
-  'Joey_Votto': {
-    name: 'Joey Votto',
+  'Joey_Otto': {
+    name: 'Joey Otto',
     info: {
       'Home Runs': 30,
       'Stolen Bases': 8,
@@ -122,8 +122,8 @@ module.exports = {
     },
     imageUrl: 'http://a.espncdn.com/combiner/i?img=/i/headshots/mlb/players/full/28670.png&w=350&h=254'
   },
-  'Paul_Goldschmidt': {
-    name: 'Paul Goldschmidt',
+  'Paul_Oldschmidt': {
+    name: 'Paul Oldschmidt',
     info: {
       'Home Runs': 24,
       'Stolen Bases': 32,
@@ -133,8 +133,8 @@ module.exports = {
     },
     imageUrl: 'http://a.espncdn.com/combiner/i?img=/i/headshots/mlb/players/full/31027.png&w=350&h=254'
   },
-  'David_Ortiz': {
-    name: 'David Ortiz',
+  'David_Ritiz': {
+    name: 'David Ritiz',
     info: {
       'Home Runs': 28,
       'Stolen Bases': 2,
@@ -144,8 +144,8 @@ module.exports = {
     },
     imageUrl: 'http://a.espncdn.com/combiner/i?img=/i/headshots/mlb/players/full/3748.png&w=350&h=254'
   },
-  'Nolan_Arenado': {
-    name: 'Nolan Arenado',
+  'Nolan_Renado': {
+    name: 'Nolan Renado',
     info: {
       'Home Runs': 41,
       'Stolen Bases': 3,
@@ -155,8 +155,8 @@ module.exports = {
     },
     imageUrl: 'http://a.espncdn.com/combiner/i?img=/i/headshots/mlb/players/full/31261.png&w=350&h=254'
   },
-  'Jose_Altuve': {
-    name: 'Jose Altuve',
+  'Jose_Raltuve': {
+    name: 'Jose Raltuve',
     info: {
       'Home Runs': 25,
       'Stolen Bases': 30,
@@ -166,8 +166,8 @@ module.exports = {
     },
     imageUrl: 'http://a.espncdn.com/combiner/i?img=/i/headshots/mlb/players/full/31662.png&w=350&h=254'
   },
-  'Mookie_Betts': {
-    name: 'Mookie Betts',
+  'Mookie_Setts': {
+    name: 'Mookie Setts',
     info: {
       'Home Runs': 31,
       'Stolen Bases': 26,

@@ -159,7 +159,6 @@ function makeRoom(sock1, sock2) {
   // Creates new game data & stores new hands for both clients
   function newGame(id1, id2, size = 5) {
     let dummyDeck = require('./data/baseballData.js');
-
     // Returns two hands drawn from the dekc
     function dealHands() {
       let cards = Object.keys(dummyDeck);
@@ -182,7 +181,8 @@ function makeRoom(sock1, sock2) {
           hand2[card.name] = card;
         }
       }
-
+      console.log(`Hand 1 - ${chalk.red(JSON.stringify(hand1))}`)
+      console.log(`Hand 2 - ${chalk.yellow(JSON.stringify(hand2))}`)
       return [hand1, hand2];
     }
 
