@@ -263,11 +263,12 @@ body {
   border-width:6px;
   padding:5px;
   z-index:2;
+  overflow: auto;
 }
 
 .statsWrapper {
   line-height: 20px;
-  position:absolute;
+  position:relative;
   bottom:0px;
   padding-left:10px;
   z-index:3;
@@ -343,6 +344,18 @@ body {
 .playbtn:focus {
   background:rgba(224, 224, 107, 1);
 }
+.environmentImage {
+  position: absolute;
+  top: 30%;
+  width: 60%;
+  height: 50%;
+  left: 2%;
+}
+.environmentImage img {
+  width: 160%;
+  height: 62%;
+}
+
 
 .opponentHand {
   display:flex;
