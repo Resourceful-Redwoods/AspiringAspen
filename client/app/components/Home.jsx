@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
+import LeaderBoard from './LeaderBoard.jsx';
 import Waiting from './Waiting.jsx';
 import Game from './Game.jsx';
 
@@ -13,13 +13,15 @@ class Home extends React.Component {
       gameState: 'idle',
       username: '',
       hasUsername: false,
-      showForm: true
+      showForm: true,
+      showLeaderBoard: false
     };
   }
 
   componentDidMount () {
     // listen to see if there is a match
     this.props.socket.on('enter game', this._enterGame.bind(this));
+    this.props.socket.on('send users', this._receiveUserData.bind(this));
     TweenMax.fromTo('.titlebar', 1.25, {y: -900, opacity: 0.8}, {y: 0, opacity: 1, ease: Expo.easeOut, delay: 0.35});
     TweenMax.fromTo('.lower', 1.25, {y: 900, opacity: 0.8}, {y: 0, opacity: 1, ease: Expo.easeOut, delay: 0.35});
     TweenMax.fromTo('.titlebar img', 0.5, {opacity: 0}, {opacity: 1, ease: Expo.easeOut, delay: 1.75});
@@ -27,6 +29,10 @@ class Home extends React.Component {
   }
 
   componentWillUnmount() {}
+
+  _receiveUserData(users) {
+    this.state.users = users;
+  }
 
   _enterGame() {
     // if there is a game, send the user to /game ot match up against opponent
@@ -41,8 +47,16 @@ class Home extends React.Component {
     // gamestate is waiting
   }
 
-  showLeaderBoard () {
-    console.log('leaderboard!');
+  handleShowLeaderBoard () {
+    if (this.state.showLeaderBoard) {
+      this.setState({
+        showLeaderBoard: false
+      });
+    } else {
+      this.setState({
+        showLeaderBoard: true
+      });
+    }
   }
 
   cancelMatchmaking () {
@@ -80,6 +94,7 @@ class Home extends React.Component {
             <img className='cardIcon' src='img/cardIcon.svg'></img>
           </div>
         </div>
+        { this.state.showLeaderBoard === true ? <LeaderBoard onShowLeaderBoard={this.handleShowLeaderBoard.bind(this)} users={this.state.users} /> : null }
         { gameState === 'waiting' ? <Waiting cancelMatchmaking={this.cancelMatchmaking.bind(this)} username={this.state.username} /> : null }
         <div className='row lower'>
           <div id='' className='col s12'>
@@ -93,7 +108,7 @@ class Home extends React.Component {
               </form>
             ) : null }
             </div>
-            <button className='leaderboard-button' onClick={this.showLeaderBoard.bind(this)}>LEADERBOARD</button>
+            <button className='leaderboard-button' onClick={this.handleShowLeaderBoard.bind(this)}>LEADERBOARD</button>
             { this.state.hasUsername ? <button className='play-button' onClick={ this.playNow.bind(this) }>PLAY <img src='img/playBtn.svg'></img> </button> : null }
           </div>
         </div>
