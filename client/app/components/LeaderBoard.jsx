@@ -1,12 +1,35 @@
 import React, { PropTypes } from 'react';
-
+import ReactDOM from 'react-dom';
 
 class LeaderBoard extends React.Component {
   constructor(props) {
     super(props);
 
+    this.users = [
+      {
+        name: 'test1',
+        wins: 12,
+        loses: 3
+      },
+      {
+        name: 'test2',
+        wins: 15,
+        loses: 7
+      },
+      {
+        name: 'test3',
+        wins: 4,
+        loses: 2
+      },
+      {
+        name: 'test4',
+        wins: 100,
+        loses: 6
+      },
+    ];
+
     this.state = {
-      leaders: props.users.sort((a, b) => (a.wins / a.loses) < (b.wins / b.loses))
+      leaders: this.users.sort((a, b) => (a.wins / a.loses) < (b.wins / b.loses))
                           .slice(0, 10)
     };
   }
@@ -23,16 +46,15 @@ class LeaderBoard extends React.Component {
 
   render () {
     return (
-    <div className='cover'>
+    <div className='cover' onClick={this.props.onShowLeaderBoard}>
       <div className='leaderboard z-depth-5'>
-        <h2 className=''>LEADER BOARD</h2>
-        <ul class="collection">
+        <h3 className='center-align'>LEADER BOARD</h3>
+        <ul className="collection">
           {this.state.leaders.map((leader, key) => {
             return (
-              <li key={key} class="collection-item avatar">
-                <h1>{key + 1}. </h1>
-                <span class="title">{leader.username}</span>
-                <p class="secondary-content">Wins: {leader.wins}<br />
+              <li key={key} className="collection-item avatar">
+                <h5>{key + 1}. {leader.name}</h5>
+                <p className="secondary-content">Wins: {leader.wins}<br />
                    Loses: {leader.loses}
                 </p>
               </li>

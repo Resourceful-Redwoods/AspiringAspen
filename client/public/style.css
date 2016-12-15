@@ -179,14 +179,18 @@ body {
 .leaderboard {
   background:#EEF0F3;
   z-index:5;
-  position:absolute;
-  top:10%;
-  left:37%;
-  width:25%;
-  height:30%;
-  border-radius:10px;
-  min-width: 300px;
-  min-height: 600px;
+  margin: auto;
+  top:20%;
+  /*left:37%;*/
+  width:50%;
+  /*height:30%;*/
+  border-radius: 10px;
+  /*min-width: 300px;*/
+  /*min-height: 600px;*/
+}
+
+.leaderboard h3 {
+  padding-top: 20px;
 }
 
 .outcome {
