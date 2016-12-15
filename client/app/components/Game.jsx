@@ -211,6 +211,7 @@ class Game extends React.Component {
     const hasOutCome = this.state.board.currentRound.hasOutcome;
     const thisOutcome = this.state.board.currentRound.outcome;
     const category = this.state.board.currentCategory;
+    console.log(category);
     return (
      <div className='row'>
        <div className='game col s9'>
