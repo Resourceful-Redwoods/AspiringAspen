@@ -89,9 +89,9 @@ class Home extends React.Component {
     return (
       <div id='home' className='wrapper'>
         <div className='row'>
-          <div className="titlebar col s12">
-            <h1>DECK</h1>
-            <img className='cardIcon' src='img/cardIcon.svg'></img>
+          <div className ='spacebackground' className="titlebar col s12">
+            <h1>Space</h1>
+            <img className='cardIcon' src='images/spaceship4.png'></img>
           </div>
         </div>
         { this.state.showLeaderBoard === true ? <LeaderBoard onShowLeaderBoard={this.handleShowLeaderBoard.bind(this)} users={this.state.users} /> : null }
@@ -108,7 +108,7 @@ class Home extends React.Component {
               </form>
             ) : null }
             </div>
-            <button className='leaderboard-button' onClick={this.handleShowLeaderBoard.bind(this)}>LEADERBOARD</button>
+            <button className='leaderboard-button' onClick={this.handleShowLeaderBoard.bind(this)}>BOUNTY BOARD</button>
             { this.state.hasUsername ? <button className='play-button' onClick={ this.playNow.bind(this) }>PLAY <img src='img/playBtn.svg'></img> </button> : null }
           </div>
         </div>
