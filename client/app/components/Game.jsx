@@ -25,7 +25,7 @@ class Game extends React.Component {
         opponentUsername: ''
       },
       board: {
-        currentCategory: JSON.stringify({name: 'loading'}),
+        currentLocation: '',
         inGame: false,
         userHand: {
           currentHand: {},
@@ -46,7 +46,7 @@ class Game extends React.Component {
 
   componentDidMount() {
     this.props.socket.on('hand', this._getHand.bind(this));
-    this.props.socket.on('category', this._getCategory.bind(this));
+    this.props.socket.on('location', this._getLocation.bind(this));
     this.props.socket.on('card played', this._getPlayedCard.bind(this));
     this.props.socket.on('round end', this._getRoundOutcome.bind(this));
     this.props.socket.on('game end', this._getGameOutcome.bind(this));
@@ -64,10 +64,10 @@ class Game extends React.Component {
     this.setState(change);
   }
 
-  _getCategory(cat) {
-    // gets the current category from the server and sets the state with it
+  _getLocation(location) {
+    // gets the current location from the server and sets the state with it
     var change = _.extend({}, this.state);
-    change.board.currentCategory = cat;
+    change.board.currentLocation = location;
     this.setState(change);
   }
 
@@ -85,10 +85,10 @@ class Game extends React.Component {
     this.setState(change);
   }
 
-  _setOpponentUsername(username) {
+  _setOpponentUsername(opponentUsername) {
     // set opponents username
     var change = _.extend({}, this.state);
-    change.game.opponentUsername = username;
+    change.game.opponentUsername = opponentUsername;
     this.setState(change);
   }
 
@@ -137,7 +137,6 @@ class Game extends React.Component {
     var message = $('<li class="message"></li>');
 
     var username = socket.id === data.user ? 'me' : this.state.game.opponentUsername;
-    // Why is opponentUsername showing up as guest?
 
     var usernameContent = $('<strong></strong>');
     usernameContent.text(username);
@@ -154,7 +153,7 @@ class Game extends React.Component {
       message.addClass('right-align');
     }
 
-    $('#chat #messages').prepend(message);
+    $('.message-list').prepend(message);
     // This would allow the chat box to automatically scroll, but it is not working...
     // $('.messages-container').scrollTop($(this).height());
   }
@@ -222,7 +221,7 @@ class Game extends React.Component {
     const gameOver = this.state.game.gameOver;
     const hasOutCome = this.state.board.currentRound.hasOutcome;
     const thisOutcome = this.state.board.currentRound.outcome;
-    const category = this.state.board.currentCategory;
+    const location = this.state.board.currentLocation;
     return (
      <div className='row'>
        <div className='game col s9'>
@@ -231,18 +230,14 @@ class Game extends React.Component {
             currentHandLength={this.state.board.opponentHandLength} username={this.state.game.opponentUsername} />
           </div>
          <div id='board'>
-          <div id='category' className='valign-wrapper'>
-            <div className='environmentImage'>
-              <img src={JSON.parse(category).image} />
-            </div>
+          <div id='location'>
             <p>
-              Battle Location: { JSON.parse(category).name }<br />
-              Score: You {this.state.game.rounds.userWins} | Opponent {this.state.game.rounds.opponentWins}<br />
-              {this.describeBattleLocation(JSON.parse(category).name)}
+              Battle Location: { location.name }<br />
+              Score: You {this.state.game.rounds.userWins} | Opponent {this.state.game.rounds.opponentWins}
             </p>
           </div>
           { this.state.board.isWaiting && !this.state.board.currentRound.outcome ? <p className='oppWaiting flash'>Waiting for opponent...</p> : null }
-          { hasOutCome ? <Outcome cat={JSON.parse(category).name} outcome={thisOutcome} oppCard={this.state.board.currentRound.opponentCard} userCard={this.state.board.userHand.selectedCard}/> : null }
+          { hasOutCome ? <Outcome cat={location.name} outcome={thisOutcome} oppCard={this.state.board.currentRound.opponentCard} userCard={this.state.board.userHand.selectedCard}/> : null }
           </div>
           { gameOver ? <GameOver exitGame={this.exitGame.bind(this)} winner={this.state.game.gameWinner}/> : null }
          <div className='center'>
