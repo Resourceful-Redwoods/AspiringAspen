@@ -40,10 +40,11 @@ body {
   font-family: Poppins, sans-serif;
   position: absolute;
   top: 200px;
-  left: 10%;
-  font-size: 1.8em;
-  color: rgb(255, 197, 36);
   text-shadow: 3px 2px #ff4000;
+  left:10%;
+  font-size:1.8em;
+  color:rgba(59, 59, 56, 0.81);
+  z-index: 10;
 }
 
 .titlebar h1 {

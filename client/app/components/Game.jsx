@@ -206,12 +206,23 @@ class Game extends React.Component {
     return false;
   }
 
+  describeBattleLocation (name) {
+    if (name === 'Desert Planet') {
+      return 'The air smells of gunpowder and dust. The cowboy feels right at home';
+    } else if (name === 'Forest Planet') {
+      return 'The trees throw many shadows. A samurai\'s practiced step allows for silent movement'
+    } else if (name === 'Metropolis Planet') {
+      return 'The Grand Library holds many of the Universe\'s secrects, wizards gather from accross the stars to increase their knowledge'
+    } else {
+      return 'The nuetral zone of the Space Station is a respot for people of all abilities'
+    }
+  }
+
   render() {
     const gameOver = this.state.game.gameOver;
     const hasOutCome = this.state.board.currentRound.hasOutcome;
     const thisOutcome = this.state.board.currentRound.outcome;
     const category = this.state.board.currentCategory;
-    console.log(category);
     return (
      <div className='row'>
        <div className='game col s9'>
@@ -223,7 +234,8 @@ class Game extends React.Component {
           <div id='category' className='valign-wrapper'>
             <p>
               Battle Location: { JSON.parse(category).name }<br />
-              Score: You {this.state.game.rounds.userWins} | Opponent {this.state.game.rounds.opponentWins}
+              Score: You {this.state.game.rounds.userWins} | Opponent {this.state.game.rounds.opponentWins}<br />
+              {this.describeBattleLocation(JSON.parse(category).name)}
             </p>
             <div className='environmentImage'>
               <img src={JSON.parse(category).image} />
