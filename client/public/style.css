@@ -13,9 +13,11 @@ body {
 .titlebar {
   position:absolute;
   background-color:#EEF0F3;
+  background-image: url('images/spacebackground.jpg');
   height:50%;
   z-index:3;
 }
+
 
 .wrapper {
   height:100%;
@@ -26,7 +28,7 @@ body {
   height: 50%;
   width:100%;
   position:absolute;
-  background-color:#DA5252;
+  background:#742CA9;
   margin-bottom: 0px;
 }
 
@@ -36,32 +38,33 @@ body {
 
 #category p {
   font-family: Poppins, sans-serif;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.24);
-  position:absolute;
+  position: absolute;
   top: 200px;
-  left:10%;
-  font-size:1.8em;
-  color:rgba(59, 59, 56, 0.81);
+  left: 10%;
+  font-size: 1.8em;
+  color: rgb(255, 197, 36);
+  text-shadow: 3px 2px #ff4000;
 }
 
 .titlebar h1 {
   font-family: Poppins, sans-serif;
-  color:#EEF0F3;
-  position:absolute;
+  color: #d9d9d9;
+  position: absolute;
   bottom: 0px;
-  left:3%;
-  margin:0;
-  -webkit-text-stroke: 5px rgba(59, 59, 56, 0.81);
-  font-weight:600;
-  font-size:6.5em;
-  z-index:0;
+  left: 3%;
+  margin: 0;
+  -webkit-text-stroke: 5px rgb(0, 0, 0);
+  font-weight: 600;
+  font-size: 6.5em;
+  z-index: 0;
 }
 
 .titlebar img {
-  position:absolute;
-  bottom:-148px;
-  left:65%;
-  z-index:10;
+    position: absolute;
+    bottom: -182px;
+    left: 65%;
+    height: 300px;
+    z-index: 10;
 }
 
 .nameForm {
@@ -86,14 +89,15 @@ body {
 
 .lower h1 {
   font-family: Poppins, sans-serif;
-  color:#E0DF6B;
-  position:relative;
-  margin:0;
-  top:8%;
-  padding-left:2%;
-  font-weight:600;
-  font-size:10em;
-  z-index:0;
+  color: #ffc524;
+  position: relative;
+  text-shadow: 13px 7px #ff4000;
+  margin: 0;
+  top: 8%;
+  padding-left: 2%;
+  font-weight: 600;
+  font-size: 10em;
+  z-index: 0;
 }
 
 .lower .play-button {
@@ -124,7 +128,7 @@ body {
 .leaderboard-button {
   margin-top: 160px;
   text-shadow: 0 1px 2px rgba(0,0,0,0.24);
-  background:#DA5252;
+  background:#742CA9;
   border:none;
   color:rgba(59, 59, 56, 0.81);
   z-index:1;
@@ -134,7 +138,7 @@ body {
 }
 
 .lower .leaderboard-button:focus {
-  background-color:#DA5252;
+  background-color: #ffc524;
 }
 
 .lower .leaderboard-button span {
@@ -222,8 +226,9 @@ body {
 .game {
   height:100%;
   width:100%;
-  background:#66AFDC;
+  /*background:#66AFDC;*/
   position:absolute;
+  background-image: url('images/spacebackground.jpg');
 }
 
 .cardFront {
@@ -245,7 +250,7 @@ body {
 .cardFrontWrapper img {
   margin:0 auto;
   width:97%;
-  height:auto;
+  height:97%;
   z-index:3;
   background:#66AFDC;
   border-radius:5%;
@@ -287,7 +292,6 @@ body {
 }
 
 .cardBackWrapper {
-  background-image: url('img/cardBack.svg');
   background-repeat:no-repeat;
   height:100%;
   width:100%;
@@ -296,12 +300,19 @@ body {
   background-position: center;
 }
 
+.cardBackWrapper img {
+    position: relative;
+    bottom: -70px;
+    height: 67%;
+    width: 90%;
+}
+
 
 .cardBack {
   top:-70px;
   width:30%;
   height:100%;
-  background:#EEF0F3;
+  /*background:#742CA9;*/
   border-radius:10px;
   box-shadow: 0px 5px 5px rgba(0,0,0,0.24);
   position:relative;
@@ -514,3 +525,4 @@ body {
 #chat #messages li:nth-child(odd) {
   background: #eee;
 }
+
