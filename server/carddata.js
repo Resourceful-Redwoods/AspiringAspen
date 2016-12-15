@@ -2,7 +2,7 @@ exports.cards = [{
   name: 'Bounty Hunter',
   type: 'Space Cowboy',
   power: 50,
-  image: '..client/public/images/cowboys4.png',
+  image: 'images/cowboys4.png',
   advantages: {
     'Space Cowboy': 0,
     'Space Samurai': 20,
@@ -12,7 +12,7 @@ exports.cards = [{
   name: 'Desperado',
   type: 'Space Cowboy',
   power: 30,
-  image: '../client/public/images/cowboys3.png',
+  image: 'images/cowboys3.png',
   advantages: {
     'Space Cowboy': 0,
     'Space Samurai': 20,
@@ -22,7 +22,7 @@ exports.cards = [{
   name: 'Sharp Shooter',
   type: 'Space Cowboy',
   power: 20,
-  image: '../client/public/images/cowboys2.png',
+  image: 'images/cowboys2.png',
   advantages: {
     'Space Cowboy': 0,
     'Space Samurai': 20,
@@ -32,7 +32,7 @@ exports.cards = [{
   name: 'Wrangler',
   type: 'Space Cowboy',
   power: 10,
-  image: '../client/public/images/cowboys1.png',
+  image: 'images/cowboys1.png',
   advantages: {
     'Space Cowboy': 0,
     'Space Samurai': 20,
@@ -42,7 +42,7 @@ exports.cards = [{
   name: 'Grand Master',
   type: 'Space Samurai',
   power: 50,
-  image: '../client/public/images/samurai4.png',
+  image: 'images/samurai4.png',
   advantages: {
     'Space Cowboy': 0,
     'Space Samurai': 0,
@@ -52,7 +52,7 @@ exports.cards = [{
   name: 'Master',
   type: 'Space Samurai',
   power: 30,
-  image: '../client/public/images/samurai3.png',
+  image: 'images/samurai3.png',
   advantages: {
     'Space Cowboy': 0,
     'Space Samurai': 0,
@@ -62,7 +62,7 @@ exports.cards = [{
   name: 'Journeyman',
   type: 'Space Samurai',
   power: 20,
-  image: '../client/public/images/samurai2.png',
+  image: 'images/samurai2.png',
   advantages: {
     'Space Cowboy': 0,
     'Space Samurai': 0,
@@ -72,7 +72,7 @@ exports.cards = [{
   name: 'Apprentice',
   type: 'Space Samurai',
   power: 10,
-  image: '../client/public/images/samurai1.png',
+  image: 'images/samurai1.png',
   advantages: {
     'Space Cowboy': 0,
     'Space Samurai': 0,
@@ -82,7 +82,7 @@ exports.cards = [{
   name: 'Warlock',
   type: 'Space Wizard',
   power: 50,
-  image: '../client/public/images/wizard4.png',
+  image: 'images/wizard4.jpg',
   advantages: {
     'Space Cowboy': 20,
     'Space Samurai': 0,
@@ -92,7 +92,7 @@ exports.cards = [{
   name: 'Mystic',
   type: 'Space Wizard',
   power: 30,
-  image: '../client/public/images/wizard3.png',
+  image: 'images/wizard3.jpg',
   advantages: {
     'Space Cowboy': 20,
     'Space Samurai': 0,
@@ -102,7 +102,7 @@ exports.cards = [{
   name: 'Scholar',
   type: 'Space Wizard',
   power: 20,
-  image: '../client/public/images/wizard2.png',
+  image: 'images/wizard2.jpg',
   advantages: {
     'Space Cowboy': 20,
     'Space Samurai': 0,
@@ -112,7 +112,7 @@ exports.cards = [{
   name: 'Student',
   type: 'Space Wizard',
   power: 10,
-  image: '../client/public/images/wizard1.png',
+  image: 'images/wizard1.jpg',
   advantages: {
     'Space Cowboy': 20,
     'Space Samurai': 0,
@@ -127,7 +127,7 @@ exports.environments = [{
     'Space Samurai': 0,
     'Space Wizard': -10
   },
-  image: '../client/public/images/desertplanet.png'
+  image: 'images/desertplanet.png'
 }, {
   name: 'Forest Planet',
   affects: {
@@ -135,7 +135,7 @@ exports.environments = [{
     'Space Samurai': 10,
     'Space Wizard': 0
   },
-  image: '../client/public/images/forestplanet.png'
+  image: 'images/forestplanet.png'
 }, {
   name: 'Metropolis Planet',
   affects: {
@@ -143,7 +143,7 @@ exports.environments = [{
     'Space Samurai': -10,
     'Space Wizard': 10
   },
-  image: '../client/public/images/metropolisplanet.png'
+  image: 'images/metropolisplanet.png'
 }, {
   name: 'Space Station',
   affects: {
@@ -151,5 +151,5 @@ exports.environments = [{
     'Space Samurai': 0,
     'Space Wizard': 0
   },
-  image: '../client/public/images/spacestation.png'
+  image: 'images/spacestation.png'
 }];
