@@ -104,7 +104,7 @@ body {
 
 .lower .play-button {
   text-shadow: 0 1px 2px rgba(0,0,0,0.24);
-  background:#DA5252;
+  background-color: #742CA9;
   position:absolute;
   height:20%;
   min-height:72px;
@@ -120,7 +120,7 @@ body {
 }
 
 .lower .play-button:focus {
-  background-color:#DA5252;
+  background-color: #742CA9;
 }
 
 .lower .play-button span {
@@ -152,30 +152,33 @@ body {
 }
 
 .waiting {
-  background:#EEF0F3;
-  z-index:5;
-  position:absolute;
-  top:35%;
-  left:37%;
-  width:25%;
-  height:30%;
-  border-radius:10px;
+  z-index: 5;
+  position: absolute;
+  top: 35%;
+  left: 37%;
+  width: 25%;
+  height: 30%;
+  border-radius: 10px;
   min-width: 316px;
   min-height: 150px;
+  background-image: url(images/spacebackground.jpg);
 }
 
 .waiting h2 {
   font-family: Poppins, sans-serif;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.24);
-  color:#DA5252;
-  position:relative;
+  position: relative;
+  color: rgb(255, 197, 36);
+  text-shadow: 3px 2px #ff4000;
 }
 
 .waiting button {
-  background:#EEF0F3;
-  position:relative;
-  left:35%;
-  border:none;
+  background: #742CA9;
+  position: relative;
+  left: 35%;
+  border: none;
+  color: rgb(255, 197, 36);
+  text-shadow: 3px 2px #ff4000;
+
 }
 
 .waiting p {
