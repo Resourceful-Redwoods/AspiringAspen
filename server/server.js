@@ -128,7 +128,6 @@ Users.find().exec(function(err, users) {
 
             // Compare cards to determine winner
             // (current data cannot lead to ties)
-            console.log(sockCard);
             let sockCardPower = sockCard['power'];
             let oppCardPower = oppCard['power'];
 
@@ -244,7 +243,6 @@ function makeRoom(sock1, sock2) {
       function drawCard() {
         let cardIndex = Math.floor(Math.random() * cards.length);
         let card = cards.splice(cardIndex, 1)[0];
-        console.log(card);
         return card;
       }
 
@@ -382,7 +380,6 @@ function declareWinner(winner) {
 // then emits that to both clients of a game (starting the next round)
 function chooseCategory(room) {
   let category = _.sample(rooms[room].game.categories);
-  console.log('line 342 catagory', category);
   rooms[room].board.currentCategory = category;
   io.to(room).emit('category', JSON.stringify(category));
 }

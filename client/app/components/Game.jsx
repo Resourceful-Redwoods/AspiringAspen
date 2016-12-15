@@ -80,7 +80,6 @@ class Game extends React.Component {
 
   _setOpponentCard(card) {
     // get opponent card from server and set state with ita
-    console.log(card);
     var change = _.extend({}, this.state);
     change.board.currentRound.opponentCard = card;
     this.setState(change);
@@ -136,6 +135,7 @@ class Game extends React.Component {
   _getChatMessage(data) {
     // get the chat message from the server
     var message = $('<li class="message"></li>');
+
     var username = socket.id === data.user ? 'me' : this.state.game.opponentUsername;
     // Why is opponentUsername showing up as guest?
 
@@ -149,6 +149,10 @@ class Game extends React.Component {
     messageOutput.append(usernameContent).append('<br />').append(messageContent);
 
     message.append(messageOutput);
+
+    if (username !== 'me') {
+      message.addClass('right-align');
+    }
 
     $('#chat #messages').prepend(message);
     // This would allow the chat box to automatically scroll, but it is not working...
@@ -175,7 +179,6 @@ class Game extends React.Component {
     delete change.board.userHand.currentHand[playedCard];
     // update state so that the removed card is not in state
     this.setState(change);
-
   }
 
   exitGame() {

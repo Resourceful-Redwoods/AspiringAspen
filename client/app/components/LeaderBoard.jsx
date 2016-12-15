@@ -5,31 +5,8 @@ class LeaderBoard extends React.Component {
   constructor(props) {
     super(props);
 
-    this.users = [
-      {
-        name: 'test1',
-        wins: 12,
-        loses: 3
-      },
-      {
-        name: 'test2',
-        wins: 15,
-        loses: 7
-      },
-      {
-        name: 'test3',
-        wins: 4,
-        loses: 2
-      },
-      {
-        name: 'test4',
-        wins: 100,
-        loses: 6
-      },
-    ];
-
     this.state = {
-      leaders: this.users.sort((a, b) => (a.wins / a.loses) < (b.wins / b.loses))
+      leaders: props.users.sort((a, b) => (a.wins / a.losses) < (b.wins / b.losses))
                           .slice(0, 10)
     };
   }
@@ -55,7 +32,7 @@ class LeaderBoard extends React.Component {
               <li key={key} className="collection-item avatar">
                 <h5>{key + 1}. {leader.name}</h5>
                 <p className="secondary-content">Wins: {leader.wins}<br />
-                   Loses: {leader.loses}
+                   Losses: {leader.losses}
                 </p>
               </li>
             );
