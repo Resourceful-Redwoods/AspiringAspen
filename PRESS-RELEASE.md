@@ -20,7 +20,7 @@ Once the project moves into development, the press release can be used as a touc
   > Online card game for aynone who can use a computer
 
 ## Summary ##
-  > A fun, super competitive stat based card game that is easy to pick up and play for all ages. Each palyer chooses a card based on a category. The player with the best stat for that category wins the round. The player with the most wins at the end of the game, wins!
+  > A fun, super competitive stat based card game that is easy to pick up and play for all ages. Each palyer chooses a card based on a location. The player with the best stat for that location wins the round. The player with the most wins at the end of the game, wins!
 
 ## Problem ##
   > There is not enough fun in the world.

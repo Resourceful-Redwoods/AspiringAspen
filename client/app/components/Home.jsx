@@ -21,7 +21,7 @@ class Home extends React.Component {
   componentDidMount () {
     // listen to see if there is a match
     this.props.socket.on('enter game', this._enterGame.bind(this));
-    this.props.socket.on('send users', this._receiveUserData.bind(this));
+    this.props.socket.on('populate userdata', this._receiveUserData.bind(this));
     TweenMax.fromTo('.titlebar', 1.25, {y: -900, opacity: 0.8}, {y: 0, opacity: 1, ease: Expo.easeOut, delay: 0.35});
     TweenMax.fromTo('.lower', 1.25, {y: 900, opacity: 0.8}, {y: 0, opacity: 1, ease: Expo.easeOut, delay: 0.35});
     TweenMax.fromTo('.titlebar img', 0.5, {opacity: 0}, {opacity: 1, ease: Expo.easeOut, delay: 1.75});
@@ -34,16 +34,19 @@ class Home extends React.Component {
     this.state.users = users;
   }
 
-  _enterGame() {
+  _enterGame(opponentUsername) {
     // if there is a game, send the user to /game ot match up against opponent
     this.props.socket.emit('set username', this.state.username);
-    this.props.router.push('/game');
+    this.props.router.push({
+      pathname: '/game',
+      state: { opponentUsername: opponentUsername}
+    });
   }
 
   playNow () {
     // indicates that the user is waiting on the client side and tells server that they are ready to play
     this.setState({ gameState: 'waiting' });
-    this.props.socket.emit('game', 'play');
+    this.props.socket.emit('queue', 'enqueue');
     // gamestate is waiting
   }
 
@@ -63,7 +66,7 @@ class Home extends React.Component {
     // cancels match making and tells server
     this.setState({ gameState: 'idle' });
     // gameState is idle, emit it back to server
-    this.props.socket.emit('game', 'cancel');
+    this.props.socket.emit('queue', 'dequeue');
   }
 
   handleUsernameChange(e) {
