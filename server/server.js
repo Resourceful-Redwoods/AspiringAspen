@@ -155,17 +155,38 @@ Users.find().exec(function(err, users) {
               socket.emit('round end', 'loss');
             }
 
-            // Check if either player has won the game
+          // Check if either player has won the game
             if (room.game.rounds.wins[socket.id] >= room.game.rounds.total / 2) {
               declareWinner(socket);
+              Users.update({name: socket.data.username}, {$inc: { wins: 1}}, function(err, user) {
+                if (err) {
+                  console.log(err);
+                }
+              });
+              Users.update({name: opponent.data.username}, {$inc: { losses: 1}}, function(err, user) {
+                if (err) {
+                  console.log(err);
+                }
+              });
+
             } else if (room.game.rounds.wins[opponent.id] >= room.game.rounds.total / 2) {
               declareWinner(opponent);
+              Users.update({name: socket.data.username}, {$inc: { losses: 1}}, function(err, user) {
+                if (err) {
+                  console.log(err);
+                }
+              });
+              Users.update({name: opponent.data.username}, {$inc: { wins: 1}}, function(err, user) {
+                if (err) {
+                  console.log(err);
+                }
+              });
             } else {
-              // Removes the selected card from the players' hands
+            // Removes the selected card from the players' hands
               delete socket.data.hand.selectedCard;
               delete opponent.data.hand.selectedCard;
 
-              // Deselects the currently selected cards
+            // Deselects the currently selected cards
               socket.data.hand.selectedCard = null;
               opponent.data.hand.selectedCard = null;
 
