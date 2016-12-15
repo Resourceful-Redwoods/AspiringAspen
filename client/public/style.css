@@ -40,11 +40,12 @@ body {
   font-family: Poppins, sans-serif;
   position: absolute;
   top: 200px;
-  text-shadow: 3px 2px #ff4000;
-  left:10%;
+  text-shadow: 3px 2px #000000;
+  left:11%;
   font-size:1.8em;
-  color:rgba(59, 59, 56, 0.81);
-  z-index: 10;
+  color:rgb(255, 197, 36);
+  z-index: 1;
+  width: 79%;
 }
 
 .titlebar h1 {
@@ -251,7 +252,7 @@ body {
 .cardFrontWrapper img {
   margin:0 auto;
   width:97%;
-  height:97%;
+  height:65%;
   z-index:3;
   background:#66AFDC;
   border-radius:5%;

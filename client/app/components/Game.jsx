@@ -232,14 +232,14 @@ class Game extends React.Component {
           </div>
          <div id='board'>
           <div id='category' className='valign-wrapper'>
+            <div className='environmentImage'>
+              <img src={JSON.parse(category).image} />
+            </div>
             <p>
               Battle Location: { JSON.parse(category).name }<br />
               Score: You {this.state.game.rounds.userWins} | Opponent {this.state.game.rounds.opponentWins}<br />
               {this.describeBattleLocation(JSON.parse(category).name)}
             </p>
-            <div className='environmentImage'>
-              <img src={JSON.parse(category).image} />
-            </div>
           </div>
           { this.state.board.isWaiting && !this.state.board.currentRound.outcome ? <p className='oppWaiting flash'>Waiting for opponent...</p> : null }
           { hasOutCome ? <Outcome cat={JSON.parse(category).name} outcome={thisOutcome} oppCard={this.state.board.currentRound.opponentCard} userCard={this.state.board.userHand.selectedCard}/> : null }
