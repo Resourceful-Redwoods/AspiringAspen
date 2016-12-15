@@ -12,7 +12,7 @@ const UserHand = (props) => {
 
   return (
     <div className='row'>
-      <div className='userHand col s8 offset-s2'>
+      <div className='userHand col s12'>
         {usersCards}
       </div>
       <button className='playbtn' onClick={props.playCard} disabled={props.isWaiting}>Play Card</button>
