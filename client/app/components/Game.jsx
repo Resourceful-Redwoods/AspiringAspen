@@ -220,7 +220,7 @@ class Game extends React.Component {
          <div id='board'>
           <div id='category'>
             <p>
-              Current Category: { JSON.parse(category).name }<br />
+              Battle Location: { JSON.parse(category).name }<br />
               Score: You {this.state.game.rounds.userWins} | Opponent {this.state.game.rounds.opponentWins}
             </p>
           </div>
