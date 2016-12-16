@@ -231,9 +231,13 @@ class Game extends React.Component {
           </div>
          <div id='board'>
           <div id='location'>
+             <div className='environmentImage'>
+              <img src={location.image} />
+            </div>
             <p>
               Battle Location: { location.name }<br />
-              Score: You {this.state.game.rounds.userWins} | Opponent {this.state.game.rounds.opponentWins}
+              Score: You {this.state.game.rounds.userWins} | Opponent {this.state.game.rounds.opponentWins}<br />
+              {this.describeBattleLocation(location.name)}
             </p>
           </div>
           { this.state.board.isWaiting && !this.state.board.currentRound.outcome ? <p className='oppWaiting flash'>Waiting for opponent...</p> : null }
