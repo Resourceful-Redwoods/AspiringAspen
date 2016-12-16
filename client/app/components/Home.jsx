@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import LeaderBoard from './LeaderBoard.jsx';
+import SignIn from './SignIn.jsx'
 import Waiting from './Waiting.jsx';
 import Game from './Game.jsx';
 import ReactAudioPlayer from 'react-audio-player';
@@ -16,6 +17,7 @@ class Home extends React.Component {
       hasUsername: false,
       showForm: true,
       showLeaderBoard: false,
+      showSignIn: false
     };
   }
 
@@ -63,6 +65,18 @@ class Home extends React.Component {
     }
   }
 
+  handleShowSignIn () {
+    if (this.state.showSignIn) {
+      this.setState({
+        showSignIn: false
+      });
+    } else {
+      this.setState({
+        showSignIn: true
+      });
+    }
+  }
+
   cancelMatchmaking () {
     // cancels match making and tells server
     this.setState({ gameState: 'idle' });
@@ -96,6 +110,11 @@ class Home extends React.Component {
 
         <div className='row'>
           <div className ='spacebackground' className="titlebar col s12">
+            <div className='center-block'>
+                { this.state.showSignIn ? (
+                <SignIn onShowSignIn={this.handleShowSignIn.bind(this)}/>
+              ) : <button className='signin-button z-depth-2' onClick={this.handleShowSignIn.bind(this)}> Sign In </button> }
+            </div>
             <h1>Space</h1>
             <img className='cardIcon' src='images/spaceship4.png'></img>
           </div>
@@ -105,15 +124,6 @@ class Home extends React.Component {
         <div className='row lower'>
           <div id='' className='col s12'>
           <h1>STOMP</h1>
-            <div className='center-block'>
-              { this.state.showForm ? (
-              <form className='nameForm' onSubmit={this.handleSubmit.bind(this)}>
-                <label>
-                  <input type="text" placeholder='enter a name' name="name" onChange={this.handleUsernameChange.bind(this)}/>
-                </label>
-              </form>
-            ) : null }
-            </div>
             <button className='leaderboard-button' onClick={this.handleShowLeaderBoard.bind(this)}>BOUNTY BOARD</button>
             { this.state.hasUsername ? <button className='play-button' onClick={ this.playNow.bind(this) }>PLAY <img src='img/playBtn.svg'></img> </button> : null }
           </div>
