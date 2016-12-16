@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import LeaderBoard from './LeaderBoard.jsx';
 import Waiting from './Waiting.jsx';
 import Game from './Game.jsx';
+import ReactAudioPlayer from 'react-audio-player'
 
 class Home extends React.Component {
   constructor(props) {
@@ -91,6 +92,8 @@ class Home extends React.Component {
     let gameState = this.state.gameState;
     return (
       <div id='home' className='wrapper'>
+      <audio src="./audio/Motivated.mp3" autoPlay loop><p>Your browser does not support the <code>audio</code> element</p></audio>
+  
         <div className='row'>
           <div className ='spacebackground' className="titlebar col s12">
             <h1>Space</h1>
