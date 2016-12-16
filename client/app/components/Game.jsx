@@ -225,6 +225,7 @@ class Game extends React.Component {
     const location = this.state.board.currentLocation;
     return (
      <div className='row'>
+        <audio src="./audio/Dominate.wav" autoPlay loop><p>Your browser does not support the <code>audio</code> element</p></audio>
        <div className='game col s9'>
          <div className='center'>
           <OpponentHand
