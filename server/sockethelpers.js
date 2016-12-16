@@ -213,6 +213,16 @@ const socketQueueListener = function (socket) {
   });
 };
 
+// Sends userlist to populate leaderboard
+const socketSendUsers = function(socket) {
+  Users.find().exec(function(err, users) {
+    if (err) {
+      console.error(err);
+    }
+    socket.emit('populate userdata', users);
+  });
+};
+
 const socketSetUsernameListener = function (socket) {
   socket.on('set username', function(name) {
     Users.findOne({name: name})
@@ -225,11 +235,17 @@ const socketSetUsernameListener = function (socket) {
         Users.create({
           name: name,
           wins: 0,
-          losses: 0
+          losses: 0,
+          status: 'online'
         }, function(err, user) {
           socket.data.username = user.name;
         });
       } else {
+        Users.update({name: name}, {$set: { status: 'online'}}, function(err, user) {
+          if (err) {
+            console.error(err);
+          }
+        });
         socket.data.username = user.name;
       }
     });

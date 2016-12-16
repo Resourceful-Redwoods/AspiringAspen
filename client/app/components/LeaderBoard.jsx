@@ -34,6 +34,7 @@ class LeaderBoard extends React.Component {
                 <p className="secondary-content">Wins: {leader.wins}<br />
                    Losses: {leader.losses}
                 </p>
+                {leader.status};
               </li>
             );
           })}

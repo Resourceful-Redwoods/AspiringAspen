@@ -7,7 +7,12 @@ var userSchema = mongoose.Schema({
     required: true
   },
   wins: Number,
-  losses: Number
+  losses: Number,
+  status: {
+    type: String,
+    required: true,
+    default: 'offline'
+  }
 });
 
 var User = mongoose.model('User', userSchema);
