@@ -38,10 +38,7 @@ class Home extends React.Component {
   _enterGame(opponentUsername) {
     // if there is a game, send the user to /game ot match up against opponent
     this.props.socket.emit('set username', this.state.username);
-    this.props.router.push({
-      pathname: '/game',
-      state: { opponentUsername: opponentUsername}
-    });
+    this.props.router.push('/game');
   }
 
   playNow () {

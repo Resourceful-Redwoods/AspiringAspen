@@ -127,9 +127,10 @@ class Game extends React.Component {
     var change = _.extend({}, this.state);
     change.game.gameWinner = outcome.toString();
     change.game.gameOver = true;
-    setTimeout(() =>
-      this.setState(change)
-    , 4000);
+    this.setState(change);
+    // setTimeout(() =>
+    //   this.setState(change)
+    // , 4000);
   }
 
   _getChatMessage(data) {
@@ -181,6 +182,9 @@ class Game extends React.Component {
   }
 
   exitGame() {
+    // tell the server that you have exited the game
+    var socketId = this.props.socket.id;
+    this.props.socket.emit('game exit');
     // allow a user to go back to home screen
     this.props.router.push('/');
   }
@@ -209,11 +213,11 @@ class Game extends React.Component {
     if (name === 'Desert Planet') {
       return 'The air smells of gunpowder and dust. The cowboy feels right at home';
     } else if (name === 'Forest Planet') {
-      return 'The trees throw many shadows. A samurai\'s practiced step allows for silent movement'
+      return 'The trees throw many shadows. A samurai\'s practiced step allows for silent movement';
     } else if (name === 'Metropolis Planet') {
-      return 'The Grand Library holds many of the Universe\'s secrects, wizards gather from accross the stars to increase their knowledge'
+      return 'The Grand Library holds many of the Universe\'s secrects, wizards gather from accross the stars to increase their knowledge';
     } else {
-      return 'The nuetral zone of the Space Station is a respot for people of all abilities'
+      return 'The nuetral zone of the Space Station is a respot for people of all abilities';
     }
   }
 
