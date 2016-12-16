@@ -355,12 +355,14 @@ const socketPlayCardListener = function(socket) {
 };
 
 // Sends userlist to populate leaderboard
-const socketSendUsers = function(socket) {
-  Users.find().exec(function(err, users) {
-    if (err) {
-      console.error(err);
-    }
-    socket.emit('populate userdata', users);
+const socketSendUsersListener = function(socket) {
+  socket.on('send me userdata', function(cb) {
+    Users.find().exec(function(err, users) {
+      if (err) {
+        console.error(err);
+      }
+      cb(users);
+    });
   });
 };
 
@@ -371,5 +373,5 @@ module.exports = {
   socketChatMessageListener: socketChatMessageListener,
   socketDisconnectListener: socketDisconnectListener,
   socketPlayCardListener: socketPlayCardListener,
-  socketSendUsers: socketSendUsers
+  socketSendUsersListener: socketSendUsersListener
 };

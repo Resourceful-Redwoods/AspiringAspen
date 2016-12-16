@@ -22,7 +22,7 @@ io.on('connection', function(socket) {
     gameState: 'idle'
   };
 
-  socketHelpers.socketSendUsers(socket);
+  socketHelpers.socketSendUsersListener(socket);
 
   // Used for clients queueing up for new game, canceling match search, & quitting current game
   socketHelpers.socketQueueListener(socket);
