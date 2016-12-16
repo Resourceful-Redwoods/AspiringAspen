@@ -22,7 +22,8 @@ class Game extends React.Component {
         },
         gameWinner: null,
         gameOver: false,
-        opponentUsername: ''
+        opponentUsername: '',
+        opponentExited: false
       },
       board: {
         currentLocation: '',
@@ -45,6 +46,9 @@ class Game extends React.Component {
   }
 
   componentDidMount() {
+    // [rematch] add a listener for a rematch event which will hide the game over modal by setting state value gameOver to false...
+    this.props.socket.on('rematch accepted', this._rematchAccepted.bind(this));
+    this.props.socket.on('opponent exited', this._opponentExited.bind(this));
     this.props.socket.on('hand', this._getHand.bind(this));
     this.props.socket.on('location', this._getLocation.bind(this));
     this.props.socket.on('card played', this._getPlayedCard.bind(this));
@@ -131,29 +135,76 @@ class Game extends React.Component {
   }
 
   _getChatMessage(data) {
-    // get the chat message from the server
-    var message = $('<li class="message"></li>');
+    if (data.user === 'admin') {
+      var message = $('<li class="message center-align"></li>');
+      var messageContent = $('<i></i>');
+      messageContent.text(data.message);
+      message.append(messageContent);
+    } else {
+      var message = $('<li class="message"></li>');
 
-    var username = socket.id === data.user ? 'me' : this.state.game.opponentUsername;
+      var username = socket.id === data.user ? 'me' : this.state.game.opponentUsername;
 
-    var usernameContent = $('<strong></strong>');
-    usernameContent.text(username);
+      var usernameContent = $('<strong></strong>');
+      usernameContent.text(username);
 
-    var messageContent = $('<span></span>');
-    messageContent.text(data.message);
+      var messageContent = $('<span></span>');
+      messageContent.text(data.message);
 
-    var messageOutput = $('<p></p>');
-    messageOutput.append(usernameContent).append('<br />').append(messageContent);
+      var messageOutput = $('<p></p>');
+      messageOutput.append(usernameContent).append('<br />').append(messageContent);
 
-    message.append(messageOutput);
+      message.append(messageOutput);
 
-    if (username !== 'me') {
-      message.addClass('right-align');
+      if (username !== 'me') {
+        message.addClass('right-align');
+      }
     }
 
     $('.message-list').prepend(message);
     // This would allow the chat box to automatically scroll, but it is not working...
     // $('.messages-container').scrollTop($(this).height());
+  }
+
+  _opponentExited() {
+    var change = _.extend({}, this.state);
+    change.game.opponentExited = true;
+    this.setState(change);
+  }
+
+  _rematchAccepted() {
+    var change = {
+      game: {
+        rounds: {
+          totalNum: 0,
+          userWins: 0,
+          opponentWins: 0
+        },
+        gameWinner: null,
+        gameOver: false,
+        opponentUsername: '',
+        opponentExited: false
+      },
+      board: {
+        currentLocation: '',
+        inGame: false,
+        userHand: {
+          currentHand: {},
+          selectedCard: null,
+          username: null
+        },
+        opponentHandLength: 0,
+        isWaiting: false,
+        currentRound: {
+          userCard: null,
+          opponentCard: null,
+          outcome: null,
+          hasOutcome: null
+        }
+      }
+    };
+
+    this.setState(change);
   }
 
   selectCard(card) {
@@ -184,6 +235,11 @@ class Game extends React.Component {
     // allow a user to go back to home screen
     this.props.router.push('/');
     this.props.socket.removeAllListeners();
+  }
+
+  // Tells the server that a player wants a rematch
+  rematch() {
+    this.props.socket.emit('rematch');
   }
 
   handleChatClick(e) {
@@ -245,7 +301,12 @@ class Game extends React.Component {
           { this.state.board.isWaiting && !this.state.board.currentRound.outcome ? <p className='oppWaiting flash'>Waiting for opponent...</p> : null }
           { hasOutCome ? <Outcome cat={location.name} outcome={thisOutcome} oppCard={this.state.board.currentRound.opponentCard} userCard={this.state.board.userHand.selectedCard}/> : null }
           </div>
-          { gameOver ? <GameOver exitGame={this.exitGame.bind(this)} winner={this.state.game.gameWinner}/> : null }
+          { gameOver ? <GameOver
+              rematch={this.rematch.bind(this)}
+              exitGame={this.exitGame.bind(this)}
+              winner={this.state.game.gameWinner}
+              opponentExited={this.state.opponentExited}
+            /> : null }
          <div className='center'>
           <Userhand
             currentHand={this.state.board.userHand.currentHand}

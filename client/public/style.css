@@ -404,6 +404,7 @@ body {
 }
 
 .youWin button {
+  margin-bottom: 15px;
   background: #742CA9;
   position: relative;
   border: none;
@@ -558,4 +559,3 @@ body {
 #chat #messages li:nth-child(odd) {
   background: #eee;
 }
-

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import LeaderBoard from './LeaderBoard.jsx';
 import Waiting from './Waiting.jsx';
 import Game from './Game.jsx';
-import ReactAudioPlayer from 'react-audio-player'
+import ReactAudioPlayer from 'react-audio-player';
 
 class Home extends React.Component {
   constructor(props) {
@@ -36,7 +36,7 @@ class Home extends React.Component {
     this.setState({users: users});
   }
 
-  _enterGame(opponentUsername) {
+  _enterGame() {
     // if there is a game, send the user to /game ot match up against opponent
     this.props.socket.emit('set username', this.state.username);
     this.props.router.push('/game');
