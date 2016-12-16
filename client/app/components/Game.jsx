@@ -50,7 +50,7 @@ class Game extends React.Component {
     this.props.socket.on('card played', this._getPlayedCard.bind(this));
     this.props.socket.on('round end', this._getRoundOutcome.bind(this));
     this.props.socket.on('game end', this._getGameOutcome.bind(this));
-    this.props.socket.on('chat message', this._getChatMessage.bind(this));
+    this.props.socket.on('push chat message', this._getChatMessage.bind(this));
     this.props.socket.on('opponent card', this._setOpponentCard.bind(this));
     this.props.socket.on('opponent username', this._setOpponentUsername.bind(this));
   }
@@ -128,12 +128,10 @@ class Game extends React.Component {
     change.game.gameWinner = outcome.toString();
     change.game.gameOver = true;
     this.setState(change);
-    // setTimeout(() =>
-    //   this.setState(change)
-    // , 4000);
   }
 
   _getChatMessage(data) {
+    console.log(data);
     // get the chat message from the server
     var message = $('<li class="message"></li>');
 
@@ -183,17 +181,17 @@ class Game extends React.Component {
 
   exitGame() {
     // tell the server that you have exited the game
-    var socketId = this.props.socket.id;
     this.props.socket.emit('game exit');
     // allow a user to go back to home screen
     this.props.router.push('/');
+    this.props.socket.removeAllListeners();
   }
 
   handleChatClick(e) {
     // when a user adds a message
     e.preventDefault();
     if ( $('#m').val() !== '' ) {
-      this.props.socket.emit('chat message', $('#m').val());
+      this.props.socket.emit('user chat message', $('#m').val());
     }
     $('#m').val('');
     return false;
@@ -203,7 +201,7 @@ class Game extends React.Component {
     // when a user adds a message
     e.preventDefault();
     if ( $('#m').val() !== '' ) {
-      this.props.socket.emit('chat message', $('#m').val());
+      this.props.socket.emit('user chat message', $('#m').val());
     }
     $('#m').val('');
     return false;

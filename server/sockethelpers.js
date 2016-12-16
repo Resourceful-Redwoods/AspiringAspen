@@ -241,12 +241,13 @@ const socketSetUsernameListener = function (socket) {
 };
 
 const socketChatMessageListener = function (socket) {
-  socket.on('chat message', function(msg) {
+  socket.on('user chat message', function(msg) {
     let message = {
       message: msg,
       user: socket.id
     };
-    io.to(socket.data.room).emit('chat message', message);
+
+    io.to(socket.data.room).emit('push chat message', message);
   });
 };
 

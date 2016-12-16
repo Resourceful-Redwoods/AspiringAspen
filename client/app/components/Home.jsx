@@ -90,7 +90,7 @@ class Home extends React.Component {
     return (
       <div id='home' className='wrapper'>
       <audio src="./audio/Motivated.mp3" autoPlay loop><p>Your browser does not support the <code>audio</code> element</p></audio>
-  
+
         <div className='row'>
           <div className ='spacebackground' className="titlebar col s12">
             <h1>Space</h1>
