@@ -4,3 +4,4 @@ client/public/bundle.js
 client/public/bundle.js.map
 server/data/
 babel_cache/
+**/.DS_Store
