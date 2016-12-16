@@ -79,14 +79,20 @@ body {
 }
 
 .nameForm input[type="text"] {
-  font-size:1.7em;
-  color:rgba(59, 59, 56, 0.81);
+  font-size:1.3em;
+  color: #d9d9d9;
   border-bottom:5px solid rgba(59, 59, 56, 0.2);
+}
+
+.nameForm input[type=text]:focus:not([readonly]) {
+  font-size:1.3em;
+  border-bottom: 1px solid #000000;
+  box-shadow: 0 1px 0 0 #000000;
 }
 
 .nameForm input::-webkit-input-placeholder {
   font-size:1.2em;
-  color:rgba(59, 59, 56, 0.81);
+  color:rgba(19, 19, 19);
 }
 
 .lower h1 {
@@ -203,7 +209,7 @@ body {
 }
 
 .outcome {
-  background:#EEF0F3;
+  /*background:#EEF0F3;*/
   z-index:6;
   position:absolute;
   top:20%;
@@ -211,6 +217,7 @@ body {
   width:80%;
   height:55%;
   border-radius:10px;
+  background-image: url(images/spacebackground.jpg);
   /*display:flex;*/
 }
 
@@ -222,9 +229,8 @@ body {
 }
 
 .outcome h2 {
-  font-family: Poppins, sans-serif;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.24);
-  color:#DA5252;
+  color: rgb(255, 197, 36);
+  text-shadow: 3px 2px #ff4000;
   position:relative;
 }
 
@@ -240,7 +246,7 @@ body {
   display:flex;
   width:200px;
   height:280px;
-  background:#DA5252;
+  background: #742CA9;
   border-radius:10px;
   box-shadow: 0px 5px 5px rgba(0,0,0,0.24);
   position:relative;
@@ -266,7 +272,7 @@ body {
   top:2.5%;
   left:2.7%;
   position:absolute;
-  background:#EEF0F3;
+  background: #080808;
   height:95%;
   width:95%;
   border-radius:10px;
@@ -278,6 +284,7 @@ body {
 
 .statsWrapper {
   line-height: 20px;
+  color: antiquewhite;
   position:relative;
   bottom:0px;
   padding-left:10px;
@@ -384,7 +391,7 @@ body {
 }
 
 .youWin {
-  background:#EEF0F3;
+  /*background:#EEF0F3;*/
   z-index:5;
   position:absolute;
   top:35%;
@@ -393,23 +400,27 @@ body {
   height:30%;
   border-radius:10px;
   text-align:center;
+  background-image: url(images/spacebackground.jpg);
 }
 
 .youWin button {
-  background:#EEF0F3;
-  position:relative;
-  border:none;
+  background: #742CA9;
+  position: relative;
+  border: none;
+  border-radius: 10px;
+  color: rgb(255, 197, 36);
+  text-shadow: 3px 2px #ff4000;
 }
 
 .youWin h2 {
   font-family: Poppins, sans-serif;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.24);
-  color:#DA5252;
+  color: rgb(255, 197, 36);
+  text-shadow: 3px 2px #ff4000;
   position:relative;
 }
 
 .youLose {
-  background:#EEF0F3;
+  /*background:#EEF0F3;*/
   z-index:5;
   position:absolute;
   top:35%;
@@ -418,18 +429,22 @@ body {
   height:30%;
   border-radius:10px;
   text-align: center;
+  background-image: url(images/spacebackground.jpg);
 }
 
 .youLose button {
-  background:#EEF0F3;
-  position:relative;
-  border:none;
+  background: #742CA9;
+  position: relative;
+  border: none;
+  border-radius: 10px;
+  color: rgb(255, 197, 36);
+  text-shadow: 3px 2px #ff4000;
 }
 
 .youLose h2 {
   font-family: Poppins, sans-serif;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.24);
-  color:#DA5252;
+  color: rgb(255, 197, 36);
+  text-shadow: 3px 2px #ff4000;
   position:relative;
 }
 
