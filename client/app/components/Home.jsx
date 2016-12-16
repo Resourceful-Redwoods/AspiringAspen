@@ -15,13 +15,14 @@ class Home extends React.Component {
       username: '',
       hasUsername: false,
       showForm: true,
-      showLeaderBoard: false
+      showLeaderBoard: false,
     };
   }
 
   componentDidMount () {
     // get new userdata on mount
     this.props.socket.emit('send me userdata', this._receiveUserData.bind(this));
+    this.props.socket.on('userdata updated', this._receiveUserData.bind(this));
     // listen to see if there is a match
     this.props.socket.on('enter game', this._enterGame.bind(this));
     TweenMax.fromTo('.titlebar', 1.25, {y: -900, opacity: 0.8}, {y: 0, opacity: 1, ease: Expo.easeOut, delay: 0.35});
@@ -30,10 +31,13 @@ class Home extends React.Component {
     TweenMax.fromTo('.nameForm', 1.25, {opacity: 0}, {opacity: 1, ease: Expo.easeOut, delay: 3});
   }
 
-  componentWillUnmount() {}
+  componentWillUnmount() {
+    this.props.socket.removeListener('userdata update', this._receiveUserData.bind(this));
+  }
 
   _receiveUserData(users) {
     this.setState({users: users});
+    console.log(this.state.users);
   }
 
   _enterGame() {

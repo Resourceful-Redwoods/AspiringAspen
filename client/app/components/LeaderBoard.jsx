@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
+import _ from 'lodash';
 
 class LeaderBoard extends React.Component {
   constructor(props) {
@@ -19,6 +20,17 @@ class LeaderBoard extends React.Component {
   componentWillUnmount() {
     const el = ReactDOM.findDOMNode(this);
     TweenMax.fromTo('.waiting', 0.7, {y: 0, opacity: 1}, {y: -100, opacity: 0, ease: Expo.easeOut});
+  }
+
+  componentWillReceiveProps(newprops) {
+
+    if (!_.isEqual(this.props, newprops)) {
+      this.setState({
+        leaders: newprops.users.sort((a, b) => (a.wins / a.losses) < (b.wins / b.losses))
+                          .slice(0, 10)
+      });
+    }
+
   }
 
   render () {

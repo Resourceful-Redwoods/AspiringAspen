@@ -7,6 +7,16 @@ var Users = require('./db/usermodel.js');
 let waiting = [];
 let rooms = {};
 
+// Alerts front end that user data has changed
+const socketUpdateUsers = function() {
+  Users.find().exec((err, users)=>{
+    if (err) {
+      console.log(err);
+    }
+    io.sockets.emit('userdata updated', users);
+  });
+};
+
 // Returns the socket matching the socket id, if connected
 const getSocket = function (socketId) {
   let socket = io.sockets.connected[socketId];
@@ -167,6 +177,12 @@ const play = function (socket) {
     socket.emit('enter game');
     opponent.emit('enter game');
     makeRoom(socket, opponent);
+    Users.update({name: socket.data.username}, {$set: { status: 'in game'}}, function(err, user) {
+      if (err) {
+        console.error(err);
+      }
+      socketUpdateUsers();
+    });
   } else {
     queue(socket);
   }
@@ -179,6 +195,13 @@ const leaveGame = function (socket) {
     socket.data.gameState = 'idle';
     delete socket.data.room;
     delete socket.data.opponent;
+    Users.update({name: socket.data.username}, {$set: { status: 'online'}}, function(err, user) {
+      if (err) {
+        console.error(err);
+      }
+      socketUpdateUsers();
+    });
+
     console.log(`User exited game - ${chalk.red(socket.id)}`);
   }
 };
@@ -236,9 +259,11 @@ const socketSetUsernameListener = function (socket) {
           name: name,
           wins: 0,
           losses: 0,
-          status: 'online'
+          // status: 'online'
         }, function(err, user) {
           socket.data.username = user.name;
+          socketUpdateUsers();
+          // socketSendUsers(socket);
         });
       } else {
         Users.update({name: name}, {$set: { status: 'online'}}, function(err, user) {
@@ -247,6 +272,7 @@ const socketSetUsernameListener = function (socket) {
           }
         });
         socket.data.username = user.name;
+        socketUpdateUsers();
       }
     });
   });
@@ -263,6 +289,7 @@ const socketChatMessageListener = function (socket) {
   });
 };
 
+
 const socketDisconnectListener = function(socket) {
   socket.on('disconnect', function() {
     let gameState = socket.data.gameState;
@@ -275,6 +302,12 @@ const socketDisconnectListener = function(socket) {
     if (gameState === 'playing') {
       declareWinner(getOpponent(socket));
     }
+    Users.update({name: socket.data.username}, {$set: { status: 'offline'}}, function(err, user) {
+      if (err) {
+        console.error(err);
+      }
+      socketUpdateUsers();
+    });
   });
 };
 
@@ -332,12 +365,15 @@ const socketPlayCardListener = function(socket) {
           if (err) {
             console.error(err);
           }
+          socketUpdateUsers();
         });
         Users.update({name: opponent.data.username}, {$inc: { losses: 1}}, function(err, user) {
           if (err) {
             console.error(err);
           }
+          socketUpdateUsers();
         });
+
 
       } else if (room.game.rounds.wins[opponent.id] >= room.game.rounds.total / 2) {
         declareWinner(opponent);
@@ -345,11 +381,13 @@ const socketPlayCardListener = function(socket) {
           if (err) {
             console.error(err);
           }
+          socketUpdateUsers();
         });
         Users.update({name: opponent.data.username}, {$inc: { wins: 1}}, function(err, user) {
           if (err) {
             console.error(err);
           }
+          socketUpdateUsers();
         });
       } else {
       // Removes the selected card from the players' hands
