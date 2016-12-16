@@ -114,8 +114,6 @@ const newGame = function (sock1, sock2, size = 5) {
 
     rooms[room] = match;
 
-    console.log(`Made Room: ${chalk.yellow(room)} with ${chalk.red(sock1.id)} & ${chalk.red(sock2.id)}`);
-
     sock1.emit('opponent username', sock2.data.username);
     sock2.emit('opponent username', sock1.data.username);
 
@@ -147,7 +145,11 @@ const makeRoom = function (sock1, sock2) {
   sock1.join(room);
   sock2.join(room);
 
-  rooms[room] = newGame(sock1, sock2);
+  io.to(room).emit('push chat message', {message: 'Only one of you will walk away from this...', user: 'admin'});
+
+  console.log(`Made Room: ${chalk.yellow(room)} with ${chalk.red(sock1.id)} & ${chalk.red(sock2.id)}`);
+
+  newGame(sock1, sock2);
 };
 
 /*
@@ -162,8 +164,8 @@ const play = function (socket) {
     }
 
     // Alerts the client that a match has been found
-    socket.emit('enter game', opponent.data.username);
-    opponent.emit('enter game', socket.data.username);
+    socket.emit('enter game');
+    opponent.emit('enter game');
     makeRoom(socket, opponent);
   } else {
     queue(socket);
@@ -193,12 +195,6 @@ const declareWinner = function (winner) {
     console.log(`${chalk.red(loser.data.opponent)} ${chalk.magenta('wins')}`);
     loser.emit('game end', 'lose');
   }
-};
-
-const socketExitGameListener = function(socket) {
-  socket.on('game exit', function() {
-    leaveGame(socket);
-  });
 };
 
 const socketQueueListener = function (socket) {
@@ -366,6 +362,43 @@ const socketSendUsersListener = function(socket) {
   });
 };
 
+const socketExitGameListener = function(socket) {
+  socket.on('game exit', function() {
+    var opponent = getOpponent(socket);
+    if (opponent) {
+      opponent.emit('opponent exited');
+      io.to(socket.data.room).emit('push chat message', {message: `${opponent.data.username} has left the game.`, user: 'admin'});
+    }
+    leaveGame(socket);
+  });
+};
+
+const socketRematchRequestListener = function(socket) {
+  socket.on('rematch', function() {
+    var opponent = getOpponent(socket);
+    if (!socket.data.rematchSelf) { // only broadcast 'wants to rematch' message once
+      io.to(socket.data.room).emit('push chat message', {message: `${opponent.data.username} wants to rematch.`, user: 'admin'});
+    }
+    opponent.data.rematchOpponent = true;
+    socket.data.rematchSelf = true;
+    if (socket.data.rematchOpponent) { // if both want a rematch
+      console.log(`${chalk.red(socket.id)} and ${chalk.red(socket.data.opponent)} want to have a rematch!`);
+      io.to(socket.data.room).emit('rematch accepted');
+      io.to(socket.data.room).emit('push chat message', {message: `${socket.data.username} and ${opponent.data.username} will battle to the death once again.`, user: 'admin'});
+      opponent.data.rematchOpponent = false;
+      opponent.data.rematchSelf = false;
+      socket.data.rematchSelf = false;
+      socket.data.rematchOpponent = false;
+      // make sure the order of socket ids matches the current room name
+      if (socket.data.room === socket.id + socket.data.opponent) {
+        newGame(socket, opponent);
+      } else if (socket.data.room === socket.data.opponent + socket.id) {
+        newGame(opponent, socket);
+      }
+    }
+  });
+};
+
 module.exports = {
   socketExitGameListener: socketExitGameListener,
   socketQueueListener: socketQueueListener,
@@ -373,5 +406,6 @@ module.exports = {
   socketChatMessageListener: socketChatMessageListener,
   socketDisconnectListener: socketDisconnectListener,
   socketPlayCardListener: socketPlayCardListener,
-  socketSendUsersListener: socketSendUsersListener
+  socketSendUsersListener: socketSendUsersListener,
+  socketRematchRequestListener: socketRematchRequestListener
 };

@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import TweenMax from 'gasp';
 
 class GameOver extends React.Component {
   constructor(props) {
@@ -18,7 +17,16 @@ class GameOver extends React.Component {
         <div className='gameOver youWin z-depth-5 valign-wrapper'>
           <div className='valign center-block'>
             <h2>{this.props.winner === 'win' ? 'YOU WIN' : 'YOU LOSE'}</h2>
-            <button onClick={this.props.exitGame}>Exit</button>
+            <button
+              className={
+                'btn ' +
+                (this.props.opponentExited ? 'disabled' : 'enabled')
+              }
+              onClick={this.props.rematch}
+              >
+              Rematch
+            </button>
+            <button className='btn' onClick={this.props.exitGame}>Exit</button>
           </div>
         </div>
       </div>
