@@ -33,11 +33,14 @@ io.on('connection', function(socket) {
   // Sends chat messages to sender & sender's opponent (only sends messages while in a game)
   socketHelpers.socketChatMessageListener(socket);
 
-  // Listen for disconnected users
+  // Listens for disconnected users
   socketHelpers.socketDisconnectListener(socket);
 
   // Listens for played cards & handles checking logic
   socketHelpers.socketPlayCardListener(socket);
+
+  // Listens for game exits
+  socketHelpers.socketExitGameListener(socket);
 });
 
 const port = process.env.PORT || 3000;

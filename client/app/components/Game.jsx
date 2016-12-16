@@ -50,7 +50,7 @@ class Game extends React.Component {
     this.props.socket.on('card played', this._getPlayedCard.bind(this));
     this.props.socket.on('round end', this._getRoundOutcome.bind(this));
     this.props.socket.on('game end', this._getGameOutcome.bind(this));
-    this.props.socket.on('chat message', this._getChatMessage.bind(this));
+    this.props.socket.on('push chat message', this._getChatMessage.bind(this));
     this.props.socket.on('opponent card', this._setOpponentCard.bind(this));
     this.props.socket.on('opponent username', this._setOpponentUsername.bind(this));
   }
@@ -127,12 +127,11 @@ class Game extends React.Component {
     var change = _.extend({}, this.state);
     change.game.gameWinner = outcome.toString();
     change.game.gameOver = true;
-    setTimeout(() =>
-      this.setState(change)
-    , 4000);
+    this.setState(change);
   }
 
   _getChatMessage(data) {
+    console.log(data);
     // get the chat message from the server
     var message = $('<li class="message"></li>');
 
@@ -181,15 +180,18 @@ class Game extends React.Component {
   }
 
   exitGame() {
+    // tell the server that you have exited the game
+    this.props.socket.emit('game exit');
     // allow a user to go back to home screen
     this.props.router.push('/');
+    this.props.socket.removeAllListeners();
   }
 
   handleChatClick(e) {
     // when a user adds a message
     e.preventDefault();
     if ( $('#m').val() !== '' ) {
-      this.props.socket.emit('chat message', $('#m').val());
+      this.props.socket.emit('user chat message', $('#m').val());
     }
     $('#m').val('');
     return false;
@@ -199,7 +201,7 @@ class Game extends React.Component {
     // when a user adds a message
     e.preventDefault();
     if ( $('#m').val() !== '' ) {
-      this.props.socket.emit('chat message', $('#m').val());
+      this.props.socket.emit('user chat message', $('#m').val());
     }
     $('#m').val('');
     return false;
@@ -209,11 +211,11 @@ class Game extends React.Component {
     if (name === 'Desert Planet') {
       return 'The air smells of gunpowder and dust. The cowboy feels right at home';
     } else if (name === 'Forest Planet') {
-      return 'The trees throw many shadows. A samurai\'s practiced step allows for silent movement'
+      return 'The trees throw many shadows. A samurai\'s practiced step allows for silent movement';
     } else if (name === 'Metropolis Planet') {
-      return 'The Grand Library holds many of the Universe\'s secrects, wizards gather from accross the stars to increase their knowledge'
+      return 'The Grand Library holds many of the Universe\'s secrects, wizards gather from accross the stars to increase their knowledge';
     } else {
-      return 'The nuetral zone of the Space Station is a respot for people of all abilities'
+      return 'The nuetral zone of the Space Station is a respot for people of all abilities';
     }
   }
 

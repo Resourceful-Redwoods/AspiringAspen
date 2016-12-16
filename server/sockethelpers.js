@@ -177,6 +177,7 @@ const leaveGame = function (socket) {
     socket.data.gameState = 'idle';
     delete socket.data.room;
     delete socket.data.opponent;
+    console.log(`User exited game - ${chalk.red(socket.id)}`);
   }
 };
 
@@ -191,9 +192,13 @@ const declareWinner = function (winner) {
   if (loser) {
     console.log(`${chalk.red(loser.data.opponent)} ${chalk.magenta('wins')}`);
     loser.emit('game end', 'lose');
-    leaveGame(loser);
   }
-  leaveGame(winner);
+};
+
+const socketExitGameListener = function(socket) {
+  socket.on('game exit', function() {
+    leaveGame(socket);
+  });
 };
 
 const socketQueueListener = function (socket) {
@@ -236,12 +241,13 @@ const socketSetUsernameListener = function (socket) {
 };
 
 const socketChatMessageListener = function (socket) {
-  socket.on('chat message', function(msg) {
+  socket.on('user chat message', function(msg) {
     let message = {
       message: msg,
       user: socket.id
     };
-    io.to(socket.data.room).emit('chat message', message);
+
+    io.to(socket.data.room).emit('push chat message', message);
   });
 };
 
@@ -359,6 +365,7 @@ const socketSendUsers = function(socket) {
 };
 
 module.exports = {
+  socketExitGameListener: socketExitGameListener,
   socketQueueListener: socketQueueListener,
   socketSetUsernameListener: socketSetUsernameListener,
   socketChatMessageListener: socketChatMessageListener,
