@@ -131,7 +131,6 @@ class Game extends React.Component {
   }
 
   _getChatMessage(data) {
-    console.log(data);
     // get the chat message from the server
     var message = $('<li class="message"></li>');
 
