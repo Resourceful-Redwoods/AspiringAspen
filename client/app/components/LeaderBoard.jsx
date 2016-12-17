@@ -38,29 +38,38 @@ class LeaderBoard extends React.Component {
 
   render () {
     return (
-    <div className='cover' onClick={this.props.onShowLeaderBoard}>
-      <div className='leaderboard z-depth-5'>
-        <h3 className='center-align'>LEADER BOARD</h3>
-        <ul className="collection">
-          {this.state.leaders.map((leader, key) => {
-            return (
-              <li key={key} className="collection-item avatar">
-                <h5>{key + 1}. {leader.name}</h5>
-                <p className="secondary-content">Wins: {leader.wins}<br />
-                   Losses: {leader.losses}
-                </p>
-                {leader.status};
-              </li>
-            );
-          })}
-        </ul>
+      <div className='cover'>
+        <div className='leaderboard z-depth-5'>
+          <h3 className='center-align'>LEADER BOARD</h3>
+          <ul className="collection">
+            {this.state.leaders.map((leader, key) => {
+              return (
+                <li key={key} className="collection-item">
+                  <div style={{'display': 'flex', 'alignItems': 'center'}}>
+                    <h5 style={{'flexGrow': '5'}}>{key + 1}. {leader.name}</h5>
+                    <p style={{'flexGrow': '1'}}>Wins: {leader.wins} <br/> Losses: {leader.losses}</p>
+                    {leader.status};
+                    <button style={{'flexGrow': '1'}} className='btn'>Challenge</button>
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+          <div className='center-align'>
+            <button className='btn' onClick={this.props.onShowLeaderBoard}>
+              Close
+            </button>
+            <br/>
+            <br/>
+          </div>
+        </div>
       </div>
-    </div>
     );
   }
 }
 
 LeaderBoard.propTypes = {
+  onShowLeaderBoard: PropTypes.func.isRequired
 };
 
 export default LeaderBoard;

@@ -232,6 +232,9 @@ const declareWinner = function (winner) {
   }
 };
 
+// Listeners
+
+
 const socketQueueListener = function (socket) {
   socket.on('queue', function(action) {
     console.log(`${chalk.red(socket.id)} wants to ${chalk.green(action)}`);
