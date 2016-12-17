@@ -91,7 +91,7 @@ class Home extends React.Component {
   render() {
     let gameState = this.state.gameState;
     return (
-      <div id='home' className='wrapper'>
+      <div id='home' className='wrapper' onClick={this.props.handleHideLeaderBoard}>
       <audio src="./audio/Motivated.mp3" autoPlay loop><p>Your browser does not support the <code>audio</code> element</p></audio>
 
         <div className='row'>
