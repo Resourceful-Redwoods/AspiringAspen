@@ -206,6 +206,19 @@ body {
 
 .leaderboard h3 {
   padding-top: 20px;
+  background-image: url(images/spacebackground.jpg);
+  color: rgb(255, 197, 36);
+  text-shadow: 3px 2px #ff4000;
+}
+
+.leaderboardFooter {
+   background-image: url(images/spacebackground.jpg);
+}
+.leaderboardFooter button {
+  background: #742CA9;
+  color: rgb(255, 197, 36);
+  border-radius: 25%;
+  text-shadow: 1px 0px #ff4000;
 }
 
 .signinup {
@@ -224,7 +237,7 @@ body {
   top:2%;
   left:9%;
   color: #ffc524;
-  cursor: pointer; 
+  cursor: pointer;
 }
 .outcome {
   /*background:#EEF0F3;*/
@@ -361,6 +374,11 @@ body {
 
 .selected {
   background:red;
+}
+
+.leaderHolder{
+  height: 10%;
+
 }
 
 .playbtn {

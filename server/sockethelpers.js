@@ -56,7 +56,7 @@ const queue = function (socket) {
     waiting.push(socket.id);
     socket.data.gameState = 'waiting';
   }
-  changeUserStatus(socket.data.username, 'online');
+  // changeUserStatus(socket.data.username, 'online');
 };
 
 // Removes a client from the queue, if they are waiting to play
@@ -277,10 +277,10 @@ const socketSetUsernameListener = function (socket) {
           status: 'online'
         }, function(err, user) {
           socket.data.username = user.name;
+          changeUserStatus(socket.data.username, 'online');
         });
       } else {
         socket.data.username = user.name;
-        // changeUserStatus(user.name, 'online');
       }
     });
   });
@@ -452,6 +452,7 @@ const socketCheckAuth = function (socket) {
         socket.emit('checkedAuth', false);
       } else {
         socket.emit('checkedAuth', true);
+        changeUserStatus(user.name, 'online');
       }
     });
   });

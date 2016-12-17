@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import _ from 'lodash';
+import OnlineBadge from './OnlineBadge.jsx';
 
 class LeaderBoard extends React.Component {
   constructor(props) {
@@ -41,26 +42,39 @@ class LeaderBoard extends React.Component {
       <div className='cover'>
         <div className='leaderboard z-depth-5'>
           <h3 className='center-align'>LEADER BOARD</h3>
-          <ul className="collection">
-            {this.state.leaders.map((leader, key) => {
-              return (
-                <li key={key} className="collection-item">
-                  <div style={{'display': 'flex', 'alignItems': 'center'}}>
-                    <h5 style={{'flexGrow': '5'}}>{key + 1}. {leader.name}</h5>
-                    <p style={{'flexGrow': '1'}}>Wins: {leader.wins} <br/> Losses: {leader.losses}</p>
-                    {leader.status};
-                    <button style={{'flexGrow': '1'}} className='btn'>Challenge</button>
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
+          <div className='leaderHolder'>
+            <ul className="collection">
+              {this.state.leaders.map((leader, key) => {
+                return (
+                  <li key={key} className="collection-item"
+                  style={{'backgroundColor': '#e1e2e3'}}>
+                    <div style={{'display': 'flex', 'alignItems': 'center'}}>
+                      <div style={{'flexGrow': '7'}}>
+                        <h5 style={{'flexGrow': '5'}}>{key + 1}. {leader.name}</h5>
+                        <p style={{'flexGrow': '1', 'marginLeft': '4px' }}>Wins: {leader.wins} &nbsp; Losses: {leader.losses}</p>
+                      </div>
+                      <OnlineBadge status={leader.status}/>
+                      <button style={{
+                        'flexGrow': '0',
+                        'background': '#742CA9',
+                        'color': 'rgb(255, 197, 36)',
+                        'textShadow': '1px 0px #ff4000',
+                        'borderRadius': '25%'
+                      }} className='btn'>Challenge</button>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
           <div className='center-align'>
-            <button className='btn' onClick={this.props.onShowLeaderBoard}>
-              Close
-            </button>
-            <br/>
-            <br/>
+            <div className='leaderboardFooter'>
+              <button className='btn' onClick={this.props.onShowLeaderBoard}>
+                Close
+              </button>
+              <br/>
+              <br/>
+            </div>
           </div>
         </div>
       </div>
