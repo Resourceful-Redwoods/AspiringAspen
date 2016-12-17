@@ -17,7 +17,8 @@ class Home extends React.Component {
       hasUsername: false,
       showForm: true,
       showLeaderBoard: false,
-      showSignIn: false
+      showSignIn: false,
+      showSignInBtn: true
     };
   }
 
@@ -84,22 +85,22 @@ class Home extends React.Component {
     this.props.socket.emit('queue', 'dequeue');
   }
 
-  handleUsernameChange(e) {
-    // when a user types in the form, set that value to be the username state and that the username has a username
-    this.setState({username: e.target.value});
-    this.setState({ hasUsername: true });
-  }
+  // handleUsernameChange(e) {
+  //   // when a user types in the form, set that value to be the username state and that the username has a username
+  //   this.setState({username: e.target.value});
+  //   this.setState({ hasUsername: true });
+  // }
 
-  handleSubmit(e) {
-    e.preventDefault();
-    // submit is not allowed if there is no username
-    if ( this.state.username !== '' ) {
-      this.setState({ hasUsername: true, showForm: false });
+  handleSignIn(username, password) {
+    console.log('username', username)
+    this.setState({username: username, hasUsername: true, showSignIn: false, showSignInBtn:false});
       // emits the username to the server
-      this.props.socket.emit('set username', this.state.username);
+   
+    this.props.socket.emit('set username', username)
       // fires playNow
-      this.playNow();
-    }
+      // this.playNow();
+
+    
   }
 
   render() {
@@ -111,9 +112,9 @@ class Home extends React.Component {
         <div className='row'>
           <div className ='spacebackground' className="titlebar col s12">
             <div className='center-block'>
-                { this.state.showSignIn ? (
-                <SignIn onShowSignIn={this.handleShowSignIn.bind(this)}/>
-              ) : <button className='signin-button z-depth-2' onClick={this.handleShowSignIn.bind(this)}> Sign In </button> }
+              { this.state.showSignIn ? (
+                <SignIn socket={this.props.socket} handleSignIn={this.handleSignIn.bind(this)} />) : null }
+              {this.state.showSignInBtn ? (<button className='signin-button z-depth-2' onClick={this.handleShowSignIn.bind(this)}> Sign In </button>) : null}
             </div>
             <h1>Space</h1>
             <img className='cardIcon' src='images/spaceship4.png'></img>

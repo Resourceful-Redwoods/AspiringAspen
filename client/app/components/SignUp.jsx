@@ -1,5 +1,5 @@
  import React, { PropTypes } from 'react';
- import ReactDOM from 'react-DOM';
+ import ReactDOM from 'react-dom';
 
  class SignUp extends React.Component {
  	constructor(props) {
