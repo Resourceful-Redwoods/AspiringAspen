@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import LeaderBoard from './LeaderBoard.jsx';
+import SignIn from './SignIn.jsx'
+import SignUp from './SignUp.jsx'
 import Waiting from './Waiting.jsx';
 import Game from './Game.jsx';
 import ReactAudioPlayer from 'react-audio-player';
@@ -16,6 +18,10 @@ class Home extends React.Component {
       hasUsername: false,
       showForm: true,
       showLeaderBoard: false,
+      showSignIn: false,
+      showSignUp: false,
+      showSignUpBtn: true,
+      showSignInBtn: true
     };
   }
 
@@ -63,6 +69,8 @@ class Home extends React.Component {
     }
   }
 
+  
+
   cancelMatchmaking () {
     // cancels match making and tells server
     this.setState({ gameState: 'idle' });
@@ -70,22 +78,44 @@ class Home extends React.Component {
     this.props.socket.emit('queue', 'dequeue');
   }
 
-  handleUsernameChange(e) {
-    // when a user types in the form, set that value to be the username state and that the username has a username
-    this.setState({username: e.target.value});
-    this.setState({ hasUsername: true });
+  // handleUsernameChange(e) {
+  //   // when a user types in the form, set that value to be the username state and that the username has a username
+  //   this.setState({username: e.target.value});
+  //   this.setState({ hasUsername: true });
+  // }
+
+  handleShowSignIn () {
+    if (this.state.showSignIn) {
+      this.setState({
+        showSignIn: false
+      });
+    } else {
+      this.setState({
+        showSignIn: true
+      });
+    }
   }
 
-  handleSubmit(e) {
-    e.preventDefault();
-    // submit is not allowed if there is no username
-    if ( this.state.username !== '' ) {
-      this.setState({ hasUsername: true, showForm: false });
-      // emits the username to the server
-      this.props.socket.emit('set username', this.state.username);
-      // fires playNow
-      this.playNow();
+  handleFormSubmit(username, password) {
+    //sets the username state and hides the signin and sign out components.
+    this.setState({username: username, hasUsername: true, showSignIn: false, showSignUp: false, showSignUpBtn: false, showSignInBtn:false});  
+  }
+
+  handleShowSignUp () {
+    if (this.state.showSignUp) {
+      this.setState({
+        showSignUp: false
+      });
+    } else {
+      this.setState({
+        showSignUp: true
+      });
     }
+  }
+ 
+  handleSignUp (username, password) {
+    this.setState({/*username: username*/ hasUsername: true, showSignUp: false, showSignUpBtn: false, showSignInBtn:false});
+
   }
 
   render() {
@@ -96,6 +126,15 @@ class Home extends React.Component {
 
         <div className='row'>
           <div className ='spacebackground' className="titlebar col s12">
+            <div className='center-block'>
+              { this.state.showSignIn ? (
+                <SignIn socket={this.props.socket} handleFormSubmit={this.handleFormSubmit.bind(this)} />) : null }
+              {this.state.showSignInBtn ? (<a className='signin-button z-depth-2' onClick={this.handleShowSignIn.bind(this)}> Sign In </a>) : null}
+
+              { this.state.showSignUp ? (
+                <SignUp socket={this.props.socket} handleFormSubmit={this.handleFormSubmit.bind(this)} />) : null }
+              {this.state.showSignUpBtn ? (<a className='signup-button z-depth-2' onClick={this.handleShowSignUp.bind(this)}> Sign Up </a>) : null}
+            </div>
             <h1>Space</h1>
             <img className='cardIcon' src='images/spaceship4.png'></img>
           </div>
@@ -105,15 +144,6 @@ class Home extends React.Component {
         <div className='row lower'>
           <div id='' className='col s12'>
           <h1>STOMP</h1>
-            <div className='center-block'>
-              { this.state.showForm ? (
-              <form className='nameForm' onSubmit={this.handleSubmit.bind(this)}>
-                <label>
-                  <input type="text" placeholder='enter a name' name="name" onChange={this.handleUsernameChange.bind(this)}/>
-                </label>
-              </form>
-            ) : null }
-            </div>
             <button className='leaderboard-button' onClick={this.handleShowLeaderBoard.bind(this)}>BOUNTY BOARD</button>
             { this.state.hasUsername ? <button className='play-button' onClick={ this.playNow.bind(this) }>PLAY <img src='img/playBtn.svg'></img> </button> : null }
           </div>

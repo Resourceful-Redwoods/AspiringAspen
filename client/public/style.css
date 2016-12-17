@@ -208,6 +208,24 @@ body {
   padding-top: 20px;
 }
 
+.signinup {
+  color: #ffc524;
+  margin: 2%;
+}
+
+.signin-button {
+  position: fixed;
+  top: 2%;
+  color: #ffc524;
+  cursor: pointer;
+}
+.signup-button {
+  position:fixed;
+  top:2%;
+  left:9%;
+  color: #ffc524;
+  cursor: pointer; 
+}
 .outcome {
   /*background:#EEF0F3;*/
   z-index:6;
@@ -457,7 +475,7 @@ body {
   position: absolute;
   background-color:rgba(238, 240, 243, 0.4);
   z-index:5;
-  padding:0;
+  padding:2%;
   margin:0;
 }
 
