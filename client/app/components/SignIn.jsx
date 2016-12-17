@@ -7,11 +7,12 @@
 
  		this.state = {
  			username: '',
- 			password: ''
-
+ 			password: '',
  		}
  	}
 	componentDidMount() {
+		this.props.socket.on('checkedAuth', function(bool){this.handleCheckedAuth(bool)}.bind(this));
+
     const el = ReactDOM.findDOMNode(this);
     TweenMax.fromTo('.waiting', 0.7, {y: -100, opacity: 0}, {y: 0, opacity: 1, ease: Expo.easeOut});
   }
@@ -31,8 +32,20 @@
   		return;
   	}
   	//check username against database
+  	this.props.socket.emit('checkAuth', {username:username, password:password})
+  }
+
+  handleCheckedAuth (bool) {
+		var checkedAuth = bool;
   	//check password against database
-  	this.props.handleSignIn(username, password)
+  	if(checkedAuth) {
+      //unrenders form and changes username state in Home.jsx
+  		this.props.handleFormSubmit(this.state.username, this.state.password);
+  		// emits the username to the server
+	    this.props.socket.emit('set username', this.state.username)
+  	} else {
+  		alert('Username and password are not correct.');
+  	}
   }
 
 	handleUsernameChange (e) {

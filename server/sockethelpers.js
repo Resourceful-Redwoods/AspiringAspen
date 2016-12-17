@@ -440,6 +440,23 @@ const socketRematchRequestListener = function(socket) {
   });
 };
 
+const socketCheckAuth = function (socket) {
+  socket.on('checkAuth', function(loginDataObj) {
+    Users.findOne({name: loginDataObj.username})
+    .exec((err, user)=>{
+      if (err) {
+        console.error(err);
+        return;
+      }
+      if (!user) {
+        socket.emit('checkedAuth', false);
+      } else {
+        socket.emit('checkedAuth', true);
+      }
+    });
+  });
+};
+
 module.exports = {
   socketExitGameListener: socketExitGameListener,
   socketQueueListener: socketQueueListener,
@@ -448,5 +465,6 @@ module.exports = {
   socketDisconnectListener: socketDisconnectListener,
   socketPlayCardListener: socketPlayCardListener,
   socketSendUsersListener: socketSendUsersListener,
-  socketRematchRequestListener: socketRematchRequestListener
+  socketRematchRequestListener: socketRematchRequestListener,
+  socketCheckAuth: socketCheckAuth
 };

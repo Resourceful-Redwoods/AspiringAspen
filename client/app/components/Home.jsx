@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import LeaderBoard from './LeaderBoard.jsx';
 import SignIn from './SignIn.jsx'
+import SignUp from './SignUp.jsx'
 import Waiting from './Waiting.jsx';
 import Game from './Game.jsx';
 import ReactAudioPlayer from 'react-audio-player';
@@ -18,6 +19,8 @@ class Home extends React.Component {
       showForm: true,
       showLeaderBoard: false,
       showSignIn: false,
+      showSignUp: false,
+      showSignUpBtn: true,
       showSignInBtn: true
     };
   }
@@ -66,17 +69,7 @@ class Home extends React.Component {
     }
   }
 
-  handleShowSignIn () {
-    if (this.state.showSignIn) {
-      this.setState({
-        showSignIn: false
-      });
-    } else {
-      this.setState({
-        showSignIn: true
-      });
-    }
-  }
+  
 
   cancelMatchmaking () {
     // cancels match making and tells server
@@ -91,16 +84,38 @@ class Home extends React.Component {
   //   this.setState({ hasUsername: true });
   // }
 
-  handleSignIn(username, password) {
-    console.log('username', username)
-    this.setState({username: username, hasUsername: true, showSignIn: false, showSignInBtn:false});
-      // emits the username to the server
-   
-    this.props.socket.emit('set username', username)
-      // fires playNow
-      // this.playNow();
+  handleShowSignIn () {
+    if (this.state.showSignIn) {
+      this.setState({
+        showSignIn: false
+      });
+    } else {
+      this.setState({
+        showSignIn: true
+      });
+    }
+  }
 
-    
+  handleFormSubmit(username, password) {
+    //sets the username state and hides the signin and sign out components.
+    this.setState({username: username, hasUsername: true, showSignIn: false, showSignUp: false, showSignUpBtn: false, showSignInBtn:false});  
+  }
+
+  handleShowSignUp () {
+    if (this.state.showSignUp) {
+      this.setState({
+        showSignUp: false
+      });
+    } else {
+      this.setState({
+        showSignUp: true
+      });
+    }
+  }
+ 
+  handleSignUp (username, password) {
+    this.setState({/*username: username*/ hasUsername: true, showSignUp: false, showSignUpBtn: false, showSignInBtn:false});
+
   }
 
   render() {
@@ -113,8 +128,12 @@ class Home extends React.Component {
           <div className ='spacebackground' className="titlebar col s12">
             <div className='center-block'>
               { this.state.showSignIn ? (
-                <SignIn socket={this.props.socket} handleSignIn={this.handleSignIn.bind(this)} />) : null }
-              {this.state.showSignInBtn ? (<button className='signin-button z-depth-2' onClick={this.handleShowSignIn.bind(this)}> Sign In </button>) : null}
+                <SignIn socket={this.props.socket} handleFormSubmit={this.handleFormSubmit.bind(this)} />) : null }
+              {this.state.showSignInBtn ? (<a className='signin-button z-depth-2' onClick={this.handleShowSignIn.bind(this)}> Sign In </a>) : null}
+
+              { this.state.showSignUp ? (
+                <SignUp socket={this.props.socket} handleFormSubmit={this.handleFormSubmit.bind(this)} />) : null }
+              {this.state.showSignUpBtn ? (<a className='signup-button z-depth-2' onClick={this.handleShowSignUp.bind(this)}> Sign Up </a>) : null}
             </div>
             <h1>Space</h1>
             <img className='cardIcon' src='images/spaceship4.png'></img>
