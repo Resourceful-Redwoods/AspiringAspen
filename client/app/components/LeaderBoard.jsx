@@ -7,30 +7,33 @@ class LeaderBoard extends React.Component {
     super(props);
 
     this.state = {
-      leaders: props.users.sort((a, b) => (a.wins / a.losses) < (b.wins / b.losses))
-                          .slice(0, 10)
+      leaders: []
     };
   }
 
   componentDidMount() {
     const el = ReactDOM.findDOMNode(this);
     TweenMax.fromTo('.waiting', 0.7, {y: -100, opacity: 0}, {y: 0, opacity: 1, ease: Expo.easeOut});
+    console.log(this.props);
+    this.props.socket.emit('send me userdata', this._receiveUserData.bind(this));
+
+    this.props.socket.on('userdata updated', ()=> {
+      this.props.socket.emit('send me userdata', this._receiveUserData.bind(this));
+    });
   }
 
   componentWillUnmount() {
     const el = ReactDOM.findDOMNode(this);
     TweenMax.fromTo('.waiting', 0.7, {y: 0, opacity: 1}, {y: -100, opacity: 0, ease: Expo.easeOut});
+
+    this.props.socket.removeListener('userdata updated', ()=> {
+      this.props.socket.emit('send me userdata', this._receiveUserData.bind(this));
+    });
   }
 
-  componentWillReceiveProps(newprops) {
-
-    if (!_.isEqual(this.props, newprops)) {
-      this.setState({
-        leaders: newprops.users.sort((a, b) => (a.wins / a.losses) < (b.wins / b.losses))
-                          .slice(0, 10)
-      });
-    }
-
+  _receiveUserData(users) {
+    this.setState({leaders: users.sort((a, b) => (a.wins / a.losses) < (b.wins / b.losses))
+                          .slice(0, 10)});
   }
 
   render () {
@@ -58,7 +61,6 @@ class LeaderBoard extends React.Component {
 }
 
 LeaderBoard.propTypes = {
-  users: PropTypes.array.isRequired
 };
 
 export default LeaderBoard;

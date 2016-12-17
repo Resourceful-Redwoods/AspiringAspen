@@ -8,12 +8,27 @@ let waiting = [];
 let rooms = {};
 
 // Alerts front end that user data has changed
-const socketUpdateUsers = function() {
-  Users.find().exec((err, users)=>{
+const changeUserStatus = function(username, status) {
+  Users.update({name: username}, {$set: { status: status}}, function(err, user) {
     if (err) {
-      console.log(err);
+      console.error(err);
     }
-    io.sockets.emit('userdata updated', users);
+  });
+};
+
+const increaseUserWins = function(username) {
+  Users.update({name: username}, {$inc: { wins: 1}}, function(err, user) {
+    if (err) {
+      console.error(err);
+    }
+  });
+};
+
+const increaseUserLosses = function(username) {
+  Users.update({name: username}, {$inc: { losses: 1}}, function(err, user) {
+    if (err) {
+      console.error(err);
+    }
   });
 };
 
@@ -41,6 +56,7 @@ const queue = function (socket) {
     waiting.push(socket.id);
     socket.data.gameState = 'waiting';
   }
+  changeUserStatus(socket.data.username, 'online');
 };
 
 // Removes a client from the queue, if they are waiting to play
@@ -152,14 +168,19 @@ const makeRoom = function (sock1, sock2) {
     username: sock2.data.username || 'Guest'
   });
 
+
   sock1.join(room);
   sock2.join(room);
+
 
   io.to(room).emit('push chat message', {message: 'Only one of you will walk away from this...', user: 'admin'});
 
   console.log(`Made Room: ${chalk.yellow(room)} with ${chalk.red(sock1.id)} & ${chalk.red(sock2.id)}`);
 
   newGame(sock1, sock2);
+
+  changeUserStatus(sock1.data.username, 'in game');
+  changeUserStatus(sock2.data.username, 'in game');
 };
 
 /*
@@ -177,12 +198,7 @@ const play = function (socket) {
     socket.emit('enter game');
     opponent.emit('enter game');
     makeRoom(socket, opponent);
-    Users.update({name: socket.data.username}, {$set: { status: 'in game'}}, function(err, user) {
-      if (err) {
-        console.error(err);
-      }
-      socketUpdateUsers();
-    });
+
   } else {
     queue(socket);
   }
@@ -195,12 +211,8 @@ const leaveGame = function (socket) {
     socket.data.gameState = 'idle';
     delete socket.data.room;
     delete socket.data.opponent;
-    Users.update({name: socket.data.username}, {$set: { status: 'online'}}, function(err, user) {
-      if (err) {
-        console.error(err);
-      }
-      socketUpdateUsers();
-    });
+
+    changeUserStatus(socket.data.username, 'online');
 
     console.log(`User exited game - ${chalk.red(socket.id)}`);
   }
@@ -259,20 +271,13 @@ const socketSetUsernameListener = function (socket) {
           name: name,
           wins: 0,
           losses: 0,
-          // status: 'online'
+          status: 'online'
         }, function(err, user) {
           socket.data.username = user.name;
-          socketUpdateUsers();
-          // socketSendUsers(socket);
         });
       } else {
-        Users.update({name: name}, {$set: { status: 'online'}}, function(err, user) {
-          if (err) {
-            console.error(err);
-          }
-        });
         socket.data.username = user.name;
-        socketUpdateUsers();
+        // changeUserStatus(user.name, 'online');
       }
     });
   });
@@ -296,18 +301,14 @@ const socketDisconnectListener = function(socket) {
     console.log(`${chalk.red(socket.id)} disconnected while ${chalk.green(gameState)}`);
 
     if (gameState === 'waiting') {
+      changeUserStatus(socket.data.username, 'offline');
       return dequeue(socket);
     }
 
     if (gameState === 'playing') {
       declareWinner(getOpponent(socket));
     }
-    Users.update({name: socket.data.username}, {$set: { status: 'offline'}}, function(err, user) {
-      if (err) {
-        console.error(err);
-      }
-      socketUpdateUsers();
-    });
+    changeUserStatus(socket.data.username, 'offline');
   });
 };
 
@@ -361,34 +362,17 @@ const socketPlayCardListener = function(socket) {
     // Check if either player has won the game
       if (room.game.rounds.wins[socket.id] >= room.game.rounds.total / 2) {
         declareWinner(socket);
-        Users.update({name: socket.data.username}, {$inc: { wins: 1}}, function(err, user) {
-          if (err) {
-            console.error(err);
-          }
-          socketUpdateUsers();
-        });
-        Users.update({name: opponent.data.username}, {$inc: { losses: 1}}, function(err, user) {
-          if (err) {
-            console.error(err);
-          }
-          socketUpdateUsers();
-        });
+
+        increaseUserWins(socket.data.username);
+        increaseUserLosses(opponent.data.username);
 
 
       } else if (room.game.rounds.wins[opponent.id] >= room.game.rounds.total / 2) {
         declareWinner(opponent);
-        Users.update({name: socket.data.username}, {$inc: { losses: 1}}, function(err, user) {
-          if (err) {
-            console.error(err);
-          }
-          socketUpdateUsers();
-        });
-        Users.update({name: opponent.data.username}, {$inc: { wins: 1}}, function(err, user) {
-          if (err) {
-            console.error(err);
-          }
-          socketUpdateUsers();
-        });
+
+        increaseUserWins(opponent.data.username);
+        increaseUserLosses(socket.data.username);
+
       } else {
       // Removes the selected card from the players' hands
         delete socket.data.hand.selectedCard;
