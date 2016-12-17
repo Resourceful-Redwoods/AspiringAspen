@@ -106,7 +106,7 @@ const dealHands = function (deck, size) {
 };
 
 // Creates new game data & stores new hands for both clients
-const newGame = function (sock1, sock2, size = 1) {
+const newGame = function (sock1, sock2, size = 5) {
   return datahelpers.getAllCardsData(function(cards) {
     const room = sock1.id + sock2.id;
     let hands = dealHands(cards, size);
