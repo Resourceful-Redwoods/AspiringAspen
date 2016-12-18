@@ -45,8 +45,8 @@ class Home extends React.Component {
   // }
 
   _enterGame() {
-    // if there is a game, send the user to /game ot match up against opponent
-    this.props.socket.emit('set username', this.state.username);
+    // if there is a game, send the user to /game to match up against opponent
+    this.props.socket.emit('set username', this.state.username, this.state.password);
     this.props.router.push('/game');
   }
 
@@ -91,14 +91,10 @@ class Home extends React.Component {
       });
     } else {
       this.setState({
+        showSignUp:false,
         showSignIn: true
       });
     }
-  }
-
-  handleFormSubmit(username, password) {
-    //sets the username state and hides the signin and sign out components.
-    this.setState({username: username, hasUsername: true, showSignIn: false, showSignUp: false, showSignUpBtn: false, showSignInBtn:false});
   }
 
   handleShowSignUp () {
@@ -108,15 +104,18 @@ class Home extends React.Component {
       });
     } else {
       this.setState({
+        showSignIn: false,
         showSignUp: true
       });
     }
   }
 
-  handleSignUp (username, password) {
-    this.setState({/*username: username*/ hasUsername: true, showSignUp: false, showSignUpBtn: false, showSignInBtn:false});
-
+  handleFormSubmit(username, password) {
+    //sets the username state and hides the signin and sign out components.
+    this.setState({username: username, hasUsername: true, showSignIn: false, showSignUp: false, showSignUpBtn: false, showSignInBtn:false});  
   }
+
+ 
 
   render() {
     let gameState = this.state.gameState;
@@ -126,13 +125,15 @@ class Home extends React.Component {
 
         <div className='row'>
           <div className ='spacebackground' className="titlebar col s12">
-            <div className='center-block'>
+            <div className=''>
               { this.state.showSignIn ? (
                 <SignIn socket={this.props.socket} handleFormSubmit={this.handleFormSubmit.bind(this)} />) : null }
+
               {this.state.showSignInBtn ? (<a className='signin-button z-depth-2' onClick={this.handleShowSignIn.bind(this)}> Sign In </a>) : null}
 
               { this.state.showSignUp ? (
                 <SignUp socket={this.props.socket} handleFormSubmit={this.handleFormSubmit.bind(this)} />) : null }
+
               {this.state.showSignUpBtn ? (<a className='signup-button z-depth-2' onClick={this.handleShowSignUp.bind(this)}> Sign Up </a>) : null}
             </div>
             <h1>Space</h1>

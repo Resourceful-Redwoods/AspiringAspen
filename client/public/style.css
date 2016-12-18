@@ -230,14 +230,16 @@ body {
   position: fixed;
   top: 2%;
   color: #ffc524;
+  z-index: 10;
   cursor: pointer;
 }
 .signup-button {
   position:fixed;
   top:2%;
-  left:9%;
+  left:60px;
   color: #ffc524;
-  cursor: pointer;
+  z-index: 10;
+  cursor: pointer; 
 }
 .outcome {
   /*background:#EEF0F3;*/

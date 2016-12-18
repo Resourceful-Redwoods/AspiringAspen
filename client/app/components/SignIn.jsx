@@ -42,7 +42,7 @@
       //unrenders form and changes username state in Home.jsx
   		this.props.handleFormSubmit(this.state.username, this.state.password);
   		// emits the username to the server
-	    this.props.socket.emit('set username', this.state.username)
+	    this.props.socket.emit('set username', this.state.username, this.state.password)
   	} else {
   		alert('Username and password are not correct.');
   	}
@@ -60,13 +60,11 @@
   	return (
   		<div className='cover signinup z-depth-5'>
   			<h3 className='center-align'> Sign In </h3>
-				<form onSubmit={this.handleSubmit.bind(this)}>
   				Username
   				<input name='username' type='text' onChange={this.handleUsernameChange.bind(this)} />
   				Password
   				<input name='password' type='text' onChange={this.handlePasswordChange.bind(this)} />
-  				<input type='submit' value='Sign In' />
-  			</form>
+  				<input type='submit' value='Sign In' onClick={this.handleSubmit.bind(this)}/>
   		</div>
   	)
   }

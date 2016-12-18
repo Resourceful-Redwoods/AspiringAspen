@@ -46,8 +46,12 @@ io.on('connection', function(socket) {
   // Listens for rematch requests
   socketHelpers.socketRematchRequestListener(socket);
 
-  //Listens for login request
+  //Listens for signin request
   socketHelpers.socketCheckAuth(socket);
+
+  //Listens for Signup request
+  socketHelpers.socketCheckUsernameAvailability(socket);
+
 });
 
 const port = process.env.PORT || 3000;
