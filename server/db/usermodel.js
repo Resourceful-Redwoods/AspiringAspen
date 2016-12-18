@@ -7,6 +7,11 @@ var userSchema = mongoose.Schema({
     unique: true,
     required: true
   },
+  password: {
+    type: String,
+    unique: true,
+    required: true
+  },
   wins: Number,
   losses: Number,
   status: {

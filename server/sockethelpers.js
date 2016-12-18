@@ -3,6 +3,8 @@ var chalk = require('chalk');
 var io = require('./server.js');
 var datahelpers = require('./datahelpers.js');
 var Users = require('./db/usermodel.js');
+var bcrypt = require('bcrypt');
+
 
 let waiting = [];
 let rooms = {};
@@ -262,7 +264,7 @@ const socketSendUsers = function(socket) {
 };
 
 const socketSetUsernameListener = function (socket) {
-  socket.on('set username', function(name) {
+  socket.on('set username', function(name, password) {
     Users.findOne({name: name})
     .exec((err, user)=>{
       if (err) {
@@ -270,14 +272,21 @@ const socketSetUsernameListener = function (socket) {
         return;
       }
       if (!user) {
-        Users.create({
-          name: name,
-          wins: 0,
-          losses: 0,
-          status: 'online'
-        }, function(err, user) {
-          socket.data.username = user.name;
-          changeUserStatus(socket.data.username, 'online');
+        bcrypt.hash(password, 5, function(err, hash) {
+          if (err) {
+            throw err;
+          }
+          console.log('hashed', password, hash);
+          Users.create({
+            name: name,
+            password: hash,
+            wins: 0,
+            losses: 0,
+            status: 'online'
+          }, function(err, user) {
+            socket.data.username = user.name;
+            changeUserStatus(socket.data.username, 'online');
+          });  
         });
       } else {
         socket.data.username = user.name;
@@ -451,8 +460,31 @@ const socketCheckAuth = function (socket) {
       if (!user) {
         socket.emit('checkedAuth', false);
       } else {
-        socket.emit('checkedAuth', true);
-        changeUserStatus(user.name, 'online');
+        bcrypt.compare(loginDataObj.password, user.password, function(err, res) {
+          if (res) {
+            socket.emit('checkedAuth', true);
+            changeUserStatus(user.name, 'online');
+          } else {
+            socket.emit('checkedAuth', false);
+          }
+        });
+      }
+    });
+  });
+};
+
+const socketCheckUsernameAvailability = function (socket) {
+  socket.on('checkUsernameAvailability', function(loginDataObj) {
+    Users.findOne({name: loginDataObj.username})
+    .exec((err, user)=>{
+      if (err) {
+        console.error(err);
+        return;
+      }
+      if (!user) {
+        socket.emit('checkedUsernameAvailability', false);
+      } else {
+        socket.emit('checkedUsernameAvailability', true);
       }
     });
   });
@@ -467,5 +499,6 @@ module.exports = {
   socketPlayCardListener: socketPlayCardListener,
   socketSendUsersListener: socketSendUsersListener,
   socketRematchRequestListener: socketRematchRequestListener,
-  socketCheckAuth: socketCheckAuth
+  socketCheckAuth: socketCheckAuth,
+  socketCheckUsernameAvailability: socketCheckUsernameAvailability
 };
