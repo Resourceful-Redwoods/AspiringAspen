@@ -490,6 +490,28 @@ const socketCheckUsernameAvailability = function (socket) {
   });
 };
 
+const socketChallengeListener = function (socket) {
+  // Needs proper handling of cases where users make/accept a challenge request but then disconnect.
+  socket.on('challenge', function (request) {
+    if (request.type === 'challengeRequest') {
+      // should check if challengee is in game or online and handle the request accordingly
+      _.filter(io.sockets.connected, (connection) => {
+        return connection.data.username = request.challengee.name;
+      })[0].emit('push chat message', {message: `${request.challenger} is calling you out. Do you accept this challenge?`, user: 'challengeRequest', challenger: request.challenger, challengee: request.challengee.name});
+    } else if (request.type === 'challengeAccepted') {
+      _.filter(io.sockets.connected, (connection) => {
+        return connection.data.username = request.challenger.name;
+      })[0].emit('challenge', {type: 'challengeAccepted', challenger: request.challenger, challengee: request.challengee.name});
+    } else if (request.type === 'challengeDeclined') {
+      _.filter(io.sockets.connected, (connection) => {
+        return connection.data.username = request.challenger.name;
+      })[0].emit('challenge', {type: 'challengeAccepted', challenger: request.challenger, challengee: request.challengee.name});
+    }
+  });
+};
+
+//TODO[challenge]: queue logic for challenges...
+
 module.exports = {
   socketExitGameListener: socketExitGameListener,
   socketQueueListener: socketQueueListener,
@@ -500,5 +522,6 @@ module.exports = {
   socketSendUsersListener: socketSendUsersListener,
   socketRematchRequestListener: socketRematchRequestListener,
   socketCheckAuth: socketCheckAuth,
-  socketCheckUsernameAvailability: socketCheckUsernameAvailability
+  socketCheckUsernameAvailability: socketCheckUsernameAvailability,
+  socketChallengeListener: socketChallengeListener
 };

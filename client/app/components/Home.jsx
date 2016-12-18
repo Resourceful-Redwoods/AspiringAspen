@@ -6,6 +6,7 @@ import SignUp from './SignUp.jsx';
 import Waiting from './Waiting.jsx';
 import Game from './Game.jsx';
 import ReactAudioPlayer from 'react-audio-player';
+import ChallengeModal from './Challenge.jsx';
 
 class Home extends React.Component {
   constructor(props) {
@@ -18,6 +19,7 @@ class Home extends React.Component {
       hasUsername: false,
       showForm: true,
       showLeaderBoard: false,
+      showChallengeModal: false,
       showSignIn: false,
       showSignUp: false,
       showSignUpBtn: true,
@@ -69,8 +71,6 @@ class Home extends React.Component {
     }
   }
 
-
-
   cancelMatchmaking () {
     // cancels match making and tells server
     this.setState({ gameState: 'idle' });
@@ -97,6 +97,11 @@ class Home extends React.Component {
     }
   }
 
+  handleFormSubmit(username, password) {
+    //sets the username state and hides the signin and sign out components.
+    this.setState({username: username, hasUsername: true, showSignIn: false, showSignUp: false, showSignUpBtn: false, showSignInBtn: false});
+  }
+
   handleShowSignUp () {
     if (this.state.showSignUp) {
       this.setState({
@@ -110,10 +115,24 @@ class Home extends React.Component {
     }
   }
 
-  handleFormSubmit(username, password) {
-    //sets the username state and hides the signin and sign out components.
-    this.setState({username: username, hasUsername: true, showSignIn: false, showSignUp: false, showSignUpBtn: false, showSignInBtn:false});  
+  handleSignUp (username, password) {
+    this.setState({/*username: username*/ hasUsername: true, showSignUp: false, showSignUpBtn: false, showSignInBtn: false});
   }
+ 
+  handleShowChallengeModal () {
+    if (this.state.showChallengeModal) {
+      this.setState({
+        showChallengeModal: false
+      });
+    } else {
+      this.setState({
+        showChallengeModal: true
+      });
+    }
+  }
+
+//TODO[challenge]: if the user is not in a game, but they are being challenged... pop up a modal and ask them if they would like to accept the challenge.
+//TODO[challenge]: modal component with messages/cancel button
 
  
 
@@ -140,7 +159,8 @@ class Home extends React.Component {
             <img className='cardIcon' src='images/spaceship4.png'></img>
           </div>
         </div>
-        { this.state.showLeaderBoard === true ? <LeaderBoard onShowLeaderBoard={this.handleShowLeaderBoard.bind(this)} socket ={this.props.socket}/> : null }
+        { this.state.showLeaderBoard === true ? <LeaderBoard onShowChallengeModal={this.handleShowChallengeModal.bind(this)} onShowLeaderBoard={this.handleShowLeaderBoard.bind(this)} username={this.state.username} socket={this.props.socket}/> : null }
+        { this.state.showChallengeModal === true ? <ChallengeModal onShowChallengeModal={this.handleShowChallengeModal.bind(this)} onShowLeaderBoard={this.handleShowLeaderBoard.bind(this)} username={this.state.username} socket={this.props.socket}/> : null }
         { gameState === 'waiting' ? <Waiting cancelMatchmaking={this.cancelMatchmaking.bind(this)} username={this.state.username} /> : null }
         <div className='row lower'>
           <div id='' className='col s12'>

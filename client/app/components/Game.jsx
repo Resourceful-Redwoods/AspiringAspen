@@ -135,11 +135,29 @@ class Game extends React.Component {
   }
 
   _getChatMessage(data) {
+    // We really should not be using jquery here... children should be added through react... but time.
     if (data.user === 'admin') {
       var message = $('<li class="message center-align"></li>');
       var messageContent = $('<i></i>');
       messageContent.text(data.message);
       message.append(messageContent);
+    } else if (data.user === 'challengeRequest') {
+      var message = $('<li class="message center-align"></li>');
+      var messageContent = $('<i></i>');
+      messageContent.text(data.message);
+      var actions = $('<div></div>');
+      var acceptButton = $('<button>Accept</button>');
+      var declineButton = $('<button>Decline</button>');
+      acceptButton.click(() => {
+        this._challengeAccepted.call(this, data.challenger, data.challengee);
+      });
+      declineButton.click(() => {
+        this._challengeDeclined.call(this, data.challenger, data.challengee);
+      });
+      actions.append(acceptButton);
+      actions.append(declineButton);
+      message.append(messageContent);
+      message.append(actions);
     } else {
       var message = $('<li class="message"></li>');
 
@@ -164,6 +182,16 @@ class Game extends React.Component {
     $('.message-list').prepend(message);
     // This would allow the chat box to automatically scroll, but it is not working...
     // $('.messages-container').scrollTop($(this).height());
+  }
+
+  _challengeAccepted(challenger, challengee){
+    console.log('accepted...');
+    this.props.socket.emit('challenge', {'type': 'challengeAccepted', 'challenger': challenger, 'challengee': {'name': challengee}});
+  }
+
+  _challengeDeclined(challenger, challengee){
+    console.log('declined...');
+    this.props.socket.emit('challenge', {'type': 'challengeDeclined', 'challenger': challenger, 'challengee': {'name': challengee}});
   }
 
   _opponentExited() {

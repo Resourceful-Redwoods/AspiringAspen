@@ -52,6 +52,8 @@ io.on('connection', function(socket) {
   //Listens for Signup request
   socketHelpers.socketCheckUsernameAvailability(socket);
 
+  // Listens for challenge events
+  socketHelpers.socketChallengeListener(socket);
 });
 
 const port = process.env.PORT || 3000;
