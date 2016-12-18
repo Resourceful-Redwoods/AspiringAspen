@@ -15,9 +15,7 @@ class LeaderBoard extends React.Component {
   componentDidMount() {
     const el = ReactDOM.findDOMNode(this);
     TweenMax.fromTo('.waiting', 0.7, {y: -100, opacity: 0}, {y: 0, opacity: 1, ease: Expo.easeOut});
-    console.log(this.props);
     this.props.socket.emit('send me userdata', this._receiveUserData.bind(this));
-
     this.props.socket.on('userdata updated', ()=> {
       this.props.socket.emit('send me userdata', this._receiveUserData.bind(this));
     });
@@ -35,6 +33,28 @@ class LeaderBoard extends React.Component {
   _receiveUserData(users) {
     this.setState({leaders: users.sort((a, b) => (a.wins / a.losses) < (b.wins / b.losses))
                           .slice(0, 10)});
+  }
+
+  _handleChallengeClick(leader) {
+    this.props.socket.on('challenge', function(response) {
+      if (response.type === 'challengeAccepted') {
+        // if challenge is accepted, notify the user in the modal and tell them to keep waiting.
+      } else if (response.type === 'challengeDeclined') {
+        // if challenge is declined, notify the user and hide the modal.
+      }
+    });
+
+    const data = {
+      'type': 'challengeRequest',
+      'challenger': this.props.username,
+      'challengee': {
+        'name': leader.name,
+        'status': leader.status
+      }
+    };
+    this.props.socket.emit('challenge', data);
+    this.props.onShowLeaderBoard();
+    this.props.onShowChallengeModal();
   }
 
   render () {
@@ -60,7 +80,7 @@ class LeaderBoard extends React.Component {
                         'color': 'rgb(255, 197, 36)',
                         'textShadow': '1px 0px #ff4000',
                         'borderRadius': '25%'
-                      }} className='btn'>Challenge</button>
+                      }} className='btn' className={`btn ${this.props.username === '' ? 'disabled' : null}`} onClick={() => { this._handleChallengeClick(leader); }}>Challenge</button>
                     </div>
                   </li>
                 );
@@ -83,7 +103,9 @@ class LeaderBoard extends React.Component {
 }
 
 LeaderBoard.propTypes = {
-  onShowLeaderBoard: PropTypes.func.isRequired
+  onShowLeaderBoard: PropTypes.func.isRequired,
+  username: PropTypes.string.isRequired,
+  socket: PropTypes.object.isRequired
 };
 
 export default LeaderBoard;
