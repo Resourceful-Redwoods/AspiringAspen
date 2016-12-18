@@ -197,7 +197,7 @@ body {
   margin: auto;
   top:20%;
   /*left:37%;*/
-  width:50%;
+  width:65%;
   /*height:30%;*/
   border-radius: 10px;
   /*min-width: 300px;*/
@@ -206,8 +206,41 @@ body {
 
 .leaderboard h3 {
   padding-top: 20px;
+  background-image: url(images/spacebackground.jpg);
+  color: rgb(255, 197, 36);
+  text-shadow: 3px 2px #ff4000;
 }
 
+.leaderboardFooter {
+   background-image: url(images/spacebackground.jpg);
+}
+.leaderboardFooter button {
+  background: #742CA9;
+  color: rgb(255, 197, 36);
+  border-radius: 25%;
+  text-shadow: 1px 0px #ff4000;
+}
+
+.signinup {
+  color: #ffc524;
+  margin: 2%;
+}
+
+.signin-button {
+  position: fixed;
+  top: 2%;
+  color: #ffc524;
+  z-index: 10;
+  cursor: pointer;
+}
+.signup-button {
+  position:fixed;
+  top:2%;
+  left:60px;
+  color: #ffc524;
+  z-index: 10;
+  cursor: pointer; 
+}
 .outcome {
   /*background:#EEF0F3;*/
   z-index:6;
@@ -345,6 +378,11 @@ body {
   background:red;
 }
 
+.leaderHolder{
+  height: 10%;
+
+}
+
 .playbtn {
   position:absolute;
   right:5%;
@@ -404,6 +442,7 @@ body {
 }
 
 .youWin button {
+  margin-bottom: 15px;
   background: #742CA9;
   position: relative;
   border: none;
@@ -456,7 +495,7 @@ body {
   position: absolute;
   background-color:rgba(238, 240, 243, 0.4);
   z-index:5;
-  padding:0;
+  padding:2%;
   margin:0;
 }
 
@@ -558,4 +597,3 @@ body {
 #chat #messages li:nth-child(odd) {
   background: #eee;
 }
-

@@ -7,6 +7,10 @@ exports.getAllUserData = function(cb) {
   Users.find().exec((err, users) => err ? console.error(err) : cb(users));
 };
 
+// exports.findUserData = function(username, cb) {
+// 	Users.findOne(username).exec((err, user) => err ? console.error(err) : cb(user));
+// }
+
 exports.getAllCardsData = function(cb) {
   Cards.find().exec((err, cards) => err ? console.error(err) : cb(cards));
 };

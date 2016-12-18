@@ -22,6 +22,7 @@ io.on('connection', function(socket) {
     gameState: 'idle'
   };
 
+  // Listens for client to request user list for populating leaderboard
   socketHelpers.socketSendUsersListener(socket);
 
   // Used for clients queueing up for new game, canceling match search, & quitting current game
@@ -41,6 +42,16 @@ io.on('connection', function(socket) {
 
   // Listens for game exits
   socketHelpers.socketExitGameListener(socket);
+
+  // Listens for rematch requests
+  socketHelpers.socketRematchRequestListener(socket);
+
+  //Listens for signin request
+  socketHelpers.socketCheckAuth(socket);
+
+  //Listens for Signup request
+  socketHelpers.socketCheckUsernameAvailability(socket);
+
 });
 
 const port = process.env.PORT || 3000;

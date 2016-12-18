@@ -1,4 +1,5 @@
-var mongoose = require('mongoose');
+var mongoose = require('bluebird').promisifyAll(require('mongoose'));
+var io = require('../server.js');
 
 var userSchema = mongoose.Schema({
   name: {
@@ -6,8 +7,22 @@ var userSchema = mongoose.Schema({
     unique: true,
     required: true
   },
+  password: {
+    type: String,
+    unique: true,
+    required: true
+  },
   wins: Number,
-  losses: Number
+  losses: Number,
+  status: {
+    type: String,
+    required: true,
+    default: 'offline'
+  }
+});
+
+userSchema.post('update', function() {
+  io.sockets.emit('userdata updated');
 });
 
 var User = mongoose.model('User', userSchema);

@@ -3,9 +3,36 @@ var chalk = require('chalk');
 var io = require('./server.js');
 var datahelpers = require('./datahelpers.js');
 var Users = require('./db/usermodel.js');
+var bcrypt = require('bcrypt');
+
 
 let waiting = [];
 let rooms = {};
+
+// Alerts front end that user data has changed
+const changeUserStatus = function(username, status) {
+  Users.update({name: username}, {$set: { status: status}}, function(err, user) {
+    if (err) {
+      console.error(err);
+    }
+  });
+};
+
+const increaseUserWins = function(username) {
+  Users.update({name: username}, {$inc: { wins: 1}}, function(err, user) {
+    if (err) {
+      console.error(err);
+    }
+  });
+};
+
+const increaseUserLosses = function(username) {
+  Users.update({name: username}, {$inc: { losses: 1}}, function(err, user) {
+    if (err) {
+      console.error(err);
+    }
+  });
+};
 
 // Returns the socket matching the socket id, if connected
 const getSocket = function (socketId) {
@@ -31,6 +58,7 @@ const queue = function (socket) {
     waiting.push(socket.id);
     socket.data.gameState = 'waiting';
   }
+  // changeUserStatus(socket.data.username, 'online');
 };
 
 // Removes a client from the queue, if they are waiting to play
@@ -114,8 +142,6 @@ const newGame = function (sock1, sock2, size = 5) {
 
     rooms[room] = match;
 
-    console.log(`Made Room: ${chalk.yellow(room)} with ${chalk.red(sock1.id)} & ${chalk.red(sock2.id)}`);
-
     sock1.emit('opponent username', sock2.data.username);
     sock2.emit('opponent username', sock1.data.username);
 
@@ -144,10 +170,19 @@ const makeRoom = function (sock1, sock2) {
     username: sock2.data.username || 'Guest'
   });
 
+
   sock1.join(room);
   sock2.join(room);
 
-  rooms[room] = newGame(sock1, sock2);
+
+  io.to(room).emit('push chat message', {message: 'Only one of you will walk away from this...', user: 'admin'});
+
+  console.log(`Made Room: ${chalk.yellow(room)} with ${chalk.red(sock1.id)} & ${chalk.red(sock2.id)}`);
+
+  newGame(sock1, sock2);
+
+  changeUserStatus(sock1.data.username, 'in game');
+  changeUserStatus(sock2.data.username, 'in game');
 };
 
 /*
@@ -162,9 +197,10 @@ const play = function (socket) {
     }
 
     // Alerts the client that a match has been found
-    socket.emit('enter game', opponent.data.username);
-    opponent.emit('enter game', socket.data.username);
+    socket.emit('enter game');
+    opponent.emit('enter game');
     makeRoom(socket, opponent);
+
   } else {
     queue(socket);
   }
@@ -177,6 +213,9 @@ const leaveGame = function (socket) {
     socket.data.gameState = 'idle';
     delete socket.data.room;
     delete socket.data.opponent;
+
+    changeUserStatus(socket.data.username, 'online');
+
     console.log(`User exited game - ${chalk.red(socket.id)}`);
   }
 };
@@ -195,11 +234,8 @@ const declareWinner = function (winner) {
   }
 };
 
-const socketExitGameListener = function(socket) {
-  socket.on('game exit', function() {
-    leaveGame(socket);
-  });
-};
+// Listeners
+
 
 const socketQueueListener = function (socket) {
   socket.on('queue', function(action) {
@@ -217,8 +253,18 @@ const socketQueueListener = function (socket) {
   });
 };
 
+// Sends userlist to populate leaderboard
+const socketSendUsers = function(socket) {
+  Users.find().exec(function(err, users) {
+    if (err) {
+      console.error(err);
+    }
+    socket.emit('populate userdata', users);
+  });
+};
+
 const socketSetUsernameListener = function (socket) {
-  socket.on('set username', function(name) {
+  socket.on('set username', function(name, password) {
     Users.findOne({name: name})
     .exec((err, user)=>{
       if (err) {
@@ -226,12 +272,21 @@ const socketSetUsernameListener = function (socket) {
         return;
       }
       if (!user) {
-        Users.create({
-          name: name,
-          wins: 0,
-          losses: 0
-        }, function(err, user) {
-          socket.data.username = user.name;
+        bcrypt.hash(password, 5, function(err, hash) {
+          if (err) {
+            throw err;
+          }
+          console.log('hashed', password, hash);
+          Users.create({
+            name: name,
+            password: hash,
+            wins: 0,
+            losses: 0,
+            status: 'online'
+          }, function(err, user) {
+            socket.data.username = user.name;
+            changeUserStatus(socket.data.username, 'online');
+          });  
         });
       } else {
         socket.data.username = user.name;
@@ -251,18 +306,21 @@ const socketChatMessageListener = function (socket) {
   });
 };
 
+
 const socketDisconnectListener = function(socket) {
   socket.on('disconnect', function() {
     let gameState = socket.data.gameState;
     console.log(`${chalk.red(socket.id)} disconnected while ${chalk.green(gameState)}`);
 
     if (gameState === 'waiting') {
+      changeUserStatus(socket.data.username, 'offline');
       return dequeue(socket);
     }
 
     if (gameState === 'playing') {
       declareWinner(getOpponent(socket));
     }
+    changeUserStatus(socket.data.username, 'offline');
   });
 };
 
@@ -316,29 +374,17 @@ const socketPlayCardListener = function(socket) {
     // Check if either player has won the game
       if (room.game.rounds.wins[socket.id] >= room.game.rounds.total / 2) {
         declareWinner(socket);
-        Users.update({name: socket.data.username}, {$inc: { wins: 1}}, function(err, user) {
-          if (err) {
-            console.error(err);
-          }
-        });
-        Users.update({name: opponent.data.username}, {$inc: { losses: 1}}, function(err, user) {
-          if (err) {
-            console.error(err);
-          }
-        });
+
+        increaseUserWins(socket.data.username);
+        increaseUserLosses(opponent.data.username);
+
 
       } else if (room.game.rounds.wins[opponent.id] >= room.game.rounds.total / 2) {
         declareWinner(opponent);
-        Users.update({name: socket.data.username}, {$inc: { losses: 1}}, function(err, user) {
-          if (err) {
-            console.error(err);
-          }
-        });
-        Users.update({name: opponent.data.username}, {$inc: { wins: 1}}, function(err, user) {
-          if (err) {
-            console.error(err);
-          }
-        });
+
+        increaseUserWins(opponent.data.username);
+        increaseUserLosses(socket.data.username);
+
       } else {
       // Removes the selected card from the players' hands
         delete socket.data.hand.selectedCard;
@@ -366,6 +412,84 @@ const socketSendUsersListener = function(socket) {
   });
 };
 
+const socketExitGameListener = function(socket) {
+  socket.on('game exit', function() {
+    var opponent = getOpponent(socket);
+    if (opponent) {
+      opponent.emit('opponent exited');
+      io.to(socket.data.room).emit('push chat message', {message: `${opponent.data.username} has left the game.`, user: 'admin'});
+    }
+    leaveGame(socket);
+  });
+};
+
+const socketRematchRequestListener = function(socket) {
+  socket.on('rematch', function() {
+    var opponent = getOpponent(socket);
+    if (!socket.data.rematchSelf) { // only broadcast 'wants to rematch' message once
+      io.to(socket.data.room).emit('push chat message', {message: `${opponent.data.username} wants to rematch.`, user: 'admin'});
+    }
+    opponent.data.rematchOpponent = true;
+    socket.data.rematchSelf = true;
+    if (socket.data.rematchOpponent) { // if both want a rematch
+      console.log(`${chalk.red(socket.id)} and ${chalk.red(socket.data.opponent)} want to have a rematch!`);
+      io.to(socket.data.room).emit('rematch accepted');
+      io.to(socket.data.room).emit('push chat message', {message: `${socket.data.username} and ${opponent.data.username} will battle to the death once again.`, user: 'admin'});
+      opponent.data.rematchOpponent = false;
+      opponent.data.rematchSelf = false;
+      socket.data.rematchSelf = false;
+      socket.data.rematchOpponent = false;
+      // make sure the order of socket ids matches the current room name
+      if (socket.data.room === socket.id + socket.data.opponent) {
+        newGame(socket, opponent);
+      } else if (socket.data.room === socket.data.opponent + socket.id) {
+        newGame(opponent, socket);
+      }
+    }
+  });
+};
+
+const socketCheckAuth = function (socket) {
+  socket.on('checkAuth', function(loginDataObj) {
+    Users.findOne({name: loginDataObj.username})
+    .exec((err, user)=>{
+      if (err) {
+        console.error(err);
+        return;
+      }
+      if (!user) {
+        socket.emit('checkedAuth', false);
+      } else {
+        bcrypt.compare(loginDataObj.password, user.password, function(err, res) {
+          if (res) {
+            socket.emit('checkedAuth', true);
+            changeUserStatus(user.name, 'online');
+          } else {
+            socket.emit('checkedAuth', false);
+          }
+        });
+      }
+    });
+  });
+};
+
+const socketCheckUsernameAvailability = function (socket) {
+  socket.on('checkUsernameAvailability', function(loginDataObj) {
+    Users.findOne({name: loginDataObj.username})
+    .exec((err, user)=>{
+      if (err) {
+        console.error(err);
+        return;
+      }
+      if (!user) {
+        socket.emit('checkedUsernameAvailability', false);
+      } else {
+        socket.emit('checkedUsernameAvailability', true);
+      }
+    });
+  });
+};
+
 module.exports = {
   socketExitGameListener: socketExitGameListener,
   socketQueueListener: socketQueueListener,
@@ -373,5 +497,8 @@ module.exports = {
   socketChatMessageListener: socketChatMessageListener,
   socketDisconnectListener: socketDisconnectListener,
   socketPlayCardListener: socketPlayCardListener,
-  socketSendUsersListener: socketSendUsersListener
+  socketSendUsersListener: socketSendUsersListener,
+  socketRematchRequestListener: socketRematchRequestListener,
+  socketCheckAuth: socketCheckAuth,
+  socketCheckUsernameAvailability: socketCheckUsernameAvailability
 };
