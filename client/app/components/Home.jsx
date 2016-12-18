@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import LeaderBoard from './LeaderBoard.jsx';
-import SignIn from './SignIn.jsx'
-import SignUp from './SignUp.jsx'
+import SignIn from './SignIn.jsx';
+import SignUp from './SignUp.jsx';
 import Waiting from './Waiting.jsx';
 import Game from './Game.jsx';
 import ReactAudioPlayer from 'react-audio-player';
@@ -69,7 +69,7 @@ class Home extends React.Component {
     }
   }
 
-  
+
 
   cancelMatchmaking () {
     // cancels match making and tells server
@@ -98,7 +98,7 @@ class Home extends React.Component {
 
   handleFormSubmit(username, password) {
     //sets the username state and hides the signin and sign out components.
-    this.setState({username: username, hasUsername: true, showSignIn: false, showSignUp: false, showSignUpBtn: false, showSignInBtn:false});  
+    this.setState({username: username, hasUsername: true, showSignIn: false, showSignUp: false, showSignUpBtn: false, showSignInBtn:false});
   }
 
   handleShowSignUp () {
@@ -112,7 +112,7 @@ class Home extends React.Component {
       });
     }
   }
- 
+
   handleSignUp (username, password) {
     this.setState({/*username: username*/ hasUsername: true, showSignUp: false, showSignUpBtn: false, showSignInBtn:false});
 
